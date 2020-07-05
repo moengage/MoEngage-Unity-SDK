@@ -22,7 +22,7 @@ public static class BuildPostProcessor
     public static readonly string NOTIFICATION_SERVICE_EXTENSION_OBJECTIVEC_FILENAME = "NotificationService";
 
     private static readonly char DIR_CHAR = Path.DirectorySeparatorChar;
-    public static readonly string MOE_IOS_LOCATION = "Assets" + DIR_CHAR + "MoEngage" + DIR_CHAR + "iOS";
+    public static readonly string MOE_IOS_LOCATION = "Assets" + DIR_CHAR + "MoEngage" + DIR_CHAR + "Plugins" + DIR_CHAR + "iOS";
 
     private static readonly string[] FRAMEWORKS_TO_ADD = {
          "Foundation.framework",
