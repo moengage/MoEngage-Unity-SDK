@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dependencies>
+  <androidPackages>
+    <androidPackage spec="com.moengage:moe-android-sdk:10.1.00"/>
+    <androidPackage spec="com.moengage:unity-wrapper:1.0.00"/>
+  </androidPackages>
+    
+  <!-- iOS Cocoapod dependencies can be specified by each iosPod element. -->
+  <iosPods>
+    <iosPod name="MoEngage-iOS-SDK" version="~> 6.1.1" minTargetSdk="9.0">
+    </iosPod>
+    <iosPod name="MoEngageInApp" version="~> 1.0.0" minTargetSdk="9.0">
+    </iosPod>
+    <iosPod name="MORichNotification" version="~> 3.1.1">
+    </iosPod>
+  </iosPods>
+</dependencies>

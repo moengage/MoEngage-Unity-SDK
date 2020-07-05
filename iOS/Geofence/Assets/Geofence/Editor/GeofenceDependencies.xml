@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dependencies>
+  <!-- iOS Cocoapod dependencies can be specified by each iosPod element. -->
+  <iosPods>
+    <iosPod name="MOGeofence" version="~> 2.0.0" minTargetSdk="9.0">
+    </iosPod>
+  </iosPods>
+</dependencies>

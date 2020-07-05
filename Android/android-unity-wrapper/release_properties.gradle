@@ -1,0 +1,31 @@
+ext {
+  developerMeta = [
+      developerId   : "moengage",
+      developerName : "MoEngage Inc",
+      developerEmail: "androidteam@moengage.com"
+  ]
+
+  licenseMeta = [
+      licenseName: "MoEngage License",
+      licenseUrl : "https://s3.amazonaws.com/licensesmoe/iplicense.txt",
+      allLicenses: ['MoEngage License']
+  ]
+
+  urlMeta = [
+      siteUrl: "https://github.com/moengage/MoEngage-Unity-SDK",
+      gitUrl : "https://github.com/moengage/MoEngage-Unity-SDK.git"
+  ]
+
+  bintrayMeta = [
+      "repoName"   : "android-sdk",
+      "publisherId": "com.moengage"
+  ]
+
+  unityBintray = [
+      "artifactId" : "unity-wrapper",
+      "name"       : "MoEngage Unity Wrapper",
+      "description": "Wrapper SDK for unity framework support on MoEngage Platform.",
+      "versionName": "1.0.00",
+      "versionCode": 1
+  ]
+}
