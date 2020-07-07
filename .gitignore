@@ -3,6 +3,11 @@
 ***.meta
 Core-SDK/Library/
 Core-SDK/Logs/
-Core-SDK/MoEngage.unitypackage
+Core-SDK/*.unitypackage
 Core-SDK/Packages/
 Core-SDK/ProjectSettings/
+Android/PushAmpPlus/Library/
+Android/PushAmpPlus/Logs/
+Android/PushAmpPlus/Packages/
+Android/PushAmpPlus/ProjectSettings/
+Android/PushAmpPlus/*.unitypackage

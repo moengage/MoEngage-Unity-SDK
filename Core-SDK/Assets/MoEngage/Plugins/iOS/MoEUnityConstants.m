@@ -7,7 +7,7 @@
 
 #import "MoEUnityConstants.h"
 
-NSString* const kMoEUnitySDKVersion = @"1.0.0";
+NSString* const kMoEUnitySDKVersion = @"1.0.1";
 
 // Callbacks Method Names
 NSString* const kMOEventNamePushClicked = @"PushClicked";
