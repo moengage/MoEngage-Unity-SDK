@@ -20,7 +20,7 @@ package com.moengage.unity.wrapper;
 interface Constants {
   String MODULE_TAG = "Unity_";
   String INTEGRATION_TYPE = "unity";
-  String INTEGRATION_VERSION = "1.0.0";
+  String INTEGRATION_VERSION = "1.0.1";
 
   String PLATFORM_NAME = "android";
 

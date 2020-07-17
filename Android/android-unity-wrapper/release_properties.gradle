@@ -25,7 +25,7 @@ ext {
       "artifactId" : "unity-wrapper",
       "name"       : "MoEngage Unity Wrapper",
       "description": "Wrapper SDK for unity framework support on MoEngage Platform.",
-      "versionName": "1.0.00",
-      "versionCode": 1
+      "versionName": "1.0.02",
+      "versionCode": 1002
   ]
 }
