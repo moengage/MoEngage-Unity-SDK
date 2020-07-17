@@ -154,7 +154,7 @@ public class MoEAndroidWrapper {
   private void appendDateAttributes(JSONObject attributesJson, Properties properties) {
     try {
       if (attributesJson == null || attributesJson.length() == 0) {
-        Logger.v(TAG + " appendGeneralAttributes() : No general attributes to track.");
+        Logger.v(TAG + " appendDateAttributes() : No date attribute to track.");
         return;
       }
       Iterator<String> keys = attributesJson.keys();
@@ -165,14 +165,14 @@ public class MoEAndroidWrapper {
         }
       }
     } catch (Exception e) {
-      Logger.e(TAG + " appendGeneralAttributes() : ", e);
+      Logger.e(TAG + " appendDateAttributes() : ", e);
     }
   }
 
   private void appendLocationAttributes(JSONObject attributesJson, Properties properties) {
     try {
       if (attributesJson == null || attributesJson.length() == 0) {
-        Logger.v(TAG + " appendGeneralAttributes() : No general attributes to track.");
+        Logger.v(TAG + " appendLocationAttributes() : No location attributes to track.");
         return;
       }
       Iterator<String> keys = attributesJson.keys();
@@ -185,7 +185,7 @@ public class MoEAndroidWrapper {
         }
       }
     } catch (Exception e) {
-      Logger.e(TAG + " appendGeneralAttributes() : ", e);
+      Logger.e(TAG + " appendLocationAttributes() : ", e);
     }
   }
 
@@ -193,7 +193,7 @@ public class MoEAndroidWrapper {
     try {
       Logger.v(TAG + " passPushPayload() : Push Payload: " + pushPayload);
       if (MoEUtils.isEmptyString(pushPayload)) {
-        Logger.e(TAG + " trackEvent() : Payload is null or empty cannot process further.");
+        Logger.e(TAG + " passPushPayload() : Payload is null or empty cannot process further.");
         return;
       }
       JSONObject payloadJson = new JSONObject(pushPayload);
@@ -222,7 +222,7 @@ public class MoEAndroidWrapper {
     try {
       Logger.v(TAG + " passPushToken() : Token Payload: " + tokenPayload);
       if (MoEUtils.isEmptyString(tokenPayload)) {
-        Logger.e(TAG + " passPushToken() : Payload is null or empty cannot process further.");
+        Logger.e(TAG + " passPushToken() : push token is null or empty cannot process further.");
         return;
       }
       JSONObject tokenJson = new JSONObject(tokenPayload);
@@ -354,7 +354,7 @@ public class MoEAndroidWrapper {
       Context context) throws JSONException {
     String attributeValue = attributeJson.getString(ARGUMENT_USER_ATTRIBUTE_VALUE);
     if (MoEUtils.isEmptyString(attributeValue)) {
-      Logger.e(TAG + " setUserAttribute() : Attribute value should not be null or empty.");
+      Logger.e(TAG + " trackTimeStampAttribute() : Attribute value should not be null or empty.");
       return;
     }
     MoEHelper.getInstance(context).setUserAttributeISODate(attributeName, attributeValue);
@@ -364,7 +364,7 @@ public class MoEAndroidWrapper {
       Context context) throws JSONException {
     if (!attributeJson.has(ARGUMENT_LOCATION_ATTRIBUTE)) {
       Logger.e(TAG
-          + " setUserAttribute() : Cannot track location attribute without "
+          + " trackLocationAttribute() : Cannot track location attribute without "
           + ARGUMENT_LOCATION_ATTRIBUTE);
       return;
     }
@@ -379,7 +379,7 @@ public class MoEAndroidWrapper {
       Context context) throws JSONException {
     Object attributeValue = attributeJson.get(ARGUMENT_USER_ATTRIBUTE_VALUE);
     if (attributeValue == null) {
-      Logger.e(TAG + " setUserAttribute() : Attribute value should not be null");
+      Logger.e(TAG + " trackGeneralAttribute() : Attribute value should not be null");
       return;
     }
     if (attributeValue instanceof Integer) {
@@ -403,7 +403,7 @@ public class MoEAndroidWrapper {
 
   public void setAppContext(String contextPayload) {
     try {
-      Logger.v(TAG + " setContext() : Context Payload: " + contextPayload);
+      Logger.v(TAG + " setAppContext() : Context Payload: " + contextPayload);
       JSONObject contextJson = new JSONObject(contextPayload);
       JSONArray contextArray = contextJson.getJSONArray(ARGUMENT_CONTEXT);
       List<String> contextList = ApiUtility.jsonArrayToStringList(contextArray);
