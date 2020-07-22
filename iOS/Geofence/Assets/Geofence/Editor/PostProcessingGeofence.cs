@@ -1,6 +1,4 @@
-﻿#define ADD_APP_GROUP
-
-#if UNITY_5_4_OR_NEWER && UNITY_IPHONE && UNITY_EDITOR
+﻿#if UNITY_5_4_OR_NEWER && UNITY_IPHONE && UNITY_EDITOR
 
 using System.IO;
 using UnityEditor;
@@ -21,6 +19,12 @@ public static class GeofenceBuildPostProcessor
         return project.GetUnityFrameworkTargetGuid();
     }
 #else
+
+     private static string GetPBXProjectTargetGUID(PBXProject project)
+    {
+        return project.TargetGuidByName(PBXProject.GetUnityTargetName());
+    }
+    
     private static string GetPBXProjectUnityFrameworkGUID(PBXProject project)
     {
         return GetPBXProjectTargetGUID(project);
