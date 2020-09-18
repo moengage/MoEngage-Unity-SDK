@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dependencies>
+
+  <androidPackages>
+    <androidPackage spec="com.moengage:rich-notification:1.1.00">
+    </androidPackage>
+  </androidPackages>
+
+</dependencies>
