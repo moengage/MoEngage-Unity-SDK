@@ -2,6 +2,8 @@ plugins{
   id("com.android.library")
 }
 
+apply(from: "../configuration.gradle")
+
 ext {
   bintrayRepo = bintrayMeta.repoName
   publishedGroupId = bintrayMeta.publisherId
@@ -25,11 +27,12 @@ ext {
 }
 
 android {
-  compileSdkVersion 28
+  compileSdkVersion buildConfiguration.compileSDKVersion
 
   defaultConfig {
-    minSdkVersion 16
-    targetSdkVersion 28
+
+    minSdkVersion buildConfiguration.minimumSDKVersion
+    targetSdkVersion buildConfiguration.targetSDKVersion
     versionCode unityBintray.versionCode
     versionName unityBintray.versionName
 
@@ -47,13 +50,14 @@ android {
 
 dependencies {
   compileOnly fileTree(dir: "libs", include: ["*.jar"])
-  compileOnly('androidx.appcompat:appcompat:1.2.0')
-  compileOnly("com.moengage:moe-android-sdk:10.4.00")
-  implementation("com.moengage:plugin-base:1.1.00")
 
-  testImplementation 'junit:junit:4.12'
-  androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-  androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+  compileOnly(dependency.appCompat)
+  compileOnly(dependency.moengage)
+  implementation(dependency.basePlugin)
+
+  testImplementation(testDependency.junit)
+  androidTestImplementation(testDependency.androidJunit)
+  androidTestImplementation(testDependency.espresso)
 }
 
 apply(from: "../releaseScript.gradle")

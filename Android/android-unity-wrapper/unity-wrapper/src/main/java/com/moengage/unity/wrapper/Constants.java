@@ -22,21 +22,6 @@ interface Constants {
   String INTEGRATION_TYPE = "unity";
   String INTEGRATION_VERSION = "1.0.1";
 
-  String PLATFORM_NAME = "android";
-
-  String PARAM_PLATFORM = "platform";
-  String PARAM_PAYLOAD = "payload";
-  String PARAM_CAMPAIGN_NAME = "campaignName";
-  String PARAM_CAMPAIGN__ID = "campaignId";
-  String PARAM_CUSTOM_ACTION = "customAction";
-  String PARAM_NAVIGATION_ACTION = "navigation";
-  String PARAM_NAVIGATION_TYPE = "navigationType";
-  String PARAM_NAVIGATION_URL = "value";
-  String PARAM_KEY_VALUE_PAIR = "kvPair";
-  String PARAM_DISMISS_INTERVAL = "dismissInterval";
-  String PARAM_IS_CANCELLABLE = "isCancellable";
-  String PARAM_SELF_HANDLED = "selfHandled";
-
   String METHOD_NAME_PUSH_REDIRECTION = "PushClicked";
   String METHOD_NAME_IN_APP_SHOWN = "InAppCampaignShown";
   String METHOD_NAME_IN_APP_CLICKED = "InAppCampaignClicked";

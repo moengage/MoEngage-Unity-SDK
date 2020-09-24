@@ -28,4 +28,22 @@ ext {
       "versionName": "1.0.02",
       "versionCode": 1002
   ]
+
+  buildConfiguration = [
+      minimumSDKVersion: 16,
+      targetSDKVersion : 28,
+      compileSDKVersion: 28
+  ]
+
+  dependency = [
+      "moengage": "com.moengage:moe-android-sdk:10.4.00",
+      "basePlugin" : "com.moengage:plugin-base:1.1.00",
+      "appCompat": "androidx.appcompat:appcompat:1.2.0"
+  ]
+
+  testDependency = [
+      "junit": "junit:junit:4.12",
+      "androidJunit": "androidx.test.ext:junit:1.1.1",
+      "espresso": "androidx.test.espresso:espresso-core:3.1.0"
+  ]
 }
