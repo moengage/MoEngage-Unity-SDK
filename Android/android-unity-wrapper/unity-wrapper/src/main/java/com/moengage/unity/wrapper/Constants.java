@@ -44,8 +44,4 @@ interface Constants {
   String METHOD_NAME_IN_APP_CUSTOM_ACTION = "InAppCampaignCustomAction";
   String METHOD_NAME_IN_APP_SELF_HANDLED = "InAppCampaignSelfHandled";
 
-  String ATTRIBUTE_TYPE_GENERAL = "general";
-  String ATTRIBUTE_TYPE_TIMESTAMP = "timestamp";
-  String ATTRIBUTE_TYPE_LOCATION = "location";
-
 }

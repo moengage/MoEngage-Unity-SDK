@@ -15,11 +15,9 @@ package com.moengage.unity.wrapper;
 
 import android.content.Context;
 import com.moengage.core.Logger;
-import com.moengage.core.MoEIntegrationHelper;
 import com.moengage.core.MoEngage;
 import com.moengage.core.model.IntegrationMeta;
-import com.moengage.inapp.MoEInAppHelper;
-import com.moengage.pushbase.MoEPushHelper;
+import com.moengage.plugin.base.PluginInitializer;
 
 /**
  * @author Umang Chamaria
@@ -32,13 +30,9 @@ public class MoEInitializer {
   public static void initialize(Context context, MoEngage.Builder builder){
     try {
       Logger.v(TAG + " initialize() : Initialising MoEngage SDK.");
-      builder.optOutDefaultInAppDisplay();
-      MoEngage.initialise(builder.build());
-      MoEIntegrationHelper.setIntegrationMeta(new IntegrationMeta(Constants.INTEGRATION_TYPE,
-          Constants.INTEGRATION_VERSION));
-      MoEInAppHelper.getInstance().registerListener(new UnityInAppMessageListener());
-      MoEPushHelper.getInstance().setMessageListener(new UnityPushMessageListener());
       MoEAndroidWrapper.getInstance().setContext(context);
+      PluginInitializer.INSTANCE.initialize(context, builder,
+          (new IntegrationMeta(Constants.INTEGRATION_TYPE, Constants.INTEGRATION_VERSION)));
     } catch (Exception e) {
       Logger.e( TAG + " initialize() : ", e);
     }
