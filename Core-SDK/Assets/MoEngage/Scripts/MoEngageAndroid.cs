@@ -171,7 +171,7 @@ namespace MoEngage
 			Debug.Log(TAG + " SelfHandledShown:: " );
 			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_IMPRESSION);
 			Debug.Log(TAG + " SelfHandledShown() Payload: " + payload);
-			moengageAndroid.Call("selfHandledShown", payload);
+			moengageAndroid.Call("selfHandledCallback", payload);
 #endif
 		}
 
@@ -181,7 +181,17 @@ namespace MoEngage
 			Debug.Log(TAG + " SelfHandledClicked:: ");
 			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_CLICK);
 			Debug.Log(TAG + " SelfHandledClicked:: Payload: " + payload);
-			moengageAndroid.Call("selfHandledClicked", payload);
+			moengageAndroid.Call("selfHandledCallback", payload);
+#endif
+		}
+
+		public static void SelfHandledPrimaryClicked(InAppCampaign campaign)
+		{
+#if !UNITY_EDITOR
+			Debug.Log(TAG + " SelfHandledPrimaryClicked::");
+			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_PRIMARY_CLICKED);
+			Debug.Log(TAG + " SelfHandledPrimaryClicked:: Payload: " + payload);
+			moengageAndroid.Call("selfHandledCallback", payload);
 #endif
 		}
 
@@ -191,7 +201,7 @@ namespace MoEngage
 			Debug.Log(TAG + " SelfHandledDismissed::");
 			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_DISMISSED);
 			Debug.Log(TAG + " SelfHandledDismissed:: Payload: " + payload);
-			moengageAndroid.Call("selfHandledDismissed", payload);
+			moengageAndroid.Call("selfHandledCallback", payload);
 #endif
 		}
 
@@ -210,6 +220,36 @@ namespace MoEngage
 #if !UNITY_EDITOR
 			Debug.Log(TAG + " InvalidateAppContext:: " );
 			moengageAndroid.Call("resetContext");
+#endif
+		}
+
+		public static void optOutDataTracking(bool shouldOptOut)
+		{
+#if !UNITY_EDITOR
+			Debug.Log(TAG + " optOutDataTracking::");
+			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_DATA, shouldOptOut);
+			Debug.Log(TAG + " optOutDataTracking:: shouldOptOut: " + shouldOptOut);
+			moengageAndroid.Call("optOutDataTracking", payload);
+#endif
+		}
+
+		public static void optOutPushTracking(bool shouldOptOut)
+		{
+#if !UNITY_EDITOR
+			Debug.Log(TAG + " optOutPushTracking::");
+			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_PUSH, shouldOptOut);
+			Debug.Log(TAG + " optOutPushTracking:: shouldOptOut: " + shouldOptOut);
+			moengageAndroid.Call("optOutPushTracking", payload);
+#endif
+		}
+
+		public static void optOutInAppTracking(bool shouldOptOut)
+		{
+#if !UNITY_EDITOR
+			Debug.Log(TAG + " optOutInAppTracking::");
+			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_INAPP, shouldOptOut);
+			Debug.Log(TAG + " optOutInAppTracking:: shouldOptOut: " + shouldOptOut);
+			moengageAndroid.Call("optOutInAppTracking", payload);
 #endif
 		}
 

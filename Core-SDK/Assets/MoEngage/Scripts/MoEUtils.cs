@@ -182,6 +182,16 @@ namespace MoEngage
 			return Json.Serialize(inAppCampaignDictionary);
 		}
 
+		public static string GetOptOutTrackingPayload( string type, bool shouldOptOut) {
+			var optOutTrackingDictionary = new Dictionary<string, bool>()
+			{
+				{ MoEConstants.ARGUMENT_TYPE, type },
+				{ MoEConstants.PARAM_STATE, shouldOptOut}
+			};
+
+			return Json.Serialize(optOutTrackingDictionary);
+		}
+
 	}
 }
 

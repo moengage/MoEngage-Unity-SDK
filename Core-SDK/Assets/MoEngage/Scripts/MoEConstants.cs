@@ -43,6 +43,8 @@ namespace MoEngage
         public const string ATTRIBUTE_TYPE_SELF_HANDLED_IMPRESSION = "impression";
 		public const string ATTRIBUTE_TYPE_SELF_HANDLED_CLICK = "click";
 		public const string ATTRIBUTE_TYPE_SELF_HANDLED_DISMISSED = "dismissed";
+		public const string ATTRIBUTE_TYPE_SELF_HANDLED_PRIMARY_CLICKED = "primary_clicked";
+
 
 		public const string ARGUMENT_CAMPAIGN_NAME = "campaignName";
 		public const string ARGUMENT_CAMPAIGN_ID = "campaignId";
@@ -86,6 +88,14 @@ namespace MoEngage
 
         public const string PARAM_IS_DEFAULT_ACTION = "isDefaultAction";
         public const string PARAM_CLICKED_ACTION = "clickedAction";
+
+        /* ***************************** Opt-out Tracking Keys ************************************** */
+
+        public const string PARAM_STATE = "state";
+        public const string PARAM_TYPE_DATA = "data";
+        public const string PARAM_TYPE_PUSH = "push";
+        public const string PARAM_TYPE_INAPP = "inapp";
+
     
     }
 }
