@@ -256,5 +256,31 @@ public class MoEAndroidWrapper {
     pluginHelper.enableSDKLogs();
   }
 
+  public void selfHandledCallback(String selfHandledPayload) {
+    try {
+      Logger.v(TAG + " selfHandledCallback() : Campaign payload: " + selfHandledPayload);
+      if (context == null) {
+        Logger.e(TAG + " selfHandledCallback() : Cannot proceed further context is null.");
+        return;
+      }
+      pluginHelper.selfHandledCallback(context, selfHandledPayload);
+    } catch (Exception e) {
+      Logger.e(TAG + " selfHandledCallback() : ", e);
+    }
+  }
+
+  public void optOutTracking(String optOutPayload){
+    try{
+     Logger.v(TAG + " optOutTracking() : OptOut payload: " + optOutPayload);
+     if (context == null){
+       Logger.e( TAG + " optOutTracking() : Cannot proceed further context is null.");
+       return;
+     }
+     pluginHelper.optOutTracking(context, optOutPayload);
+    }catch(Exception e){
+      Logger.e(TAG + " optOutTracking() : ", e);
+    }
+  }
+
   private static final String ARGUMENT_GAME_OBJECT = "gameObjectName";
 }
