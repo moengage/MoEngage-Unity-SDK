@@ -28,7 +28,7 @@ namespace MoEngage
         public PushCampaign(Dictionary<string, object> pushPayload)
         {
             platform = pushPayload["platform"] as string;
-            isDefaultAction = pushPayload["isDefaultAction"] as bool;
+            isDefaultAction = (bool)pushPayload["isDefaultAction"];
             clickedAction = pushPayload["clickedAction"] as  Dictionary<string, object>;
             payload = pushPayload["payload"] as Dictionary<string, object>;
         }
