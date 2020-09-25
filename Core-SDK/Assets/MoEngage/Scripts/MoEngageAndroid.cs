@@ -243,16 +243,6 @@ namespace MoEngage
 #endif
 		}
 
-		public static void optOutInAppTracking(bool shouldOptOut)
-		{
-#if !UNITY_EDITOR
-			Debug.Log(TAG + " optOutInAppTracking::");
-			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_INAPP, shouldOptOut);
-			Debug.Log(TAG + " optOutInAppTracking:: shouldOptOut: " + shouldOptOut);
-			moengageAndroid.Call("optOutInAppTracking", payload);
-#endif
-		}
-
 	}
 
 #endif

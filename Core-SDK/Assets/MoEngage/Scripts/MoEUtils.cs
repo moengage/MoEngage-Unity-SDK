@@ -183,7 +183,7 @@ namespace MoEngage
 		}
 
 		public static string GetOptOutTrackingPayload( string type, bool shouldOptOut) {
-			var optOutTrackingDictionary = new Dictionary<string, bool>()
+			var optOutTrackingDictionary = new Dictionary<string, object>()
 			{
 				{ MoEConstants.ARGUMENT_TYPE, type },
 				{ MoEConstants.PARAM_STATE, shouldOptOut}
