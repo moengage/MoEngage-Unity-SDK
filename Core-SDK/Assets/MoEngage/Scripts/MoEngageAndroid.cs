@@ -143,13 +143,8 @@ namespace MoEngage
 	    {
 #if !UNITY_EDITOR
 			Debug.Log(TAG + ": PassPushPayload::");
-			Dictionary<string, string> payloadDict = new Dictionary<string, string> ();
-			foreach(KeyValuePair<string, string> entry in pushPayloadDict)
-			{
-			   payloadDict.Add(entry.Key, entry.Value);
-			}
-
-			string pushPayload = MoEUtils.GetPushPayload(payloadDict);
+			
+			string pushPayload = MoEUtils.GetPushPayload(pushPayloadDict);
 			Debug.Log(TAG + ": PassPushPayload:: pushPayload: " + pushPayload);
 			moengageAndroid.Call("passPushPayload", pushPayload);
 #endif

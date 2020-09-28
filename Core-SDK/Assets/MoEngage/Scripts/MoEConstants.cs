@@ -35,7 +35,7 @@ namespace MoEngage
         public const string ARGUMENT_APP_STATUS = "appStatus";
         public const string ARGUMENT_ALIAS = "alias";
         public const string ARGUMENT_FCM_TOKEN = "fcmToken";
-        public const string ARGUMENT_PUSH_PAYLOAD = "pushPayload";
+        public const string ARGUMENT_FCM_PAYLOAD = "fcmPayload";
 
         public const string ATTRIBUTE_TYPE_GENERAL = "general";
         public const string ATTRIBUTE_TYPE_TIMESTAMP = "timestamp";

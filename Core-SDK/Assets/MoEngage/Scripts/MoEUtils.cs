@@ -76,7 +76,7 @@ namespace MoEngage
 
 		public static string GetPushPayload(IDictionary<string, string> payload) {
 			Dictionary<string, object> pushPayloadDict = new Dictionary<string, object> {
-		        { MoEConstants.ARGUMENT_PUSH_PAYLOAD, payload }
+		        { MoEConstants.ARGUMENT_FCM_PAYLOAD, payload }
 		      };
 
 		    string pushPayload =Json.Serialize(pushPayloadDict);
