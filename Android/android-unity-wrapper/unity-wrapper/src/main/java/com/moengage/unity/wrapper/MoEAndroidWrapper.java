@@ -27,26 +27,11 @@
 package com.moengage.unity.wrapper;
 
 import android.content.Context;
-import android.os.Bundle;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.models.GeoLocation;
 import com.moengage.core.Logger;
 import com.moengage.core.MoEUtils;
-import com.moengage.core.Properties;
-import com.moengage.core.SdkConfig;
-import com.moengage.core.model.AppStatus;
-import com.moengage.core.utils.ApiUtility;
-import com.moengage.inapp.MoEInAppHelper;
-import com.moengage.inapp.model.MoEInAppCampaign;
-import com.moengage.push.PushManager;
-import com.moengage.pushbase.MoEPushHelper;
-import com.unity3d.player.UnityPlayer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.moengage.plugin.base.CallbackHelper;
+import com.moengage.plugin.base.PluginHelper;
+import com.moengage.plugin.base.model.PushService;
 import org.json.JSONObject;
 
 /**
@@ -59,8 +44,10 @@ public class MoEAndroidWrapper {
 
   private static final String TAG = Constants.MODULE_TAG + "MoEAndroidWrapper";
 
-  private MoEAndroidWrapper() {
+  private PluginHelper pluginHelper;
 
+  private MoEAndroidWrapper() {
+    pluginHelper = new PluginHelper();
   }
 
   private static MoEAndroidWrapper instance = new MoEAndroidWrapper();
@@ -70,10 +57,6 @@ public class MoEAndroidWrapper {
   }
 
   private Context context;
-  private String gameObjectName;
-  private boolean isInitialized;
-  private final List<Message> messageQueue =
-      Collections.synchronizedList(new ArrayList<Message>());
 
   void setContext(Context context){
     this.context = context;
@@ -83,13 +66,13 @@ public class MoEAndroidWrapper {
     try {
       Logger.v(TAG + " initialize() : Initialization payload: " + initializePayload);
       JSONObject initializationJson = new JSONObject(initializePayload);
-      gameObjectName = initializationJson.getString(ARGUMENT_GAME_OBJECT);
+      String gameObjectName = initializationJson.getString(ARGUMENT_GAME_OBJECT);
       if (MoEUtils.isEmptyString(gameObjectName)) {
         Logger.e(TAG + " initialize() : Game object name is empty cannot pass callbacks");
         return;
       }
-      isInitialized = true;
-      flushPendingMessagesIfAny();
+      CallbackHelper.INSTANCE.setEventEmitter(new EventEmitterImpl(gameObjectName));
+      pluginHelper.initialize();
     } catch (Exception e) {
       Logger.e(TAG + " initialise() : ", e);
     }
@@ -98,121 +81,19 @@ public class MoEAndroidWrapper {
   public void trackEvent(String eventPayload) {
     try {
       Logger.v(TAG + " trackEvent() : Event Payload: " + eventPayload);
-      if (MoEUtils.isEmptyString(eventPayload)) {
-        Logger.e(TAG + " trackEvent() : Payload is null or empty cannot process further.");
-        return;
-      }
-      JSONObject eventJson = new JSONObject(eventPayload);
-      String eventName = eventJson.getString(ARGUMENT_EVENT_NAME);
-      if (MoEUtils.isEmptyString(eventName)) {
-        Logger.e(TAG + " trackEvent() : Event name cannot be null or empty.");
-        return;
-      }
       if (context == null) {
         Logger.e(TAG + " trackEvent() : Context is null cannot process further.");
         return;
       }
-      Properties properties = new Properties();
-      JSONObject attributeJson = eventJson.optJSONObject(ARGUMENT_EVENT_ATTRIBUTES);
-      if (attributeJson == null || attributeJson.length() == 0) {
-        MoEHelper.getInstance(context).trackEvent(eventName, properties);
-        return;
-      }
-      appendGeneralAttributes(attributeJson.optJSONObject(ARGUMENT_GENERAL_EVENT_ATTRIBUTES),
-          properties);
-      appendDateAttributes(attributeJson.optJSONObject(ARGUMENT_TIMESTAMP_EVENT_ATTRIBUTES),
-          properties);
-      appendLocationAttributes(attributeJson.optJSONObject(ARGUMENT_LOCATION_EVENT_ATTRIBUTES),
-          properties);
-      if (attributeJson.optBoolean(ARGUMENT_IS_NON_INTERACTIVE_EVENT, false)) {
-        properties.setNonInteractive();
-      }
-      MoEHelper.getInstance(context).trackEvent(eventName, properties);
+      pluginHelper.trackEvent(context, eventPayload);
     } catch (Exception e) {
       Logger.e(TAG + " trackEvent() : ", e);
     }
   }
 
-  private void appendGeneralAttributes(JSONObject attributesJson, Properties properties) {
-    try {
-      if (attributesJson == null || attributesJson.length() == 0) {
-        Logger.v(TAG + " appendGeneralAttributes() : No general attributes to track.");
-        return;
-      }
-      Iterator<String> keys = attributesJson.keys();
-      while (keys.hasNext()) {
-        String key = keys.next();
-        if (!MoEUtils.isEmptyString(key)) {
-          properties.addAttribute(key, attributesJson.get(key));
-        }
-      }
-    } catch (Exception e) {
-      Logger.e(TAG + " appendGeneralAttributes() : ", e);
-    }
-  }
-
-  private void appendDateAttributes(JSONObject attributesJson, Properties properties) {
-    try {
-      if (attributesJson == null || attributesJson.length() == 0) {
-        Logger.v(TAG + " appendDateAttributes() : No date attribute to track.");
-        return;
-      }
-      Iterator<String> keys = attributesJson.keys();
-      while (keys.hasNext()) {
-        String key = keys.next();
-        if (!MoEUtils.isEmptyString(key)) {
-          properties.addDateIso(key, attributesJson.getString(key));
-        }
-      }
-    } catch (Exception e) {
-      Logger.e(TAG + " appendDateAttributes() : ", e);
-    }
-  }
-
-  private void appendLocationAttributes(JSONObject attributesJson, Properties properties) {
-    try {
-      if (attributesJson == null || attributesJson.length() == 0) {
-        Logger.v(TAG + " appendLocationAttributes() : No location attributes to track.");
-        return;
-      }
-      Iterator<String> keys = attributesJson.keys();
-      while (keys.hasNext()) {
-        String key = keys.next();
-        if (!MoEUtils.isEmptyString(key)) {
-          JSONObject locationJson = attributesJson.getJSONObject(key);
-          properties.addAttribute(key, new GeoLocation(locationJson.getDouble(ARGUMENT_LATITUDE),
-              locationJson.getDouble(ARGUMENT_LONGITUDE)));
-        }
-      }
-    } catch (Exception e) {
-      Logger.e(TAG + " appendLocationAttributes() : ", e);
-    }
-  }
-
   public void passPushPayload(String pushPayload) {
     try {
-      Logger.v(TAG + " passPushPayload() : Push Payload: " + pushPayload);
-      if (MoEUtils.isEmptyString(pushPayload)) {
-        Logger.e(TAG + " passPushPayload() : Payload is null or empty cannot process further.");
-        return;
-      }
-      JSONObject payloadJson = new JSONObject(pushPayload);
-      Logger.v(TAG + " passPushPayload() : Payload Json: " + payloadJson);
-      JSONObject payload = payloadJson.getJSONObject(ARGUMENT_PUSH_PAYLOAD);
-      if (payload.length() == 0) {
-        Logger.e(TAG + " passPushPayload() : Push payload is either null or empty");
-        return;
-      }
-      Bundle payloadBundle = MoEUtils.jsonToBundle(payload);
-      if (payloadBundle == null) {
-        Logger.e(TAG + " passPushPayload() : Could not parse payload json.");
-        return;
-      }
-      if (context == null) {
-        Logger.e(TAG + " passPushPayload() : Context is null cannot process further.");
-        return;
-      }
-      MoEPushHelper.getInstance().handlePushPayload(context, payloadBundle);
+      pluginHelper.passPushPayload(context, pushPayload, PushService.FCM);
     } catch (Exception e) {
       Logger.e(TAG + " passPushPayload() : ", e);
     }
@@ -221,17 +102,7 @@ public class MoEAndroidWrapper {
   public void passPushToken(String tokenPayload) {
     try {
       Logger.v(TAG + " passPushToken() : Token Payload: " + tokenPayload);
-      if (MoEUtils.isEmptyString(tokenPayload)) {
-        Logger.e(TAG + " passPushToken() : push token is null or empty cannot process further.");
-        return;
-      }
-      JSONObject tokenJson = new JSONObject(tokenPayload);
-      String token = tokenJson.getString(ARGUMENT_FCM_TOKEN);
-      if (context == null) {
-        Logger.e(TAG + " passPushToken() : Context is null cannot process further.");
-        return;
-      }
-      PushManager.getInstance().refreshToken(context, token);
+      pluginHelper.passPushToken(context, tokenPayload, PushService.FCM);
     } catch (Exception e) {
       Logger.e(TAG + " passPushToken() : ", e);
     }
@@ -244,7 +115,7 @@ public class MoEAndroidWrapper {
         Logger.e(TAG + " getSelfHandledInApp() : Context is null cannot process further.");
         return;
       }
-      MoEInAppHelper.getInstance().getSelfHandledInApp(context);
+      pluginHelper.getSelfHandledInApp(context);
     } catch (Exception e) {
       Logger.e(TAG + " getSelfHandledInApp() : ", e);
     }
@@ -257,7 +128,7 @@ public class MoEAndroidWrapper {
         Logger.e(TAG + " showInApp() : Context is null cannot process further.");
         return;
       }
-      MoEInAppHelper.getInstance().showInApp(context);
+      pluginHelper.showInApp(context);
     } catch (Exception e) {
       Logger.e(TAG + " showInApp() : ", e);
     }
@@ -270,7 +141,7 @@ public class MoEAndroidWrapper {
         Logger.e(TAG + " logout() : Context is null cannot process further.");
         return;
       }
-      MoEHelper.getInstance(context).logoutUser();
+      pluginHelper.logout(context);
     } catch (Exception e) {
       Logger.e(TAG + " logout() : ", e);
     }
@@ -279,17 +150,11 @@ public class MoEAndroidWrapper {
   public void setAlias(String aliasPayload) {
     try {
       Logger.v(TAG + " setAlias() : Alias Payload: " + aliasPayload);
-      JSONObject aliasJson = new JSONObject(aliasPayload);
-      String alias = aliasJson.getString(ARGUMENT_ALIAS);
-      if (MoEUtils.isEmptyString(alias)) {
-        Logger.e(TAG + " setAlias() : Alias cannot be null or empty");
-        return;
-      }
       if (context == null) {
         Logger.e(TAG + " setAlias() : Context is null cannot process further.");
         return;
       }
-      MoEHelper.getInstance(context).setAlias(alias);
+      pluginHelper.setAlias(context, aliasPayload);
     } catch (Exception e) {
       Logger.e(TAG + " setAlias() : ", e);
     }
@@ -298,17 +163,11 @@ public class MoEAndroidWrapper {
   public void setAppStatus(String appStatusPayload) {
     try {
       Logger.v(TAG + " setAppStatus() : App status payload: " + appStatusPayload);
-      JSONObject appStatusJson = new JSONObject(appStatusPayload);
-      String appStatus = appStatusJson.getString(ARGUMENT_APP_STATUS);
-      if (MoEUtils.isEmptyString(appStatus)) {
-        Logger.e(TAG + " setAppStatus() : App status cannot be null or empty");
-        return;
-      }
       if (context == null) {
         Logger.e(TAG + " setAppStatus() : Context is null cannot process further.");
         return;
       }
-      MoEHelper.getInstance(context).setAppStatus(AppStatus.valueOf(appStatus.toUpperCase()));
+      pluginHelper.setAppStatus(context, appStatusPayload);
     } catch (Exception e) {
       Logger.e(TAG + " setAppStatus() : ", e);
     }
@@ -317,99 +176,24 @@ public class MoEAndroidWrapper {
   public void setUserAttribute(String userAttributePayload) {
     try {
       Logger.v(TAG + " setUserAttribute() : User Attribute payload: " + userAttributePayload);
-      JSONObject attributeJson = new JSONObject(userAttributePayload);
-      String attributeName = attributeJson.getString(ARGUMENT_USER_ATTRIBUTE_NAME);
-      if (MoEUtils.isEmptyString(attributeName)) {
-        Logger.e(TAG + " setUserAttribute() : Attribute name cannot be null or empty.");
-        return;
-      }
-      String attributeType = attributeJson.getString(ARGUMENT_TYPE);
-      if (MoEUtils.isEmptyString(attributeType)) {
-        Logger.e(TAG + " setUserAttribute() : Attribute type cannot be null or empty");
-        return;
-      }
       if (context == null) {
         Logger.e(TAG + " setUserAttribute() : Cannot proceed further context is null.");
         return;
       }
-      switch (attributeType) {
-        case Constants.ATTRIBUTE_TYPE_GENERAL:
-          trackGeneralAttribute(attributeJson, attributeName, context);
-          break;
-        case Constants.ATTRIBUTE_TYPE_TIMESTAMP:
-          trackTimeStampAttribute(attributeJson, attributeName, context);
-          break;
-        case Constants.ATTRIBUTE_TYPE_LOCATION:
-          trackLocationAttribute(attributeJson, attributeName, context);
-          break;
-        default:
-          Logger.e(TAG + " setUserAttribute() : Invalid attribute type: " + attributeType);
-      }
+      pluginHelper.setUserAttribute(context, userAttributePayload);
     } catch (Exception e) {
       Logger.e(TAG + " setUserAttribute() : ", e);
-    }
-  }
-
-  private void trackTimeStampAttribute(JSONObject attributeJson, String attributeName,
-      Context context) throws JSONException {
-    String attributeValue = attributeJson.getString(ARGUMENT_USER_ATTRIBUTE_VALUE);
-    if (MoEUtils.isEmptyString(attributeValue)) {
-      Logger.e(TAG + " trackTimeStampAttribute() : Attribute value should not be null or empty.");
-      return;
-    }
-    MoEHelper.getInstance(context).setUserAttributeISODate(attributeName, attributeValue);
-  }
-
-  private void trackLocationAttribute(JSONObject attributeJson, String attributeName,
-      Context context) throws JSONException {
-    if (!attributeJson.has(ARGUMENT_LOCATION_ATTRIBUTE)) {
-      Logger.e(TAG
-          + " trackLocationAttribute() : Cannot track location attribute without "
-          + ARGUMENT_LOCATION_ATTRIBUTE);
-      return;
-    }
-    JSONObject locationJson = attributeJson.getJSONObject(ARGUMENT_LOCATION_ATTRIBUTE);
-    MoEHelper.getInstance(context)
-        .setUserAttribute(attributeName,
-            new GeoLocation(locationJson.getDouble(ARGUMENT_LATITUDE),
-                locationJson.getDouble(ARGUMENT_LONGITUDE)));
-  }
-
-  private void trackGeneralAttribute(JSONObject attributeJson, String attributeName,
-      Context context) throws JSONException {
-    Object attributeValue = attributeJson.get(ARGUMENT_USER_ATTRIBUTE_VALUE);
-    if (attributeValue == null) {
-      Logger.e(TAG + " trackGeneralAttribute() : Attribute value should not be null");
-      return;
-    }
-    if (attributeValue instanceof Integer) {
-      MoEHelper.getInstance(context).setUserAttribute(attributeName, (int) attributeValue);
-    } else if (attributeValue instanceof Double) {
-      MoEHelper.getInstance(context).setUserAttribute(attributeName, (double) attributeValue);
-    } else if (attributeValue instanceof Float) {
-      MoEHelper.getInstance(context).setUserAttribute(attributeName, (float) attributeValue);
-    } else if (attributeValue instanceof Boolean) {
-      MoEHelper.getInstance(context)
-          .setUserAttribute(attributeName, (boolean) attributeValue);
-    } else if (attributeValue instanceof Long) {
-      MoEHelper.getInstance(context).setUserAttribute(attributeName, (long) attributeValue);
-    } else if (attributeValue instanceof String) {
-      MoEHelper.getInstance(context).setUserAttribute(attributeName,
-          String.valueOf(attributeValue));
-    } else {
-      Logger.e(TAG + " trackGeneralAttribute() : Not a supported datatype");
     }
   }
 
   public void setAppContext(String contextPayload) {
     try {
       Logger.v(TAG + " setAppContext() : Context Payload: " + contextPayload);
-      JSONObject contextJson = new JSONObject(contextPayload);
-      JSONArray contextArray = contextJson.getJSONArray(ARGUMENT_CONTEXT);
-      List<String> contextList = ApiUtility.jsonArrayToStringList(contextArray);
-      if (context != null && contextList != null && !contextList.isEmpty()) {
-        MoEHelper.getInstance(context).setAppContext(contextList);
+      if (context == null) {
+        Logger.e(TAG + " setAppContext() : Cannot proceed further context is null.");
+        return;
       }
+      pluginHelper.setAppContext(context, contextPayload);
     } catch (Exception e) {
       Logger.e(TAG + " setAppContext() : ", e);
     }
@@ -417,9 +201,12 @@ public class MoEAndroidWrapper {
 
   public void resetContext(){
     try {
-      if (context != null) {
-        MoEHelper.getInstance(context).resetAppContext();
+      Logger.v(TAG + " resetContext() : Resetting app context");
+      if (context == null) {
+        Logger.e(TAG + " resetContext() : Cannot proceed further context is null.");
+        return;
       }
+      pluginHelper.resetAppContext(context);
     } catch (Exception e) {
       Logger.e( TAG + " resetContext() : ", e);
     }
@@ -428,13 +215,11 @@ public class MoEAndroidWrapper {
   public void selfHandledShown(String selfHandledPayload){
     try{
      Logger.v(TAG + " selfHandledShown() : Campaign payload: " + selfHandledPayload);
-     JSONObject campaignJson = new JSONObject(selfHandledPayload);
-      MoEInAppCampaign campaign = Utils.jsonToInAppCampaign(campaignJson);
       if (context == null){
         Logger.e( TAG + " selfHandledShown() : Cannot proceed further context is null.");
         return;
       }
-      MoEInAppHelper.getInstance().selfHandledShown(context, campaign);
+      pluginHelper.selfHandledCallback(context, selfHandledPayload);
     }catch(Exception e){
       Logger.e(TAG + " selfHandledShown() : ", e);
     }
@@ -443,13 +228,11 @@ public class MoEAndroidWrapper {
   public void selfHandledClicked(String selfHandledPayload){
     try{
       Logger.v(TAG + " selfHandledClicked() : Campaign payload: " + selfHandledPayload);
-      JSONObject campaignJson = new JSONObject(selfHandledPayload);
-      MoEInAppCampaign campaign = Utils.jsonToInAppCampaign(campaignJson);
       if (context == null){
         Logger.e( TAG + " selfHandledClicked() : Cannot proceed further context is null.");
         return;
       }
-      MoEInAppHelper.getInstance().selfHandledClicked(context, campaign);
+      pluginHelper.selfHandledCallback(context, selfHandledPayload);
     }catch(Exception e){
       Logger.e(TAG + " selfHandledClicked() : ", e);
     }
@@ -458,76 +241,46 @@ public class MoEAndroidWrapper {
   public void selfHandledDismissed(String selfHandledPayload){
     try{
      Logger.v(TAG + " selfHandledDismissed() : Campaign payload: " + selfHandledPayload);
-      JSONObject campaignJson = new JSONObject(selfHandledPayload);
-      MoEInAppCampaign campaign = Utils.jsonToInAppCampaign(campaignJson);
       if (context == null){
         Logger.e( TAG + " selfHandledDismissed() : Cannot proceed further context is null.");
         return;
       }
-      MoEInAppHelper.getInstance().selfHandledDismissed(context, campaign);
+      pluginHelper.selfHandledCallback(context, selfHandledPayload);
     }catch(Exception e){
       Logger.e(TAG + " selfHandledDismissed() : ", e);
     }
   }
 
   public void enableSDKLogs() {
-    SdkConfig.getConfig().logLevel = Logger.VERBOSE;
-    Logger.v(TAG + " enableSDKLogs(): Logging enabled");
+    Logger.v(TAG + " enableSDKLogs(): Enabling SDK logs.");
+    pluginHelper.enableSDKLogs();
   }
 
-  void sendOrQueueCallback(String methodName, JSONObject payload) {
+  public void selfHandledCallback(String selfHandledPayload) {
     try {
-      Logger.v(
-          TAG + " sendOrQueueCallback() : Method Name: " + methodName + " Payload: " + payload);
-      payload.put(Constants.PARAM_PLATFORM, Constants.PLATFORM_NAME);
-      if (isInitialized){
-        sendUnityMessage(new Message(methodName, payload.toString()));
-      }else {
-        messageQueue.add(new Message(methodName, payload.toString()));
-      }
-    } catch (Exception e) {
-      Logger.e(TAG + " sendOrQueueCallback() : ", e);
-    }
-  }
-
-  private void flushPendingMessagesIfAny() {
-    for (Message message : messageQueue) {
-      sendUnityMessage(message);
-    }
-    messageQueue.clear();
-  }
-
-  private void sendUnityMessage(Message message) {
-    try {
-      if (MoEUtils.isEmptyString(gameObjectName)) {
-        Logger.e(TAG + " sendUnityMessage() : Game object name is null or empty cannot send "
-            + "message.");
+      Logger.v(TAG + " selfHandledCallback() : Campaign payload: " + selfHandledPayload);
+      if (context == null) {
+        Logger.e(TAG + " selfHandledCallback() : Cannot proceed further context is null.");
         return;
       }
-      Logger.v(TAG + " sendUnityMessage() : Sending Message: " + message);
-      UnityPlayer.UnitySendMessage(gameObjectName, message.methodName, message.payload);
+      pluginHelper.selfHandledCallback(context, selfHandledPayload);
     } catch (Exception e) {
-      Logger.e(TAG + " sendUnityMessage() : ", e);
+      Logger.e(TAG + " selfHandledCallback() : ", e);
     }
   }
 
-  private static final String ARGUMENT_EVENT_NAME = "eventName";
-  private static final String ARGUMENT_EVENT_ATTRIBUTES = "eventAttributes";
-  private static final String ARGUMENT_GENERAL_EVENT_ATTRIBUTES = "generalAttributes";
-  private static final String ARGUMENT_LOCATION_EVENT_ATTRIBUTES = "locationAttributes";
-  private static final String ARGUMENT_TIMESTAMP_EVENT_ATTRIBUTES = "dateTimeAttributes";
-  private static final String ARGUMENT_IS_NON_INTERACTIVE_EVENT = "isNonInteractive";
-  private static final String ARGUMENT_LATITUDE = "latitude";
-  private static final String ARGUMENT_LONGITUDE = "longitude";
-  private static final String ARGUMENT_USER_ATTRIBUTE_NAME = "attributeName";
-  private static final String ARGUMENT_USER_ATTRIBUTE_VALUE = "attributeValue";
-  private static final String ARGUMENT_LOCATION_ATTRIBUTE = "locationAttribute";
-  private static final String ARGUMENT_TYPE = "type";
+  public void optOutTracking(String optOutPayload){
+    try{
+     Logger.v(TAG + " optOutTracking() : OptOut payload: " + optOutPayload);
+     if (context == null){
+       Logger.e( TAG + " optOutTracking() : Cannot proceed further context is null.");
+       return;
+     }
+     pluginHelper.optOutTracking(context, optOutPayload);
+    }catch(Exception e){
+      Logger.e(TAG + " optOutTracking() : ", e);
+    }
+  }
 
   private static final String ARGUMENT_GAME_OBJECT = "gameObjectName";
-  private static final String ARGUMENT_APP_STATUS = "appStatus";
-  private static final String ARGUMENT_ALIAS = "alias";
-  private static final String ARGUMENT_FCM_TOKEN = "fcmToken";
-  private static final String ARGUMENT_PUSH_PAYLOAD = "pushPayload";
-  private static final String ARGUMENT_CONTEXT = "contexts";
 }

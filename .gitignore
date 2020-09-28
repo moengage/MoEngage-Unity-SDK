@@ -14,6 +14,18 @@ Android/PushAmpPlus/Packages/
 Android/PushAmpPlus/ProjectSettings/
 Android/PushAmpPlus/*.unitypackage
 
+Android/HMSPushKit/Library/
+Android/HMSPushKit/Logs/
+Android/HMSPushKit/Packages/
+Android/HMSPushKit/ProjectSettings/
+Android/HMSPushKit/*.unitypackage
+
+Android/RichNotification/Library/
+Android/RichNotification/Logs/
+Android/RichNotification/Packages/
+Android/RichNotification/ProjectSettings/
+Android/RichNotification/*.unitypackage
+
 iOS/Geofence/Library/
 iOS/Geofence/Logs/
 iOS/Geofence/Packages/

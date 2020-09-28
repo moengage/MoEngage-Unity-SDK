@@ -76,7 +76,7 @@ namespace MoEngage
 
 		public static string GetPushPayload(IDictionary<string, string> payload) {
 			Dictionary<string, object> pushPayloadDict = new Dictionary<string, object> {
-		        { MoEConstants.ARGUMENT_PUSH_PAYLOAD, payload }
+		        { MoEConstants.ARGUMENT_FCM_PAYLOAD, payload }
 		      };
 
 		    string pushPayload =Json.Serialize(pushPayloadDict);
@@ -180,6 +180,16 @@ namespace MoEngage
 			};
 
 			return Json.Serialize(inAppCampaignDictionary);
+		}
+
+		public static string GetOptOutTrackingPayload( string type, bool shouldOptOut) {
+			var optOutTrackingDictionary = new Dictionary<string, object>()
+			{
+				{ MoEConstants.ARGUMENT_TYPE, type },
+				{ MoEConstants.PARAM_STATE, shouldOptOut}
+			};
+
+			return Json.Serialize(optOutTrackingDictionary);
 		}
 
 	}

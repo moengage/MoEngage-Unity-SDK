@@ -21,12 +21,20 @@ namespace MoEngage
     public class PushCampaign
     {
         public string platform;
+        public bool isDefaultAction;
+        public IDictionary<string, object> clickedAction;
         public IDictionary<string,object> payload;
 
         public PushCampaign(Dictionary<string, object> pushPayload)
         {
-            platform = pushPayload["platform"] as string;
-            payload = pushPayload["payload"] as Dictionary<string, object>;
+            platform = pushPayload[MoEConstants.PARAM_PLATFORM] as string;
+            isDefaultAction = (bool)pushPayload[MoEConstants.PARAM_IS_DEFAULT_ACTION];
+
+            if (pushPayload.ContainsKey(MoEConstants.PARAM_CLICKED_ACTION)) {
+                clickedAction = pushPayload[MoEConstants.PARAM_CLICKED_ACTION] as  Dictionary<string, object>;
+            }
+
+            payload = pushPayload[MoEConstants.PARAM_PAYLOAD] as Dictionary<string, object>;
         }
     }
 }

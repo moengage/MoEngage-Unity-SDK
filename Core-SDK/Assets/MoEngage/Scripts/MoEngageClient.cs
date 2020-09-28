@@ -395,6 +395,36 @@ namespace MoEngage
 #endif
         }
 
+        public static void SelfHandledPrimaryClicked(InAppCampaign inAppCampaign)
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+			MoEngageAndroid.SelfHandledPrimaryClicked(inAppCampaign);
+#elif UNITY_IOS && !UNITY_EDITOR
+
+#endif
+        }
+
+        public static void optOutDataTracking(bool shouldOptOut)
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.optOutDataTracking(shouldOptOut);
+#endif
+        } 
+        
+        public static void optOutPushTracking(bool shouldOptOut)
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.optOutPushTracking(shouldOptOut);
+#endif
+        } 
+
+         public static void optOutInAppTracking(bool shouldOptOut)
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.optOutInAppTracking(shouldOptOut);
+#endif
+        } 
+
         #endregion
 
         #region iOS Specific Methods
