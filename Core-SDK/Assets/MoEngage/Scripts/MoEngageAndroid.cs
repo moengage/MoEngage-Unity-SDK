@@ -228,8 +228,8 @@ namespace MoEngage
 #if !UNITY_EDITOR
 			Debug.Log(TAG + " optOutDataTracking::");
 			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_DATA, shouldOptOut);
-			Debug.Log(TAG + " optOutDataTracking:: shouldOptOut: " + shouldOptOut);
-			moengageAndroid.Call("optOutDataTracking", payload);
+			Debug.Log(TAG + " optOutDataTracking:: payload: " + payload);
+			moengageAndroid.Call("optOutTracking", payload);
 #endif
 		}
 
@@ -238,8 +238,18 @@ namespace MoEngage
 #if !UNITY_EDITOR
 			Debug.Log(TAG + " optOutPushTracking::");
 			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_PUSH, shouldOptOut);
-			Debug.Log(TAG + " optOutPushTracking:: shouldOptOut: " + shouldOptOut);
-			moengageAndroid.Call("optOutPushTracking", payload);
+			Debug.Log(TAG + " optOutPushTracking:: payload: " + payload);
+			moengageAndroid.Call("optOutTracking", payload);
+#endif
+		}
+
+		public static void optOutInAppTracking(bool shouldOptOut)
+		{
+#if !UNITY_EDITOR
+			Debug.Log(TAG + " optOutInAppTracking::");
+			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_INAPP, shouldOptOut);
+			Debug.Log(TAG + " optOutInAppTracking:: payload: " + payload);
+			moengageAndroid.Call("optOutTracking", payload);
 #endif
 		}
 

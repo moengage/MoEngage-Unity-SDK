@@ -85,7 +85,6 @@ namespace MoEngage
         public const string PARAM_PAYLOAD = "payload";
         public const string PARAM_DISMISS_INTERVAL = "dismissInterval";
         public const string PARAM_IS_CANCELLABLE = "isCancellable";
-
         public const string PARAM_IS_DEFAULT_ACTION = "isDefaultAction";
         public const string PARAM_CLICKED_ACTION = "clickedAction";
 
