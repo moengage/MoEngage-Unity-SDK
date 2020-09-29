@@ -7,12 +7,11 @@
 
 #import "MoEUnityConstants.h"
 
-NSString* const kMoEUnitySDKVersion = @"1.0.1";
-
 // Callbacks Method Names
-NSString* const kMOEventNamePushClicked = @"PushClicked";
-NSString* const kMOEventNameInAppShown = @"InAppCampaignShown";
-NSString* const kMOEventNameInAppClicked = @"InAppCampaignClicked";
-NSString* const kMOEventNameInAppDismissed = @"InAppCampaignDismissed";
-NSString* const kMOEventNameInAppSelfHandled = @"InAppCampaignSelfHandled";
-NSString* const kMOEventNameInAppCustomAction = @"InAppCampaignCustomAction";
+NSString* const kUnityMethodNamePushClicked = @"PushClicked";
+NSString* const kUnityMethodNameInAppShown = @"InAppCampaignShown";
+NSString* const kUnityMethodNameInAppClicked = @"InAppCampaignClicked";
+NSString* const kUnityMethodNameInAppDismissed = @"InAppCampaignDismissed";
+NSString* const kUnityMethodNameInAppSelfHandled = @"InAppCampaignSelfHandled";
+NSString* const kUnityMethodNameInAppCustomAction = @"InAppCampaignCustomAction";
+

@@ -7,14 +7,15 @@
 //  Copyright © 2020 MoEngage. All rights reserved.
 //
 
-#import "MoEUnityBridge.h"
+#import <MoEPluginBase/MoEPluginBase.h>
 #import <MoEngage/MoEngage.h>
+#import "MoEUnityInitializer.h"
 
 extern "C"{
 
 #pragma mark- Utils Methods
 void enableLogs() {
-    [[MoEUnityBridge sharedInstance] enableLogs:true];
+    [[MoEPluginBridge sharedInstance] enableLogs];
 }
 
 NSString* getNSStringFromChar(const char* str) {
@@ -100,103 +101,67 @@ char* moe_cStringCopy(const char* string) {
 void initialize(const char* gameObjPayload){
     NSMutableDictionary *gameObjDict = getDictionaryFromJSON(gameObjPayload);
     NSString* gameObjectName = [gameObjDict validObjectForKey:@"gameObjectName"];
-    [[MoEUnityBridge sharedInstance] initializeWithGameObject:gameObjectName];
+    [[MoEUnityInitializer sharedInstance] setupSDKWithGameObject:gameObjectName];
 }
 
 #pragma mark- INSTALL/UPDATE Tracking
 
 void setAppStatus(const char* appStatusPayload){
     NSMutableDictionary *appStatusDict = getDictionaryFromJSON(appStatusPayload);
-    NSString* appStatus = [appStatusDict validObjectForKey:@"appStatus"];
-    if (appStatus) {
-        [[MoEUnityBridge sharedInstance] setAppStatus:appStatus];
-    }
+    [[MoEPluginBridge sharedInstance] setAppStatus:appStatusDict];
 }
 
 #pragma mark- User Attributes
 
 void setUserAttribute(const char* userAttrPayload){
     NSMutableDictionary *userAttrDict = getDictionaryFromJSON(userAttrPayload);
-    NSString* attributeType = [userAttrDict validObjectForKey:@"type"];
-    NSString* attributeName = [userAttrDict validObjectForKey:@"attributeName"];
-    if (attributeType) {
-        if ([attributeType isEqualToString:@"general"]) {
-            id attributeValue = [userAttrDict validObjectForKey:@"attributeValue"];
-            [[MoEUnityBridge sharedInstance] setUserAttribute:attributeValue forKey:attributeName];
-        }
-        else if ([attributeType isEqualToString:@"timestamp"]){
-            NSString* attributeValue = [userAttrDict validObjectForKey:@"attributeValue"];
-            [[MoEUnityBridge sharedInstance] setUserAttributeDateTimeWithISOString:attributeValue forKey:attributeName];
-        }
-        else if ([attributeType isEqualToString:@"location"]){
-            NSDictionary* locationDict = [userAttrDict validObjectForKey:@"locationAttribute"];
-            if (locationDict) {
-                double lat = [[locationDict validObjectForKey:@"latitude"] doubleValue];
-                double lng = [[locationDict validObjectForKey:@"longitude"] doubleValue];
-                [[MoEUnityBridge sharedInstance] setUserAttributeLocationLatitude:lat longitude:lng forKey:attributeName];
-            }
-        }
-    }
+    [[MoEPluginBridge sharedInstance] setUserAttributeWithPayload:userAttrDict];
 }
 
 void setAlias(const char* aliasPayload){
     NSMutableDictionary *aliasDict = getDictionaryFromJSON(aliasPayload);
-    NSString* alias = [aliasDict validObjectForKey:@"alias"];
-    if (alias) {
-        [[MoEUnityBridge sharedInstance] setAlias:alias];
-    }
+    [[MoEPluginBridge sharedInstance] setAlias:aliasDict];
 }
 
 #pragma mark- Track Event
 
 void trackEvent(const char* eventPayload) {
     NSMutableDictionary *eventPayloadDict = getDictionaryFromJSON(eventPayload);
-    [[MoEUnityBridge sharedInstance] trackEventWithPayload:eventPayloadDict];
+    [[MoEPluginBridge sharedInstance] trackEventWithPayload:eventPayloadDict];
 }
 
 #pragma mark- Push Notification
 
 void registerForPush() {
-    [[MoEUnityBridge sharedInstance] registerForPush];
+    [[MoEPluginBridge sharedInstance] registerForPush];
 }
 
 #pragma mark- InApp Nativ
 void showInApp() {
-    [[MoEUnityBridge sharedInstance] showInApp];
+    [[MoEPluginBridge sharedInstance] showInApp];
 }
 
 void setInAppContexts(const char* contextsPayload){
     NSMutableDictionary *contextsPayloadDict = getDictionaryFromJSON(contextsPayload);
-    NSArray* contexts = [contextsPayloadDict validObjectForKey:@"contexts"];
-    [[MoEUnityBridge sharedInstance] setInAppContexts:contexts];
+    [[MoEPluginBridge sharedInstance] setInAppContexts:contextsPayloadDict];
 }
 
 void invalidateInAppContexts(){
-    [[MoEUnityBridge sharedInstance] invalidateInAppContexts];
+    [[MoEPluginBridge sharedInstance] invalidateInAppContexts];
 }
 
 void getSelfHandledInApp() {
-    [[MoEUnityBridge sharedInstance] getSelfHandledInApp];
+    [[MoEPluginBridge sharedInstance] getSelfHandledInApp];
 }
 
-void selfHandledCampaignShown(const char* selfHandledPayload){
+void updateSelfHandledInAppStatusWithPayload(const char* selfHandledPayload){
     NSMutableDictionary *selfHandledCampaignDict = getDictionaryFromJSON(selfHandledPayload);
-    [[MoEUnityBridge sharedInstance] selfHandledCampaignShown:selfHandledCampaignDict];
-}
-
-void selfHandledCampaignClicked(const char* selfHandledPayload){
-    NSMutableDictionary *selfHandledCampaignDict = getDictionaryFromJSON(selfHandledPayload);
-    [[MoEUnityBridge sharedInstance] selfHandledCampaignClicked:selfHandledCampaignDict];
-}
-
-void selfHandledCampaignDismissed(const char* selfHandledPayload){
-    NSMutableDictionary *selfHandledCampaignDict = getDictionaryFromJSON(selfHandledPayload);
-    [[MoEUnityBridge sharedInstance] selfHandledCampaignDismissed:selfHandledCampaignDict];
+    [[MoEPluginBridge sharedInstance] updateSelfHandledInAppStatusWithPayload:selfHandledCampaignDict];
 }
 
 #pragma mark- Geofence
 void startGeofenceMonitoring() {
-    [[MoEUnityBridge sharedInstance] startGeofenceMonitoring];
+    [[MoEPluginBridge sharedInstance] startGeofenceMonitoring];
 }
 
 #pragma mark- OptOuts
@@ -205,7 +170,7 @@ void optOutOfIDFATracking(const char* optOutPayload) {
     NSMutableDictionary *optOutDict = getDictionaryFromJSON(optOutPayload);
     id optOutVal = [optOutDict validObjectForKey:@"isOptedOut"];
     if (optOutVal) {
-        [[MOAnalytics sharedInstance]optOutOfIDFATracking:[optOutVal boolValue]];
+        [[MOAnalytics sharedInstance] optOutOfIDFATracking:[optOutVal boolValue]];
     }
 }
 
@@ -213,13 +178,18 @@ void optOutOfIDFVTracking(const char* optOutPayload) {
     NSMutableDictionary *optOutDict = getDictionaryFromJSON(optOutPayload);
     id optOutVal = [optOutDict validObjectForKey:@"isOptedOut"];
     if (optOutVal) {
-        [[MOAnalytics sharedInstance]optOutOfIDFVTracking:[optOutVal boolValue]];
+        [[MOAnalytics sharedInstance] optOutOfIDFVTracking:[optOutVal boolValue]];
     }
+}
+
+void optOutGDPRTracking(const char* optOutPayload) {
+    NSMutableDictionary *optOutDict = getDictionaryFromJSON(optOutPayload);
+    [[MoEPluginBridge sharedInstance] optOutTracking:optOutDict];
 }
 
 #pragma mark- Reset User
 void resetUser(){
-    [[MoEUnityBridge sharedInstance] resetUser];
+    [[MoEPluginBridge sharedInstance] resetUser];
 }
 
 }

@@ -65,13 +65,7 @@ namespace MoEngage
         private static extern void getSelfHandledInApp();
 
         [DllImport("__Internal")]
-        private static extern void selfHandledCampaignShown(string selfHandledPayload);
-
-        [DllImport("__Internal")]
-        private static extern void selfHandledCampaignClicked(string selfHandledPayload);
-
-        [DllImport("__Internal")]
-        private static extern void selfHandledCampaignDismissed(string selfHandledPayload);
+        private static extern void updateSelfHandledInAppStatusWithPayload(string selfHandledPayload);
 
         [DllImport("__Internal")]
         private static extern void startGeofenceMonitoring();
@@ -81,6 +75,9 @@ namespace MoEngage
 
         [DllImport("__Internal")]
         private static extern void optOutOfIDFVTracking(string optOutPayload);
+
+        [DllImport("__Internal")]
+        private static extern void optOutGDPRTracking(string optOutPayload);
 
         #endregion
 
@@ -218,7 +215,7 @@ namespace MoEngage
 			Debug.Log(TAG + " SelfHandledShown:: " );
 			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_IMPRESSION);
 			Debug.Log(TAG + " SelfHandledShown() Payload: " + payload);
-			selfHandledCampaignShown(payload);	
+			updateSelfHandledInAppStatusWithPayload(payload);	
 #endif
         }
 
@@ -228,9 +225,19 @@ namespace MoEngage
 			Debug.Log(TAG + " SelfHandledClicked:: ");
 			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_CLICK);
 			Debug.Log(TAG + " SelfHandledClicked:: Payload: " + payload);
-			selfHandledCampaignClicked(payload);	
+			updateSelfHandledInAppStatusWithPayload(payload);	
 #endif
         }
+
+        public static void SelfHandledPrimaryClicked(InAppCampaign campaign)
+	{
+#if !UNITY_EDITOR
+			Debug.Log(TAG + " SelfHandledPrimaryClicked::");
+			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_PRIMARY_CLICKED);
+			Debug.Log(TAG + " SelfHandledPrimaryClicked:: Payload: " + payload);
+			updateSelfHandledInAppStatusWithPayload(payload);
+#endif
+	}
 
         public static void SelfHandledDismissed(InAppCampaign campaign)
         {
@@ -238,7 +245,7 @@ namespace MoEngage
 			Debug.Log(TAG + " SelfHandledDismissed::");
 			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_DISMISSED);
 			Debug.Log(TAG + " SelfHandledDismissed:: Payload: " + payload);
-			selfHandledCampaignDismissed(payload);	
+			updateSelfHandledInAppStatusWithPayload(payload);	
 #endif
         }
 
@@ -291,6 +298,36 @@ namespace MoEngage
             optOutOfIDFVTracking(payload);
 #endif
         }
+
+        		public static void optOutDataTracking(bool shouldOptOut)
+		{
+#if !UNITY_EDITOR
+			Debug.Log(TAG + " optOutDataTracking::");
+			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_DATA, shouldOptOut);
+			Debug.Log(TAG + " optOutDataTracking:: payload: " + payload);
+			optOutGDPRTracking(payload);
+#endif
+		}
+
+		public static void optOutPushTracking(bool shouldOptOut)
+		{
+#if !UNITY_EDITOR
+			Debug.Log(TAG + " optOutPushTracking::");
+			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_PUSH, shouldOptOut);
+			Debug.Log(TAG + " optOutPushTracking:: payload: " + payload);
+			optOutGDPRTracking(payload);
+#endif
+		}
+
+		public static void optOutInAppTracking(bool shouldOptOut)
+		{
+#if !UNITY_EDITOR
+			Debug.Log(TAG + " optOutInAppTracking::");
+			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_INAPP, shouldOptOut);
+			Debug.Log(TAG + " optOutInAppTracking:: payload: " + payload);
+			optOutGDPRTracking(payload);
+#endif
+		}
 
         #endregion
 

@@ -386,6 +386,15 @@ namespace MoEngage
 #endif
         }
 
+        public static void SelfHandledPrimaryClicked(InAppCampaign inAppCampaign)
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+	    MoEngageAndroid.SelfHandledPrimaryClicked(inAppCampaign);
+#elif UNITY_IOS && !UNITY_EDITOR
+            MoEngageiOS.SelfHandledPrimaryClicked(inAppCampaign);
+#endif
+        }
+
         public static void SelfHandledDismissed(InAppCampaign inAppCampaign)
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -395,19 +404,16 @@ namespace MoEngage
 #endif
         }
 
-        public static void SelfHandledPrimaryClicked(InAppCampaign inAppCampaign)
-        {
-#if UNITY_ANDROID && !UNITY_EDITOR
-			MoEngageAndroid.SelfHandledPrimaryClicked(inAppCampaign);
-#elif UNITY_IOS && !UNITY_EDITOR
+        #endregion
 
-#endif
-        }
+        #region GDPR OptOut Methods
 
         public static void optOutDataTracking(bool shouldOptOut)
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
             MoEngageAndroid.optOutDataTracking(shouldOptOut);
+#elif UNITY_IOS && !UNITY_EDITOR
+            MoEngageiOS.optOutDataTracking(shouldOptOut);
 #endif
         } 
         
@@ -415,6 +421,8 @@ namespace MoEngage
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
             MoEngageAndroid.optOutPushTracking(shouldOptOut);
+#elif UNITY_IOS && !UNITY_EDITOR
+            MoEngageiOS.optOutPushTracking(shouldOptOut);
 #endif
         } 
 
@@ -422,6 +430,8 @@ namespace MoEngage
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
             MoEngageAndroid.optOutInAppTracking(shouldOptOut);
+#elif UNITY_IOS && !UNITY_EDITOR
+            MoEngageiOS.optOutInAppTracking(shouldOptOut);
 #endif
         } 
 

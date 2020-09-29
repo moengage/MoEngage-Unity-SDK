@@ -32,7 +32,8 @@ public static class BuildPostProcessor
          "Security.framework",
          "ImageIO.framework",
          "NotificationCenter.framework",
-         "UserNotifications.framework"
+         "UserNotifications.framework",
+         "UserNotificationsUI.framework"
       };
 
     private enum EntitlementOptions
