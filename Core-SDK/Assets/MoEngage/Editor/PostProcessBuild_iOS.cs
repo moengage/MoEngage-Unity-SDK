@@ -1,4 +1,5 @@
 ﻿#define ADD_APP_GROUP
+#define ADD_PUSH_TEMPLATES
 
 #if UNITY_5_4_OR_NEWER && UNITY_IPHONE && UNITY_EDITOR
 
@@ -21,8 +22,12 @@ public static class BuildPostProcessor
     public static readonly string NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME = "MoENotificationServiceExtension";
     public static readonly string NOTIFICATION_SERVICE_EXTENSION_OBJECTIVEC_FILENAME = "NotificationService";
 
+    public static readonly string PUSH_TEMPLATES_EXTENSION_TARGET_NAME = "MoEPushTemplateExtension";
+    public static readonly string PUSH_TEMPLATES_EXTENSION_OBJECTIVEC_FILENAME = "NotificationViewController";
+
     private static readonly char DIR_CHAR = Path.DirectorySeparatorChar;
     public static readonly string MOE_IOS_LOCATION = "Assets" + DIR_CHAR + "MoEngage" + DIR_CHAR + "Plugins" + DIR_CHAR + "iOS";
+    public static readonly string MOE_IOS_PUSH_TEMP_LOCATION = MOE_IOS_LOCATION + DIR_CHAR + "PushTemplates";
 
     private static readonly string[] FRAMEWORKS_TO_ADD = {
          "Foundation.framework",
@@ -112,6 +117,10 @@ public static class BuildPostProcessor
 
         // Add the NSE target to the Xcode project
         AddNotificationServiceExtension(project, path);
+
+#if ADD_PUSH_TEMPLATES
+        AddPushTemplateExtension(project, path);
+#endif
 
         // Reload file after changes from AddNotificationServiceExtension
         project.WriteToFile(projectPath);
@@ -213,7 +222,7 @@ public static class BuildPostProcessor
         var mainTargetGUID = GetPBXProjectTargetGUID(project);
         var extensionTargetName = NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME;
 
-        var exisitingPlistFile = CreateNotificationExtensionPlistFile(path);
+        var exisitingPlistFile = CreateExtensionPlistFile(path, true);
         // If file exisits then the below has been completed before from another build
         // The below will not be updated on Append builds
         // Changes would most likely need to be made to support Append builds
@@ -228,7 +237,7 @@ public static class BuildPostProcessor
            extensionTargetName + "/" + "Info.plist" // Unix path as it's used by Xcode
         );
 
-        AddNotificationServiceSourceFilesToTarget(project, extensionGUID, path);
+        AddExtensionSourceFilesToTarget(project, extensionGUID, path, true);
 
         foreach (var framework in FRAMEWORKS_TO_ADD)
         {
@@ -263,14 +272,26 @@ public static class BuildPostProcessor
     }
 
     // Copies NotificationService.m and .h files into the NotificationServiceExtension folder adds them to the Xcode target
-    private static void AddNotificationServiceSourceFilesToTarget(PBXProject project, string extensionGUID, string path)
+    private static void AddExtensionSourceFilesToTarget(PBXProject project, string extensionGUID, string path, bool forServiceExtension)
     {
         var buildPhaseID = project.AddSourcesBuildPhase(extensionGUID);
         foreach (var type in new string[] { "m", "h" })
         {
-            var nativeFileName = NOTIFICATION_SERVICE_EXTENSION_OBJECTIVEC_FILENAME + "." + type;
-            var sourcePath = MOE_IOS_LOCATION + DIR_CHAR + nativeFileName;
-            var nativeFileRelativeDestination = NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "/" + nativeFileName;
+            var nativeFileName = "";
+            var sourcePath = "";
+            var nativeFileRelativeDestination = "";
+
+            if(forServiceExtension){
+                nativeFileName = NOTIFICATION_SERVICE_EXTENSION_OBJECTIVEC_FILENAME + "." + type;
+                sourcePath = MOE_IOS_LOCATION + DIR_CHAR + nativeFileName;
+                nativeFileRelativeDestination = NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "/" + nativeFileName;
+            }
+            else{
+                nativeFileName = PUSH_TEMPLATES_EXTENSION_OBJECTIVEC_FILENAME + "." + type;
+                sourcePath = MOE_IOS_PUSH_TEMP_LOCATION + DIR_CHAR + nativeFileName;
+                nativeFileRelativeDestination = PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "/" + nativeFileName;
+            }
+            
 
             var destPath = path + DIR_CHAR + nativeFileRelativeDestination;
             if (!File.Exists(destPath))
@@ -283,25 +304,111 @@ public static class BuildPostProcessor
 
     // Create a .plist file for the NSE
     // NOTE: File in Xcode project is replaced everytime, never appends
-    private static bool CreateNotificationExtensionPlistFile(string path)
+    private static bool CreateExtensionPlistFile(string path, bool forServiceExtension)
     {
 #if UNITY_2017_2_OR_NEWER
-        var pathToNotificationService = path + DIR_CHAR + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME;
-        Directory.CreateDirectory(pathToNotificationService);
+        var pathToExtension = path + DIR_CHAR;
+        if(forServiceExtension){
+            pathToExtension = pathToExtension + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME;
+        }
+        else{
+            pathToExtension = pathToExtension + PUSH_TEMPLATES_EXTENSION_TARGET_NAME;
+        }
+        Directory.CreateDirectory(pathToExtension);
 
-        var notificationServicePlistPath = pathToNotificationService + DIR_CHAR + "Info.plist";
-        bool exisiting = File.Exists(notificationServicePlistPath);
+        var extensionPlistPath = pathToExtension + DIR_CHAR + "Info.plist";
+        bool exisiting = File.Exists(extensionPlistPath);
 
         // Read plist from MoEngage iOS folder.
-        var notificationServicePlist = new PlistDocument();
-        notificationServicePlist.ReadFromFile(MOE_IOS_LOCATION + DIR_CHAR + "Info.plist");
-        notificationServicePlist.root.SetString("CFBundleShortVersionString", PlayerSettings.bundleVersion);
-        notificationServicePlist.root.SetString("CFBundleVersion", PlayerSettings.iOS.buildNumber.ToString());
-        notificationServicePlist.WriteToFile(notificationServicePlistPath);
+        var plistFile = new PlistDocument();
+        if(forServiceExtension){
+            plistFile.ReadFromFile(MOE_IOS_LOCATION + DIR_CHAR + "Info.plist");
+        }
+        else{
+            plistFile.ReadFromFile(MOE_IOS_PUSH_TEMP_LOCATION + DIR_CHAR + "Info.plist");
+        }
+        
+        plistFile.root.SetString("CFBundleShortVersionString", PlayerSettings.bundleVersion);
+        plistFile.root.SetString("CFBundleVersion", PlayerSettings.iOS.buildNumber.ToString());
+        plistFile.WriteToFile(extensionPlistPath);
         return exisiting;
 #else
          return true;
 #endif
+    }
+
+
+        private static void AddPushTemplateExtension(PBXProject project, string path)
+    {
+#if UNITY_2017_2_OR_NEWER && !UNITY_CLOUD_BUILD
+        var projectPath = PBXProject.GetPBXProjectPath(path);
+        var mainTargetGUID = GetPBXProjectTargetGUID(project);
+        var extensionTargetName = PUSH_TEMPLATES_EXTENSION_TARGET_NAME;
+
+        var exisitingPlistFile = CreateExtensionPlistFile(path,false);
+        // If file exisits then the below has been completed before from another build
+        // The below will not be updated on Append builds
+        // Changes would most likely need to be made to support Append builds
+        if (exisitingPlistFile)
+            return;
+
+        var extensionGUID = PBXProjectExtensions.AddAppExtension(
+           project,
+           mainTargetGUID,
+           extensionTargetName,
+           PlayerSettings.GetApplicationIdentifier(BuildTargetGroup.iOS) + "." + extensionTargetName,
+           extensionTargetName + "/" + "Info.plist" // Unix path as it's used by Xcode
+        );
+
+        AddExtensionSourceFilesToTarget(project, extensionGUID, path, false);
+        AddExtensionStoryBoardToTarget(project, extensionGUID, path);
+
+        foreach (var framework in FRAMEWORKS_TO_ADD)
+        {
+            project.AddFrameworkToProject(extensionGUID, framework, true);
+        }
+
+        // Makes it so that the extension target is Universal (not just iPhone) and has an iOS 10 deployment target
+        project.SetBuildProperty(extensionGUID, "TARGETED_DEVICE_FAMILY", "1,2");
+        project.SetBuildProperty(extensionGUID, "IPHONEOS_DEPLOYMENT_TARGET", "12.0");
+
+        project.SetBuildProperty(extensionGUID, "ARCHS", "$(ARCHS_STANDARD)");
+        project.SetBuildProperty(extensionGUID, "DEVELOPMENT_TEAM", PlayerSettings.iOS.appleDeveloperTeamID);
+        project.SetBuildProperty(extensionGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
+
+        project.WriteToFile(projectPath);
+
+        //var contents = File.ReadAllText(projectPath);
+        // This method only modifies the PBXProject string passed in (contents).
+        // After this method finishes, we must write the contents string to disk
+        //File.WriteAllText(projectPath, contents);
+
+        AddOrUpdateEntitlements(
+           path,
+           project,
+           extensionGUID,
+           extensionTargetName,
+           new HashSet<EntitlementOptions> {
+               EntitlementOptions.ApsEnv, EntitlementOptions.AppGroups
+           }
+        );
+#endif
+    }
+
+    private static void AddExtensionStoryBoardToTarget(PBXProject project, string extensionGUID, string path)
+    {
+        var buildPhaseID = project.AddSourcesBuildPhase(extensionGUID);
+        var storyBoardFileName = "MainInterface.storyboard";
+        var sourcePath = MOE_IOS_PUSH_TEMP_LOCATION + DIR_CHAR + storyBoardFileName;
+        var nativeFileRelativeDestination = PUSH_TEMPLATES_EXTENSION_TARGET_NAME + DIR_CHAR + storyBoardFileName;
+
+        var destPath = path + DIR_CHAR + nativeFileRelativeDestination;
+        if (!File.Exists(destPath))
+            FileUtil.CopyFileOrDirectory(sourcePath, destPath);
+
+        string resourcesBuildPhase = project.GetResourcesBuildPhaseByTarget(extensionGUID);
+        string resourcesFilesGuid = project.AddFile(destPath, nativeFileRelativeDestination, PBXSourceTree.Source);
+        project.AddFileToBuildSection(extensionGUID, resourcesBuildPhase, resourcesFilesGuid);
     }
 
 }
