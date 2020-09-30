@@ -25,8 +25,8 @@ ext {
       "artifactId" : "unity-wrapper",
       "name"       : "MoEngage Unity Wrapper",
       "description": "Wrapper SDK for unity framework support on MoEngage Platform.",
-      "versionName": "1.0.02",
-      "versionCode": 1002
+      "versionName": "1.1.00",
+      "versionCode": 1100
   ]
 
   buildConfiguration = [
@@ -36,7 +36,7 @@ ext {
   ]
 
   dependency = [
-      "moengage": "com.moengage:moe-android-sdk:10.4.00",
+      "moengage": "com.moengage:moe-android-sdk:10.4.01",
       "basePlugin" : "com.moengage:plugin-base:1.1.00",
       "appCompat": "androidx.appcompat:appcompat:1.2.0"
   ]

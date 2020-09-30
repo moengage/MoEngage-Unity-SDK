@@ -20,7 +20,7 @@ package com.moengage.unity.wrapper;
 interface Constants {
   String MODULE_TAG = "Unity_";
   String INTEGRATION_TYPE = "unity";
-  String INTEGRATION_VERSION = "1.0.1";
+  String INTEGRATION_VERSION = "1.1.0";
 
   String METHOD_NAME_PUSH_REDIRECTION = "PushClicked";
   String METHOD_NAME_IN_APP_SHOWN = "InAppCampaignShown";
