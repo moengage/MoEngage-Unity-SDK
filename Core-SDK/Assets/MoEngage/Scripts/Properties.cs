@@ -155,7 +155,6 @@ namespace MoEngage
 			propertiesDict.Add(MoEConstants.ARGUMENT_GENERAL_EVENT_ATTRIBUTES, GeneralAttributes);
 			propertiesDict.Add(MoEConstants.ARGUMENT_LOCATION_EVENT_ATTRIBUTES, LocationAttributes);
 			propertiesDict.Add(MoEConstants.ARGUMENT_TIMESTAMP_EVENT_ATTRIBUTES, DateTimeAttributes);
-			propertiesDict.Add(MoEConstants.ARGUMENT_IS_NON_INTERACTIVE_EVENT, GetIsNonInteractive());
 
 			return propertiesDict;
 		}

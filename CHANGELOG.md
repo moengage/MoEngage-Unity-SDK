@@ -1,3 +1,7 @@
+### 1.1.1
+- Bugfix
+    - Events not marked as non-interactive.
+    
 ### 1.1.0 (30-09-2020)
 - Added support for Push Templates 
 - Provided GDPR OptOut APIs

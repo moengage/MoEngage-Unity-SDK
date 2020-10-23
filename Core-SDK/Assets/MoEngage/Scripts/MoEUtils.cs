@@ -67,7 +67,8 @@ namespace MoEngage
 		{
 			Dictionary<string, object> eventDict = new Dictionary<string, object> {
 				{ MoEConstants.ARGUMENT_EVENT_NAME, eventName },
-				{ MoEConstants.ARGUMENT_EVENT_ATTRIBUTES, properties.ToDictionary() }
+				{ MoEConstants.ARGUMENT_EVENT_ATTRIBUTES, properties.ToDictionary() },
+				{MoEConstants.ARGUMENT_IS_NON_INTERACTIVE_EVENT, properties.GetIsNonInteractive() }
 			};
 
 			string eventPayload = Json.Serialize(eventDict);
