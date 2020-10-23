@@ -1,4 +1,4 @@
-### 1.1.1
+### 1.1.1 (23-10-2020)
 - Bugfix
     - Events not marked as non-interactive.
     
