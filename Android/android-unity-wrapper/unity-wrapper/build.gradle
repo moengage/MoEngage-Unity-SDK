@@ -53,7 +53,7 @@ dependencies {
 
   compileOnly(dependency.appCompat)
   compileOnly(dependency.moengage)
-  implementation(dependency.basePlugin)
+  api(dependency.basePlugin)
 
   testImplementation(testDependency.junit)
   androidTestImplementation(testDependency.androidJunit)
