@@ -58,7 +58,7 @@ public class MoEAndroidWrapper {
 
   private Context context;
 
-  void setContext(Context context){
+  void setContext(Context context) {
     this.context = context;
   }
 
@@ -199,7 +199,7 @@ public class MoEAndroidWrapper {
     }
   }
 
-  public void resetContext(){
+  public void resetContext() {
     try {
       Logger.v(TAG + " resetContext() : Resetting app context");
       if (context == null) {
@@ -208,45 +208,45 @@ public class MoEAndroidWrapper {
       }
       pluginHelper.resetAppContext(context);
     } catch (Exception e) {
-      Logger.e( TAG + " resetContext() : ", e);
+      Logger.e(TAG + " resetContext() : ", e);
     }
   }
 
-  public void selfHandledShown(String selfHandledPayload){
-    try{
-     Logger.v(TAG + " selfHandledShown() : Campaign payload: " + selfHandledPayload);
-      if (context == null){
-        Logger.e( TAG + " selfHandledShown() : Cannot proceed further context is null.");
+  public void selfHandledShown(String selfHandledPayload) {
+    try {
+      Logger.v(TAG + " selfHandledShown() : Campaign payload: " + selfHandledPayload);
+      if (context == null) {
+        Logger.e(TAG + " selfHandledShown() : Cannot proceed further context is null.");
         return;
       }
       pluginHelper.selfHandledCallback(context, selfHandledPayload);
-    }catch(Exception e){
+    } catch (Exception e) {
       Logger.e(TAG + " selfHandledShown() : ", e);
     }
   }
 
-  public void selfHandledClicked(String selfHandledPayload){
-    try{
+  public void selfHandledClicked(String selfHandledPayload) {
+    try {
       Logger.v(TAG + " selfHandledClicked() : Campaign payload: " + selfHandledPayload);
-      if (context == null){
-        Logger.e( TAG + " selfHandledClicked() : Cannot proceed further context is null.");
+      if (context == null) {
+        Logger.e(TAG + " selfHandledClicked() : Cannot proceed further context is null.");
         return;
       }
       pluginHelper.selfHandledCallback(context, selfHandledPayload);
-    }catch(Exception e){
+    } catch (Exception e) {
       Logger.e(TAG + " selfHandledClicked() : ", e);
     }
   }
 
-  public void selfHandledDismissed(String selfHandledPayload){
-    try{
-     Logger.v(TAG + " selfHandledDismissed() : Campaign payload: " + selfHandledPayload);
-      if (context == null){
-        Logger.e( TAG + " selfHandledDismissed() : Cannot proceed further context is null.");
+  public void selfHandledDismissed(String selfHandledPayload) {
+    try {
+      Logger.v(TAG + " selfHandledDismissed() : Campaign payload: " + selfHandledPayload);
+      if (context == null) {
+        Logger.e(TAG + " selfHandledDismissed() : Cannot proceed further context is null.");
         return;
       }
       pluginHelper.selfHandledCallback(context, selfHandledPayload);
-    }catch(Exception e){
+    } catch (Exception e) {
       Logger.e(TAG + " selfHandledDismissed() : ", e);
     }
   }
@@ -269,15 +269,15 @@ public class MoEAndroidWrapper {
     }
   }
 
-  public void optOutTracking(String optOutPayload){
-    try{
-     Logger.v(TAG + " optOutTracking() : OptOut payload: " + optOutPayload);
-     if (context == null){
-       Logger.e( TAG + " optOutTracking() : Cannot proceed further context is null.");
-       return;
-     }
-     pluginHelper.optOutTracking(context, optOutPayload);
-    }catch(Exception e){
+  public void optOutTracking(String optOutPayload) {
+    try {
+      Logger.v(TAG + " optOutTracking() : OptOut payload: " + optOutPayload);
+      if (context == null) {
+        Logger.e(TAG + " optOutTracking() : Cannot proceed further context is null.");
+        return;
+      }
+      pluginHelper.optOutTracking(context, optOutPayload);
+    } catch (Exception e) {
       Logger.e(TAG + " optOutTracking() : ", e);
     }
   }
