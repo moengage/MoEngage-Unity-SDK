@@ -40,12 +40,23 @@ public class MoEInitializer {
 
   private static final String TAG = Constants.MODULE_TAG + "MoEInitializer";
 
-  public static void initialize(Context context, MoEngage.Builder builder){
+  public static void initialize(Context context, MoEngage.Builder builder) {
+    try {
+      Logger.v(TAG + " initialize() : Initialising MoEngage SDK.");
+      initialize(context, builder, true);
+    } catch (Exception e) {
+      Logger.e(TAG + " initialize() : ", e);
+    }
+  }
+
+  public static void initialize(Context context, MoEngage.Builder builder, boolean isSdkEnabled) {
     try {
       Logger.v(TAG + " initialize() : Initialising MoEngage SDK.");
       MoEAndroidWrapper.getInstance().setContext(context);
       PluginInitializer.INSTANCE.initialize(context, builder,
-          (new IntegrationMeta(Constants.INTEGRATION_TYPE, Constants.INTEGRATION_VERSION)));
+          (new IntegrationMeta(Constants.INTEGRATION_TYPE, Constants.INTEGRATION_VERSION)),
+          isSdkEnabled);
+      Logger.v(TAG + " initialize() : Initialising MoEngage SDK.");
     } catch (Exception e) {
       Logger.e( TAG + " initialize() : ", e);
     }

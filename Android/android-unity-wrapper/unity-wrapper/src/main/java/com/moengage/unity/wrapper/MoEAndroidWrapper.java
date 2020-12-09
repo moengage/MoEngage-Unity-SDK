@@ -282,5 +282,17 @@ public class MoEAndroidWrapper {
     }
   }
 
+  public void storeFeatureStatus(String featureStatusPayload){
+    try{
+      Logger.v(TAG + " storeFeatureStatus() : Feature status payload: " + featureStatusPayload);
+      if (context == null){
+        Logger.e( TAG + " storeFeatureStatus() : Cannot proceed further context is null.");
+      }
+      pluginHelper.storeFeatureStatus(context, featureStatusPayload);
+    }catch (Exception e){
+      Logger.e( TAG + " storeFeatureStatus() : ", e);
+    }
+  }
+
   private static final String ARGUMENT_GAME_OBJECT = "gameObjectName";
 }
