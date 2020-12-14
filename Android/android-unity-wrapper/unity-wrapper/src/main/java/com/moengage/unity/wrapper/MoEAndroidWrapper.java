@@ -282,7 +282,7 @@ public class MoEAndroidWrapper {
     }
   }
 
-  public void storeFeatureStatus(String featureStatusPayload){
+  public void updateSdkState(String featureStatusPayload){
     try{
       Logger.v(TAG + " storeFeatureStatus() : Feature status payload: " + featureStatusPayload);
       if (context == null){

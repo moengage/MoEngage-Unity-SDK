@@ -193,6 +193,16 @@ namespace MoEngage
 			return Json.Serialize(optOutTrackingDictionary);
 		}
 
+			public static string GetSdkStatePayload(bool isSdkEnabled)
+      {
+			var sdkStatusDictionary = new Dictionary<string, object>()
+			{
+				{ MoEConstants.FEATURE_STATUS_IS_SDK_ENABLED, isSdkEnabled},
+			};
+
+			return Json.Serialize(sdkStatusDictionary);
+		}
+
 	}
 }
 
