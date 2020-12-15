@@ -95,6 +95,6 @@ namespace MoEngage
         public const string PARAM_TYPE_PUSH = "push";
         public const string PARAM_TYPE_INAPP = "inapp";
 
-    
+        public const string FEATURE_STATUS_IS_SDK_ENABLED = "isSdkEnabled";
     }
 }

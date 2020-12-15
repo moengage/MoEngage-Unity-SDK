@@ -36,8 +36,8 @@ ext {
   ]
 
   dependency = [
-      "moengage": "com.moengage:moe-android-sdk:10.4.03",
-      "basePlugin" : "com.moengage:plugin-base:1.1.03",
+      "moengage": "com.moengage:moe-android-sdk:10.6.00",
+      "basePlugin" : "com.moengage:plugin-base:1.2.00",
       "appCompat": "androidx.appcompat:appcompat:1.2.0"
   ]
 

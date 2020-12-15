@@ -499,5 +499,19 @@ namespace MoEngage
 
         #endregion
 
+        public static void EnableSdk()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.UpdateSdkState(true);  
+#endif
+        }
+
+        public static void DisableSdk()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.UpdateSdkState(false);   
+#endif
+        }
+
     }
 }
