@@ -55,10 +55,13 @@ public class EventEmitterImpl implements EventEmitter {
     try {
       Logger.v(TAG + " emit() : " + event);
       if (event instanceof InAppEvent) {
+        Logger.v(TAG + " emit() : Emitting in-app event.");
         this.emitInAppEvent((InAppEvent) event);
       } else if (event instanceof PushEvent) {
+        Logger.v(TAG + " emit() : Emitting push event");
         this.emitPushEvent((PushEvent) event);
       } else if (event instanceof TokenEvent) {
+        Logger.v(TAG + " emit() : Emitting token event");
         emitPushToken((TokenEvent) event);
       }
     } catch (Exception e) {
