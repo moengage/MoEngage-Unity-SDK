@@ -33,6 +33,7 @@ import com.moengage.plugin.base.model.Event;
 import com.moengage.plugin.base.model.EventType;
 import com.moengage.plugin.base.model.InAppEvent;
 import com.moengage.plugin.base.model.PushEvent;
+import com.moengage.plugin.base.model.TokenEvent;
 import com.unity3d.player.UnityPlayer;
 import java.util.EnumMap;
 import org.json.JSONObject;
@@ -57,6 +58,8 @@ public class EventEmitterImpl implements EventEmitter {
         this.emitInAppEvent((InAppEvent) event);
       } else if (event instanceof PushEvent) {
         this.emitPushEvent((PushEvent) event);
+      } else if (event instanceof TokenEvent) {
+        emitPushToken((TokenEvent) event);
       }
     } catch (Exception e) {
       Logger.e(TAG + " emit() : Exception: ", e);
@@ -87,6 +90,18 @@ public class EventEmitterImpl implements EventEmitter {
     }
   }
 
+  private void emitPushToken(TokenEvent tokenEvent) {
+    try {
+      Logger.v(TAG + " emitPushToken() : " + tokenEvent);
+      String methodName = eventMap.get(tokenEvent.getEventType());
+      if (methodName == null) return;
+      JSONObject tokenPayload = UtilsKt.pushTokenToJson(tokenEvent.getPushToken());
+      emit(tokenEvent.getEventType(), tokenPayload);
+    } catch (Exception e) {
+      Logger.e(TAG + " emitPushToken() : ", e);
+    }
+  }
+
   private void emit(EventType eventType, JSONObject payload) {
     try {
       UnityPlayer.UnitySendMessage(gameObjectName, eventMap.get(eventType), payload.toString());
@@ -95,7 +110,7 @@ public class EventEmitterImpl implements EventEmitter {
     }
   }
 
-  private static EnumMap<EventType, String> eventMap = new EnumMap<>(EventType.class);
+  private static final EnumMap<EventType, String> eventMap = new EnumMap<>(EventType.class);
 
   static {
     eventMap.put(EventType.PUSH_CLICKED, Constants.METHOD_NAME_PUSH_REDIRECTION);
@@ -104,5 +119,6 @@ public class EventEmitterImpl implements EventEmitter {
     eventMap.put(EventType.INAPP_CLOSED, Constants.METHOD_NAME_IN_APP_CLOSED);
     eventMap.put(EventType.INAPP_CUSTOM_ACTION, Constants.METHOD_NAME_IN_APP_CUSTOM_ACTION);
     eventMap.put(EventType.INAPP_SELF_HANDLED_AVAILABLE, Constants.METHOD_NAME_IN_APP_SELF_HANDLED);
+    eventMap.put(EventType.PUSH_TOKEN_GENERATED, Constants.METHOD_NAME_PUSH_TOKEN);
   }
 }

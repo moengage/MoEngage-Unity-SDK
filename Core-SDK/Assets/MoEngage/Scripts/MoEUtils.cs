@@ -203,6 +203,17 @@ namespace MoEngage
 			return Json.Serialize(sdkStatusDictionary);
 		}
 
+		public static PushToken GetPushTokenFromPayload(string payload)
+        {
+			Dictionary<string, string> payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary<string, string>;
+			
+			return new PushToken(
+				payloadDictionary[MoEConstants.PARAM_PLATFORM],
+				payloadDictionary[MoEConstants.PARAM_PUSH_TOKEN],
+				(PushService)Enum.Parse(typeof(PushService), payloadDictionary[MoEConstants.PARAM_PUSH_SERVICE])
+				);
+        }
+
 	}
 }
 

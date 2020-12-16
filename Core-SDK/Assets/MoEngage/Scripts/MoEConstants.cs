@@ -88,6 +88,9 @@ namespace MoEngage
         public const string PARAM_IS_DEFAULT_ACTION = "isDefaultAction";
         public const string PARAM_CLICKED_ACTION = "clickedAction";
 
+        public const string PARAM_PUSH_TOKEN = "token";
+        public const string PARAM_PUSH_SERVICE = "pushService";
+
         /* ***************************** Opt-out Tracking Keys ************************************** */
 
         public const string PARAM_STATE = "state";
