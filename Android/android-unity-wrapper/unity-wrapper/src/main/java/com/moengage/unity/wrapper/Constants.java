@@ -41,4 +41,6 @@ interface Constants {
   String METHOD_NAME_IN_APP_CLOSED = "InAppCampaignDismissed";
   String METHOD_NAME_IN_APP_CUSTOM_ACTION = "InAppCampaignCustomAction";
   String METHOD_NAME_IN_APP_SELF_HANDLED = "InAppCampaignSelfHandled";
+  String METHOD_NAME_PUSH_TOKEN = "PushToken";
+
 }

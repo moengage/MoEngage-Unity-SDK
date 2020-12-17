@@ -29,6 +29,7 @@ namespace MoEngage
         public static event EventHandler<InAppCampaign> InAppDismissed;
         public static event EventHandler<InAppCampaign> InAppCustomAction;
         public static event EventHandler<InAppCampaign> InAppSelfHandled;
+        public static event EventHandler<PushToken> PushTokenCallback;
 
         // Start is called before the first frame update
         void Start()
@@ -80,6 +81,13 @@ namespace MoEngage
             OnInAppSelfHandled(campaign);
         }
 
+        public void PushToken(string payload)
+        {
+            Debug.Log(TAG + " PushToken() Callback from native: " + payload);
+            PushToken token = MoEUtils.GetPushTokenFromPayload(payload);
+            OnPushTokenGenerated(token);
+        }
+
 
         protected virtual void OnPushClicked(PushCampaign payload)
         {
@@ -109,6 +117,11 @@ namespace MoEngage
         protected virtual void OnInAppSelfHandled(InAppCampaign campaign)
         {
             InAppSelfHandled?.Invoke(this, campaign);
+        }
+
+        protected virtual void OnPushTokenGenerated(PushToken pushToken)
+        {
+            PushTokenCallback?.Invoke(this, pushToken);
         }
     }
 }
