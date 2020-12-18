@@ -44,7 +44,8 @@
 }
 
 - (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions {
-    [self intializeSDKWithLaunchOptions:launchOptions andSDKState:true];
+    
+    [self intializeSDKWithLaunchOptions:launchOptions andSDKState:[[MoEngageCore sharedInstance] isSDKEnabled]];
 }
 
 - (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions andSDKState:(BOOL)isSDKEnabled{
@@ -56,7 +57,7 @@
     self.moeGameObjectName = gameObjectName;
     if (!self.isSDKIntialized) {
         //this will works as fallback method if AppDelegate Swizzling doesn't work
-        [self setupSDKWithLaunchOptions: nil andSDKState:true];
+        [self setupSDKWithLaunchOptions: nil andSDKState:[[MoEngageCore sharedInstance] isSDKEnabled]];
     }
     [[MoEPluginBridge sharedInstance] pluginInitialized];
 }
