@@ -8,6 +8,7 @@
 #import "MoEUnityConstants.h"
 
 // Callbacks Method Names
+NSString* const kUnityMethodNamePushTokenRegistered = @"PushToken";
 NSString* const kUnityMethodNamePushClicked = @"PushClicked";
 NSString* const kUnityMethodNameInAppShown = @"InAppCampaignShown";
 NSString* const kUnityMethodNameInAppClicked = @"InAppCampaignClicked";

@@ -23,18 +23,25 @@ namespace MoEngage
     {
         private const string TAG = "MoEGameObject";
 
+        public static event EventHandler<PushToken> PushTokenCallback;
         public static event EventHandler<PushCampaign> PushNotifCallback;
         public static event EventHandler<InAppCampaign> InAppShown;
         public static event EventHandler<InAppCampaign> InAppClicked;
         public static event EventHandler<InAppCampaign> InAppDismissed;
         public static event EventHandler<InAppCampaign> InAppCustomAction;
         public static event EventHandler<InAppCampaign> InAppSelfHandled;
-        public static event EventHandler<PushToken> PushTokenCallback;
 
         // Start is called before the first frame update
         void Start()
         {
             MoEngageClient.Initialize(gameObject);
+        }
+
+        public void PushToken(string payload)
+        {
+            Debug.Log(TAG + " PushToken() Callback from native: " + payload);
+            PushToken token = MoEUtils.GetPushTokenFromPayload(payload);
+            OnPushTokenGenerated(token);
         }
 
         public void PushClicked(string payload)
@@ -79,13 +86,6 @@ namespace MoEngage
             Debug.Log(TAG + " InAppCampaignSelfHandled() Callback from Native: " + payload);
             InAppCampaign campaign = MoEUtils.GetInAppCampaignFromPayload(payload);
             OnInAppSelfHandled(campaign);
-        }
-
-        public void PushToken(string payload)
-        {
-            Debug.Log(TAG + " PushToken() Callback from native: " + payload);
-            PushToken token = MoEUtils.GetPushTokenFromPayload(payload);
-            OnPushTokenGenerated(token);
         }
 
 

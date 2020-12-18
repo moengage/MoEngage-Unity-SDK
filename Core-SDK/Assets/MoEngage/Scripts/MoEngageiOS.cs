@@ -79,6 +79,9 @@ namespace MoEngage
         [DllImport("__Internal")]
         private static extern void optOutGDPRTracking(string optOutPayload);
 
+        [DllImport("__Internal")]
+        private static extern void updateSdkState(string payload);
+
         #endregion
 
         #region Initialize
@@ -299,35 +302,35 @@ namespace MoEngage
 #endif
         }
 
-        		public static void optOutDataTracking(bool shouldOptOut)
-		{
+        public static void optOutDataTracking(bool shouldOptOut)
+	{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " optOutDataTracking::");
-			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_DATA, shouldOptOut);
-			Debug.Log(TAG + " optOutDataTracking:: payload: " + payload);
-			optOutGDPRTracking(payload);
+	        Debug.Log(TAG + " optOutDataTracking::");
+		string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_DATA, shouldOptOut);
+		Debug.Log(TAG + " optOutDataTracking:: payload: " + payload);
+		optOutGDPRTracking(payload);
 #endif
-		}
+	}
 
-		public static void optOutPushTracking(bool shouldOptOut)
-		{
+	public static void optOutPushTracking(bool shouldOptOut)
+	{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " optOutPushTracking::");
-			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_PUSH, shouldOptOut);
-			Debug.Log(TAG + " optOutPushTracking:: payload: " + payload);
-			optOutGDPRTracking(payload);
+		Debug.Log(TAG + " optOutPushTracking::");
+		string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_PUSH, shouldOptOut);
+		Debug.Log(TAG + " optOutPushTracking:: payload: " + payload);
+		optOutGDPRTracking(payload);
 #endif
-		}
+	}
 
-		public static void optOutInAppTracking(bool shouldOptOut)
-		{
+	public static void optOutInAppTracking(bool shouldOptOut)
+	{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " optOutInAppTracking::");
-			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_INAPP, shouldOptOut);
-			Debug.Log(TAG + " optOutInAppTracking:: payload: " + payload);
-			optOutGDPRTracking(payload);
+		Debug.Log(TAG + " optOutInAppTracking::");
+		string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_INAPP, shouldOptOut);
+		Debug.Log(TAG + " optOutInAppTracking:: payload: " + payload);
+		optOutGDPRTracking(payload);
 #endif
-		}
+	}
 
         #endregion
 
@@ -336,11 +339,24 @@ namespace MoEngage
         public static void Logout()
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ":  ResetUser::");
-			resetUser();
+		Debug.Log(TAG + ":  ResetUser::");
+		resetUser();
 #endif
         }
 
+        #endregion
+
+        #region Reset User
+
+        public static void UpdateSdkState(bool state)
+        {
+#if !UNITY_EDITOR
+		Debug.Log(TAG + " UpdateSdkState::");
+		string payload = MoEUtils.GetSdkStatePayload(state);
+		Debug.Log(TAG + " UpdateSdkState:: payload " + payload);
+		updateSdkState(payload);
+#endif
+	}
         #endregion
 
     }

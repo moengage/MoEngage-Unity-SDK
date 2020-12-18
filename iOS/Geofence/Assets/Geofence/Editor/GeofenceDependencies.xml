@@ -2,7 +2,7 @@
 <dependencies>
   <!-- iOS Cocoapod dependencies can be specified by each iosPod element. -->
   <iosPods>
-    <iosPod name="MOGeofence" version="~> 2.0.0" minTargetSdk="9.0">
+    <iosPod name="MOGeofence" version="~> 2.1.0" minTargetSdk="9.0">
     </iosPod>
   </iosPods>
 </dependencies>

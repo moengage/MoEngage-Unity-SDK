@@ -44,15 +44,19 @@
 }
 
 - (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions {
+    [self intializeSDKWithLaunchOptions:launchOptions andSDKState:true];
+}
+
+- (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions andSDKState:(BOOL)isSDKEnabled{
     self.isSDKIntialized = YES;
-    [self setupSDKWithLaunchOptions:launchOptions];
+    [self setupSDKWithLaunchOptions:launchOptions andSDKState:isSDKEnabled];
 }
 
 - (void)setupSDKWithGameObject:(NSString*)gameObjectName {
     self.moeGameObjectName = gameObjectName;
     if (!self.isSDKIntialized) {
         //this will works as fallback method if AppDelegate Swizzling doesn't work
-        [self setupSDKWithLaunchOptions: nil];
+        [self setupSDKWithLaunchOptions: nil andSDKState:true];
     }
     [[MoEPluginBridge sharedInstance] pluginInitialized];
 }
@@ -61,7 +65,7 @@
     [[MoEPluginBridge sharedInstance] trackPluginVersion:MOE_UNITY_PLUGIN_VERSION forIntegrationType:Unity];
 }
 
--(void)setupSDKWithLaunchOptions:(NSDictionary * _Nullable)launchOptions{
+-(void)setupSDKWithLaunchOptions:(NSDictionary * _Nullable)launchOptions andSDKState:(BOOL)isSDKEnabled{
     
     if (kMoEngageLogsEnabled) {
         [MoEngage debug:LOG_ALL];
@@ -91,7 +95,7 @@
     
     NSString* moeAppID = kMoEngageAppID;
     if (moeAppID.length > 0) {
-        [[MoEPluginInitializer sharedInstance] intializeSDKWithAppID:moeAppID andLaunchOptions:launchOptions];
+        [[MoEPluginInitializer sharedInstance] intializeSDKWithAppID:moeAppID withSDKState:isSDKEnabled andLaunchOptions:launchOptions];
     }
     else{
         NSAssert(NO, @"MoEngage - Provide the APP ID for your MoEngage App in MoEngageConfiguration.h file. To get the AppID login to your MoEngage account, after that go to Settings -> App Settings. You will find the App ID in this screen.");
@@ -122,7 +126,10 @@
 -(void)sendMessageWithName:(NSString *)name andPayload:(NSDictionary *)payloadDict{
     // TODO: Remove mapper in the next release -- To use same internal name as used in MoEPluginBase
     NSString* unityMethodName = nil;
-    if ([name isEqualToString:kEventNamePushClicked]) {
+    if ([name isEqualToString:kEventNamePushTokenRegistered]){
+        unityMethodName = kUnityMethodNamePushTokenRegistered;
+    }
+    else if ([name isEqualToString:kEventNamePushClicked]) {
         unityMethodName = kUnityMethodNamePushClicked;
     }
     else if ([name isEqualToString:kEventNameInAppCampaignShown]){

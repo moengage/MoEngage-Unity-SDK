@@ -13,6 +13,7 @@
 @property(assign, nonatomic, readonly) BOOL isSDKIntialized;
 
 +(instancetype)sharedInstance;
-- (void)intializeSDKWithLaunchOptions: (NSDictionary*)launchOptions;
+- (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions;
+- (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions andSDKState:(BOOL)isSDKEnabled;
 - (void)setupSDKWithGameObject:(NSString*)gameObjectName;
 @end

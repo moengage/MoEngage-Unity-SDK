@@ -192,5 +192,13 @@ void resetUser(){
     [[MoEPluginBridge sharedInstance] resetUser];
 }
 
+#pragma mark- Update SDK State
+void updateSdkState(const char* sdkStatePayload){
+    NSMutableDictionary *sdkStateDict = getDictionaryFromJSON(sdkStatePayload);
+    if (sdkStateDict) {
+        [[MoEPluginBridge sharedInstance] updateSDKState:sdkStateDict];
+    }
+}
+
 }
 

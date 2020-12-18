@@ -33,7 +33,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [super application:application didFinishLaunchingWithOptions:launchOptions];
     NSLog(@"MoEAppDelegate called from application:didFinishLaunchingWithOptions:");
-    [[MoEUnityInitializer sharedInstance] intializeSDKWithLaunchOptions:launchOptions];
+    [[MoEUnityInitializer sharedInstance] intializeSDKWithLaunchOptions:launchOptions andSDKState:true];
     return YES;
 }
 

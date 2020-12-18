@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 
 // Callbacks Method Names
+extern NSString* const kUnityMethodNamePushTokenRegistered;
 extern NSString* const kUnityMethodNamePushClicked;
 extern NSString* const kUnityMethodNameInAppShown;
 extern NSString* const kUnityMethodNameInAppClicked;

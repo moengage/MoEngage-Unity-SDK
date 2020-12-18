@@ -437,6 +437,28 @@ namespace MoEngage
 
         #endregion
 
+        #region Enable/Disable SDK Methods
+
+        public static void EnableSdk()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.UpdateSdkState(true);  
+#elif UNITY_IOS && !UNITY_EDITOR
+            MoEngageiOS.UpdateSdkState(true);
+#endif
+        }
+
+        public static void DisableSdk()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.UpdateSdkState(false);   
+#elif UNITY_IOS && !UNITY_EDITOR
+            MoEngageiOS.UpdateSdkState(false);
+#endif
+        }
+
+         #endregion
+
         #region iOS Specific Methods
 
         /// <summary>
@@ -498,20 +520,6 @@ namespace MoEngage
         }
 
         #endregion
-
-        public static void EnableSdk()
-        {
-#if UNITY_ANDROID && !UNITY_EDITOR
-            MoEngageAndroid.UpdateSdkState(true);  
-#endif
-        }
-
-        public static void DisableSdk()
-        {
-#if UNITY_ANDROID && !UNITY_EDITOR
-            MoEngageAndroid.UpdateSdkState(false);   
-#endif
-        }
 
     }
 }

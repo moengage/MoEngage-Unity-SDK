@@ -1,3 +1,8 @@
+
+### 1.2.0 (18-12-2020)
+- Disable/Enable Methods added to block/unblock the SDK features.
+- Push Token Callback added
+
 ### 1.1.1 (23-10-2020)
 - Bugfix
     - Events not marked as non-interactive.
