@@ -2,7 +2,7 @@
 <dependencies>
 
   <androidPackages>
-    <androidPackage spec="com.moengage:cards:1.1.00">
+    <androidPackage spec="com.moengage:cards:1.2.00">
     </androidPackage>
   </androidPackages>
 

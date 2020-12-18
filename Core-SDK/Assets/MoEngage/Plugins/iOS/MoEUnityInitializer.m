@@ -13,7 +13,7 @@
 #import "MoEngageConfiguration.h"
 #import "MoEUnityConstants.h"
 
-#define MOE_UNITY_PLUGIN_VERSION    @"1.1.1"
+#define MOE_UNITY_PLUGIN_VERSION    @"1.2.0"
 
 @interface MoEUnityInitializer() <MoEPluginBridgeDelegate>
 @property(assign, nonatomic) BOOL isSDKIntialized;
