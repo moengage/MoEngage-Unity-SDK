@@ -1,4 +1,7 @@
 
+### 1.2.1 (29-12-2020)
+- iOS: Weak link AppTrackingTransparency framework in Build Settings
+
 ### 1.2.0 (18-12-2020)
 - Disable/Enable Methods added to block/unblock the SDK features.
 - Push Token Callback added
