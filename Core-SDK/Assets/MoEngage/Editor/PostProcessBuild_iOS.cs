@@ -38,8 +38,7 @@ public static class BuildPostProcessor
          "ImageIO.framework",
          "NotificationCenter.framework",
          "UserNotifications.framework",
-         "UserNotificationsUI.framework",
-         "AppTrackingTransparency.framework",
+         "UserNotificationsUI.framework"
       };
 
     private enum EntitlementOptions
@@ -104,6 +103,10 @@ public static class BuildPostProcessor
         {
             project.AddFrameworkToProject(unityFrameworkGUID, framework, false);
         }
+        
+        // Weak link AppTrackingTransparency framework
+        project.AddFrameworkToProject(unityFrameworkGUID,"AppTrackingTransparency.framework", true);
+
         project.SetBuildProperty(mainTargetGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
 
         AddOrUpdateEntitlements(
