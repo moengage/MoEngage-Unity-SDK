@@ -12,4 +12,5 @@
 #define kMoEngageLogsEnabled NO
 #define kDefaultIDFATrackingOptedOut NO
 #define kDefaultIDFVTrackingOptedOut NO
+#define kMoEngageUnityControllerSwizzlingEnabled YES
 

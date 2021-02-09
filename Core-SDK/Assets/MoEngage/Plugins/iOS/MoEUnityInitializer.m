@@ -13,7 +13,7 @@
 #import "MoEngageConfiguration.h"
 #import "MoEUnityConstants.h"
 
-#define MOE_UNITY_PLUGIN_VERSION    @"1.2.1"
+#define MOE_UNITY_PLUGIN_VERSION    @"1.3.0"
 
 @interface MoEUnityInitializer() <MoEPluginBridgeDelegate>
 @property(assign, nonatomic) BOOL isSDKIntialized;
@@ -174,5 +174,14 @@
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
+#pragma mark- Utils Swizzling
+
++(BOOL)isUnityAppControllerSwizzlingEnabled{
+    BOOL swizzleUnityAppController = false;
+#ifdef kMoEngageUnityControllerSwizzlingEnabled
+    swizzleUnityAppController = kMoEngageUnityControllerSwizzlingEnabled;
+#endif
+    return swizzleUnityAppController;
+}
 
 @end

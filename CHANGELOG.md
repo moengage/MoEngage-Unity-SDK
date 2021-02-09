@@ -1,4 +1,7 @@
 
+### 1.3.0 (11-01-2021)
+- iOS: UnityAppController Swizzling implementation added since UnityAppController subclass Implementation was not working in case of multiple subclasses.
+
 ### 1.2.1 (29-12-2020)
 - iOS: Weak link AppTrackingTransparency framework in Build Settings
 

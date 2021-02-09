@@ -13,7 +13,7 @@
 #import "AppDelegateListener.h"
 #import "MoEUnityInitializer.h"
 
-@interface MoEUnityAppController : UnityAppController <AppDelegateListener>
+@interface MoEUnityAppController : UnityAppController
 
 @end
 
@@ -22,9 +22,6 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
-        UnityRegisterAppDelegateListener(self);
-    }
     return self;
 }
 
@@ -32,12 +29,17 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [super application:application didFinishLaunchingWithOptions:launchOptions];
-    NSLog(@"MoEAppDelegate called from application:didFinishLaunchingWithOptions:");
-    [[MoEUnityInitializer sharedInstance] intializeSDKWithLaunchOptions:launchOptions];
+    
+    BOOL swizzleUnityAppController = [MoEUnityInitializer isUnityAppControllerSwizzlingEnabled];
+    if (!swizzleUnityAppController) {
+        NSLog(@"MoEUnityAppController SubClass application:didFinishLaunchingWithOptions: called");
+        [[MoEUnityInitializer sharedInstance] intializeSDKWithLaunchOptions:launchOptions];
+    }
     return YES;
 }
 
 @end
 
 IMPL_APP_CONTROLLER_SUBCLASS(MoEUnityAppController)
+
 

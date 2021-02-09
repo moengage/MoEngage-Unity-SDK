@@ -13,7 +13,10 @@
 @property(assign, nonatomic, readonly) BOOL isSDKIntialized;
 
 +(instancetype)sharedInstance;
++(BOOL)isUnityAppControllerSwizzlingEnabled;
+
 - (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions;
 - (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions andSDKState:(BOOL)isSDKEnabled;
 - (void)setupSDKWithGameObject:(NSString*)gameObjectName;
+
 @end
