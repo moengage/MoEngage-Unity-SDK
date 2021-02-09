@@ -27,8 +27,8 @@
 package com.moengage.unity.wrapper;
 
 import android.content.Context;
-import com.moengage.core.Logger;
-import com.moengage.core.MoEUtils;
+import com.moengage.core.internal.logger.Logger;
+import com.moengage.core.internal.utils.MoEUtils;
 import com.moengage.plugin.base.CallbackHelper;
 import com.moengage.plugin.base.PluginHelper;
 import com.moengage.plugin.base.model.PushService;
@@ -93,7 +93,7 @@ public class MoEAndroidWrapper {
 
   public void passPushPayload(String pushPayload) {
     try {
-      pluginHelper.passPushPayload(context, pushPayload, PushService.FCM);
+      pluginHelper.passPushPayload(context, pushPayload);
     } catch (Exception e) {
       Logger.e(TAG + " passPushPayload() : ", e);
     }
@@ -102,7 +102,7 @@ public class MoEAndroidWrapper {
   public void passPushToken(String tokenPayload) {
     try {
       Logger.v(TAG + " passPushToken() : Token Payload: " + tokenPayload);
-      pluginHelper.passPushToken(context, tokenPayload, PushService.FCM);
+      pluginHelper.passPushToken(context, tokenPayload);
     } catch (Exception e) {
       Logger.e(TAG + " passPushToken() : ", e);
     }

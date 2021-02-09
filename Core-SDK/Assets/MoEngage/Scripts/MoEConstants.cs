@@ -34,8 +34,8 @@ namespace MoEngage
         public const string ARGUMENT_GAME_OBJECT = "gameObjectName";
         public const string ARGUMENT_APP_STATUS = "appStatus";
         public const string ARGUMENT_ALIAS = "alias";
-        public const string ARGUMENT_FCM_TOKEN = "fcmToken";
-        public const string ARGUMENT_FCM_PAYLOAD = "fcmPayload";
+        public const string ARGUMENT_TOKEN = "token";
+        public const string ARGUMENT_SERVICE = "service";
 
         public const string ATTRIBUTE_TYPE_GENERAL = "general";
         public const string ATTRIBUTE_TYPE_TIMESTAMP = "timestamp";
@@ -99,5 +99,9 @@ namespace MoEngage
         public const string PARAM_TYPE_INAPP = "inapp";
 
         public const string FEATURE_STATUS_IS_SDK_ENABLED = "isSdkEnabled";
+
+        /* ****************************** Push Service Type ***************************************** */
+        
+        public const string PUSH_SERVICE_TYPE_FCM = "FCM";
     }
 }

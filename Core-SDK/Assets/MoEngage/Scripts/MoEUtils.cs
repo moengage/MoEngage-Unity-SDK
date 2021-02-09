@@ -75,20 +75,22 @@ namespace MoEngage
 			return eventPayload;
 		}
 
-		public static string GetPushPayload(IDictionary<string, string> payload) {
+		public static string GetPushPayload(IDictionary<string, string> payload, string service) {
 			Dictionary<string, object> pushPayloadDict = new Dictionary<string, object> {
-		        { MoEConstants.ARGUMENT_FCM_PAYLOAD, payload }
+		        { MoEConstants.ARGUMENT_PAYLOAD, payload },
+				{ MoEConstants.ARGUMENT_SERVICE, service }
 		      };
 
 		    string pushPayload =Json.Serialize(pushPayloadDict);
 		    return pushPayload;
 		}
 
-		public static string GetPushTokenPayload(string pushToken) 
+		public static string GetPushTokenPayload(string pushToken, string service) 
 		{
 			Dictionary<string, string> tokenDict = new Dictionary<string, string>
 			{
-				{ MoEConstants.ARGUMENT_FCM_TOKEN, pushToken }
+				{ MoEConstants.ARGUMENT_TOKEN, pushToken },
+				{ MoEConstants.ARGUMENT_SERVICE, service }
 			};
 
 			string pushTokenPayload = Json.Serialize(tokenDict);

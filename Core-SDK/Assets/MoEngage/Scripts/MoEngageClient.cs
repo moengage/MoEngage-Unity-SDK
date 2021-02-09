@@ -156,7 +156,7 @@ namespace MoEngage
         /// <summary>
         /// Tracks birthdate as user attribute.
         /// </summary>
-        /// <param name="time"></param>
+        /// <param name="time" - Supported format - [yyyy-MM-dd|yyyyMMdd][T(hh:mm[:ss[.sss]]|hhmm[ss[.sss]])]?[Z|[+-]hh:mm]]></param>
         public static void SetBirthdate(string time)
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -265,10 +265,10 @@ namespace MoEngage
         }
 
         /// <summary>
-        /// 
+        /// Tracks a user date attribute.
         /// </summary>
         /// <param name="attributeName"></param>
-        /// <param name="isoDate"></param>
+        /// <param name="isoDate" - Supported format - [yyyy-MM-dd|yyyyMMdd][T(hh:mm[:ss[.sss]]|hhmm[ss[.sss]])]?[Z|[+-]hh:mm]]></param>
         public static void SetUserAttributeISODate(string attributeName, string isoDate)
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -279,7 +279,7 @@ namespace MoEngage
         }
 
         /// <summary>
-        /// Tracks a user attribute.
+        /// Tracks a user location attribute.
         /// </summary>
         /// <param name="attributeName"></param>
         /// <param name="location"></param>
@@ -505,17 +505,17 @@ namespace MoEngage
 
         #region Android Specific Methods
 
-        public static void PassPushPayload(IDictionary<string, string> pushPayload)
+        public static void PassFcmPushPayload(IDictionary<string, string> pushPayload)
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            MoEngageAndroid.PassPushPayload(pushPayload);
+            MoEngageAndroid.PassFcmPushPayload(pushPayload);
 #endif
         }
 
-        public static void PassPushToken(string pushToken)
+        public static void PassFcmPushToken(string pushToken)
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            MoEngageAndroid.PassPushToken(pushToken);
+            MoEngageAndroid.PassFcmPushToken(pushToken);
 #endif
         }
 

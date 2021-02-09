@@ -2,7 +2,7 @@
 <dependencies>
 
   <androidPackages>
-    <androidPackage spec="com.moengage:push-amp-plus:2.2.00">
+    <androidPackage spec="com.moengage:push-amp-plus:3.0.00">
     </androidPackage>
   </androidPackages>
 
