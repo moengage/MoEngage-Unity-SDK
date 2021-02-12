@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020 MoEngage Inc.
+ * Copyright (c) 2014-2021 MoEngage Inc.
  *
  * All rights reserved.
  *
@@ -11,24 +11,11 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-apply(from: "../bintray.gradle")
-apply(from: "../installv.gradle")
-
-// Below is the configuration for publishing to local maven. Uncomment the below config and
-// comment out the above config.
-// Note: Javadoc task needs to be commented out when commenting the above config.
-// Gradle command to upload to local maven - ../gradlew uploadArchives
-// command needs to be run inside the specific module which needs to be uploaded.
-/*
-apply(plugin: "maven")
-
-group = "com.moe"
-version = "0.0.16"
-
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      repository(url: mavenLocal().getUrl())
-    }
-  }
-}*/
+/**
+ * @author Umang Chamaria
+ */
+object Deps {
+    val moengage = "com.moengage:moe-android-sdk:10.6.00"
+    val basePlugin = "com.moengage:plugin-base:1.2.00"
+    val appCompat = "androidx.appcompat:appcompat:1.2.0"
+}
