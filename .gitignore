@@ -8,6 +8,12 @@ Core-SDK/*.unitypackage
 Core-SDK/Packages/
 Core-SDK/ProjectSettings/
 
+Cards/Library/
+Cards/Logs/
+Cards/*.unitypackage
+Cards/Packages/
+Cards/ProjectSettings/
+
 Android/PushAmpPlus/Library/
 Android/PushAmpPlus/Logs/
 Android/PushAmpPlus/Packages/
@@ -19,6 +25,7 @@ Android/RichNotification/Logs/
 Android/RichNotification/Packages/
 Android/RichNotification/ProjectSettings/
 Android/RichNotification/*.unitypackage
+
 
 iOS/Geofence/Library/
 iOS/Geofence/Logs/

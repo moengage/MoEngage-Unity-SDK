@@ -1,3 +1,5 @@
+### 1.3.1 (16-02-2021)
+- Android artifacts use manven central instead of Jcenter.
 
 ### 1.3.0 (11-01-2021)
 - iOS: UnityAppController Swizzling implementation added since UnityAppController subclass Implementation was not working in case of multiple subclasses.
