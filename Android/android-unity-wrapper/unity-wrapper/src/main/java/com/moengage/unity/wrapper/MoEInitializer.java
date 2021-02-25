@@ -27,9 +27,9 @@
 package com.moengage.unity.wrapper;
 
 import android.content.Context;
-import com.moengage.core.Logger;
 import com.moengage.core.MoEngage;
-import com.moengage.core.model.IntegrationMeta;
+import com.moengage.core.internal.logger.Logger;
+import com.moengage.core.internal.model.IntegrationMeta;
 import com.moengage.plugin.base.PluginInitializer;
 
 /**

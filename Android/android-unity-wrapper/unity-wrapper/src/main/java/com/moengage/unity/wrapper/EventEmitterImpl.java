@@ -26,7 +26,7 @@
 package com.moengage.unity.wrapper;
 
 import androidx.annotation.NonNull;
-import com.moengage.core.Logger;
+import com.moengage.core.internal.logger.Logger;
 import com.moengage.plugin.base.EventEmitter;
 import com.moengage.plugin.base.UtilsKt;
 import com.moengage.plugin.base.model.Event;

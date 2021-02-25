@@ -139,23 +139,23 @@ namespace MoEngage
 #endif
 		}
 
-		public static void PassPushPayload(IDictionary<string, string> pushPayloadDict) 
+		public static void PassFcmPushPayload(IDictionary<string, string> pushPayloadDict) 
 	    {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": PassPushPayload::");
+			Debug.Log(TAG + ": PassFcmPushPayload::");
 			
-			string pushPayload = MoEUtils.GetPushPayload(pushPayloadDict);
-			Debug.Log(TAG + ": PassPushPayload:: pushPayload: " + pushPayload);
+			string pushPayload = MoEUtils.GetPushPayload(new Dictionary<string, string> (pushPayloadDict), MoEConstants.PUSH_SERVICE_TYPE_FCM);
+			Debug.Log(TAG + ": PassFcmPushPayload:: pushPayload: " + pushPayload);
 			moengageAndroid.Call("passPushPayload", pushPayload);
 #endif
 	    }
 
-	    public static void PassPushToken(string pushToken) 
+	    public static void PassFcmPushToken(string pushToken) 
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": PassPushToken:: ");
-			string pushTokenPayload = MoEUtils.GetPushTokenPayload(pushToken);
-			Debug.Log(TAG + ": PassPushToken:: pushToken: " + pushTokenPayload);
+			Debug.Log(TAG + ": PassFcmPushToken:: ");
+			string pushTokenPayload = MoEUtils.GetPushTokenPayload(pushToken, MoEConstants.PUSH_SERVICE_TYPE_FCM);
+			Debug.Log(TAG + ": PassFcmPushToken:: pushToken: " + pushTokenPayload);
 			moengageAndroid.Call("passPushToken", pushTokenPayload);
 #endif
 	    }

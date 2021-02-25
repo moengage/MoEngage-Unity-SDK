@@ -15,7 +15,7 @@
  * @author Umang Chamaria
  */
 object Deps {
-    val moengage = "com.moengage:moe-android-sdk:10.6.01"
-    val basePlugin = "com.moengage:plugin-base:1.2.01"
+    val moengage = "com.moengage:moe-android-sdk:11.0.04"
+    val basePlugin = "com.moengage:plugin-base:2.0.00"
     val appCompat = "androidx.appcompat:appcompat:1.2.0"
 }

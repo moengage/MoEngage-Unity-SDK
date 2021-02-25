@@ -1,3 +1,13 @@
+### 2.0.00
+- Android 
+    - Android Native SDK updated to support version `11.0.04` and above.
+- Removed APIs
+
+|                             Then                            	|                               Now                              	|
+|:-----------------------------------------------------------:	|:--------------------------------------------------------------:	|
+| MoEngageClient#PassPushPayload(IDictionary<string, string>) 	| MoEngageClient#PassFcmPushPayload(IDictionary<string, string>) 	|
+|             MoEngageClient#PassPushToken(string)            	|             MoEngageClient#PassFcmPushToken(string)            	|
+
 ### 1.3.1 (16-02-2021)
 - Android artifacts use manven central instead of Jcenter.
 
