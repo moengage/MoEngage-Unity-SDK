@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <MoEngage/MoEngage.h>
 
 @interface MoEUnityInitializer : NSObject
 @property(assign, nonatomic, readonly) BOOL isSDKIntialized;
@@ -17,6 +18,10 @@
 
 - (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions;
 - (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions andSDKState:(BOOL)isSDKEnabled;
+
+- (void)intializeSDKWithConfig:(MOSDKConfig*)sdkConfig andLaunchOptions:(NSDictionary*)launchOptions;
+- (void)intializeSDKWithConfig:(MOSDKConfig*)sdkConfig withSDKState:(BOOL)isSDKEnabled andLaunchOptions:(NSDictionary*)launchOptions;
+
 - (void)setupSDKWithGameObject:(NSString*)gameObjectName;
 
 @end

@@ -7,13 +7,10 @@
 //
 
 #import "MoEUnityInitializer.h"
-#import <MoEngage/MoEngage.h>
 #import <MoEPluginBase/MoEPluginBase.h>
 #import <MOInApp/MOInApp.h>
 #import "MoEngageConfiguration.h"
 #import "MoEUnityConstants.h"
-
-#define MOE_UNITY_PLUGIN_VERSION    @"1.3.1"
 
 @interface MoEUnityInitializer() <MoEPluginBridgeDelegate>
 @property(assign, nonatomic) BOOL isSDKIntialized;
@@ -44,76 +41,102 @@
 }
 
 - (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions {
-    
     [self intializeSDKWithLaunchOptions:launchOptions andSDKState:[[MoEngageCore sharedInstance] isSDKEnabled]];
 }
 
 - (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions andSDKState:(BOOL)isSDKEnabled{
+    MOSDKConfig* sdkConfig = [self getSDKConfigFromFile];
+    [self intializeSDKWithConfig:sdkConfig withSDKState:isSDKEnabled andLaunchOptions:launchOptions];
+}
+
+
+- (void)intializeSDKWithConfig:(MOSDKConfig*)sdkConfig andLaunchOptions:(NSDictionary*)launchOptions{
+    [self intializeSDKWithConfig:sdkConfig withSDKState:[[MoEngageCore sharedInstance] isSDKEnabled] andLaunchOptions:launchOptions];
+}
+
+- (void)intializeSDKWithConfig:(MOSDKConfig*)sdkConfig withSDKState:(BOOL)isSDKEnabled andLaunchOptions:(NSDictionary*)launchOptions{
     self.isSDKIntialized = YES;
-    [self setupSDKWithLaunchOptions:launchOptions andSDKState:isSDKEnabled];
+    [self setupSDKWithConfig:sdkConfig withSDKState:isSDKEnabled andLaunchOptions:launchOptions];
 }
 
 - (void)setupSDKWithGameObject:(NSString*)gameObjectName {
     self.moeGameObjectName = gameObjectName;
     if (!self.isSDKIntialized) {
         //this will works as fallback method if AppDelegate Swizzling doesn't work
-        [self setupSDKWithLaunchOptions: nil andSDKState:[[MoEngageCore sharedInstance] isSDKEnabled]];
+        MOSDKConfig* sdkConfig = [self getSDKConfigFromFile];
+        [self setupSDKWithConfig:sdkConfig  withSDKState:[[MoEngageCore sharedInstance] isSDKEnabled] andLaunchOptions:nil];
     }
     [[MoEPluginBridge sharedInstance] pluginInitialized];
 }
 
-- (void)setUnitySDKVersion{
-    [[MoEPluginBridge sharedInstance] trackPluginVersion:MOE_UNITY_PLUGIN_VERSION forIntegrationType:Unity];
-}
-
--(void)setupSDKWithLaunchOptions:(NSDictionary * _Nullable)launchOptions andSDKState:(BOOL)isSDKEnabled{
+-(void)setupSDKWithConfig:(MOSDKConfig*)sdkConfig withSDKState:(BOOL)isSDKEnabled andLaunchOptions:(NSDictionary * _Nullable)launchOptions {
     
     if (kMoEngageLogsEnabled) {
-        [MoEngage debug:LOG_ALL];
+        [MoEngage enableSDKLogs:true];
     }
     
-    if (kDefaultIDFATrackingOptedOut) {
-        [[MOAnalytics sharedInstance] optOutOfIDFATracking:true];
-    }
-    
-    if (kDefaultIDFVTrackingOptedOut) {
-        [[MOAnalytics sharedInstance] optOutOfIDFVTracking:true];
-    }
-    
-    
-    [self setUnitySDKVersion];
     [MoEPluginBridge sharedInstance].bridgeDelegate = self;
-    [MoEngage setAppGroupID:[self getAppGroupID]];
     
-    /* MoEngage - Create a MoEngageConfiguration.h file in Project's Assets > Plugin folder and provide the APP ID and Region for MoEngage Integration as shown below:
-     
-     #define kMoEngageAppID @"Your App ID"
-     #define kMoEngageRegion @"DEFAULT"  // DEFAULT/EU/SERV3
-     */
-    
-    NSString* region = kMoEngageRegion;
-    [self setMoEngageRegion:region];
-    
-    NSString* moeAppID = kMoEngageAppID;
-    if (moeAppID.length > 0) {
-        [[MoEPluginInitializer sharedInstance] intializeSDKWithAppID:moeAppID withSDKState:isSDKEnabled andLaunchOptions:launchOptions];
+    if (sdkConfig.moeAppID && sdkConfig.moeAppID.length > 0) {
+        sdkConfig.pluginIntegrationType = UNITY;
+        sdkConfig.pluginIntegrationVersion = kUnityPluginVersion;
+        [[MoEPluginInitializer sharedInstance] intializeSDKWithConfig:sdkConfig withSDKState:isSDKEnabled andLaunchOptions:launchOptions];
     }
     else{
         NSAssert(NO, @"MoEngage - Provide the APP ID for your MoEngage App in MoEngageConfiguration.h file. To get the AppID login to your MoEngage account, after that go to Settings -> App Settings. You will find the App ID in this screen.");
     }
 }
 
--(void)setMoEngageRegion:(NSString*)region{
+-(MOSDKConfig*)getSDKConfigFromFile{
+    MOSDKConfig* sdkConfig = [[MoEngage sharedInstance] getDefaultSDKConfiguration];
+    
+    /* MoEngage - Create a MoEngageConfiguration.h file in Project's Assets > Plugin folder and provide the APP ID and Region for MoEngage Integration as shown below:
+     
+     #define kMoEngageAppID @"Your App ID"
+     #define kMoEngageRegion @"DEFAULT"  // DEFAULT/EU/SERV3
+     */
+    sdkConfig.moeDataCenter = [self getMoEngageDataCenter];
+    sdkConfig.moeAppID = kMoEngageAppID;
+    
+    sdkConfig.pluginIntegrationType = UNITY;
+    sdkConfig.pluginIntegrationVersion = kUnityPluginVersion;
+    sdkConfig.encryptNetworkRequests = [MoEUnityInitializer shouldEncryptNetworkRequests];
+    sdkConfig.optOutIDFATracking = [MoEUnityInitializer shouldOptOutIDFATracking];
+    sdkConfig.optOutIDFVTracking = [MoEUnityInitializer shouldOptOutIDFVTracking];
+
+    NSString* appGroupID = [self getAppGroupID];
+    if (appGroupID && appGroupID.length > 0) {
+        sdkConfig.appGroupID = appGroupID;
+    }
+    
+    return sdkConfig;
+
+}
+
+-(MODataCenter)getMoEngageDataCenter{
+#ifdef kMoEngageDataCenter
+    NSString* dataCenter = kMoEngageDataCenter;
+    dataCenter = dataCenter.uppercaseString;
+    if ([dataCenter isEqualToString:@"DATA_CENTER_02"]){
+        return DATA_CENTER_02;
+    }
+    else if ([dataCenter isEqualToString:@"DATA_CENTER_03"]){
+        return  DATA_CENTER_03;
+    }
+#endif
+    
+#ifdef kMoEngageRegion
+    NSString* region = kMoEngageRegion;
     region = region.uppercaseString;
     if ([region isEqualToString:@"EU"]){
-        [MoEngage redirectDataToRegion:MOE_REGION_EU];
+        return DATA_CENTER_02;
     }
     else if ([region isEqualToString:@"SERV3"]){
-        [MoEngage redirectDataToRegion:MOE_REGION_SERV3];
+        return  DATA_CENTER_03;
     }
-    else{
-        [MoEngage redirectDataToRegion:MOE_REGION_DEFAULT];
-    }
+#endif
+    
+    return DATA_CENTER_01;
 }
 
 -(NSString*)getAppGroupID{
@@ -127,8 +150,8 @@
 -(void)sendMessageWithName:(NSString *)name andPayload:(NSDictionary *)payloadDict{
     // TODO: Remove mapper in the next release -- To use same internal name as used in MoEPluginBase
     NSString* unityMethodName = nil;
-    if ([name isEqualToString:kEventNamePushTokenRegistered]){
-        unityMethodName = kUnityMethodNamePushTokenRegistered;
+    if ([name isEqualToString:kEventNamePushTokenGenerated]){
+        unityMethodName = kUnityMethodNamePushTokenGenerated;
     }
     else if ([name isEqualToString:kEventNamePushClicked]) {
         unityMethodName = kUnityMethodNamePushClicked;
@@ -182,6 +205,31 @@
     swizzleUnityAppController = kMoEngageUnityControllerSwizzlingEnabled;
 #endif
     return swizzleUnityAppController;
+}
+
++(BOOL)shouldEncryptNetworkRequests{
+    BOOL shouldEncrypt = false;
+#ifdef kMoEngageEncryptNetworkRequests
+    shouldEncrypt = kMoEngageEncryptNetworkRequests;
+#endif
+    return shouldEncrypt;
+}
+
++(BOOL)shouldOptOutIDFVTracking{
+    BOOL shouldOptOut = false;
+#ifdef kDefaultIDFVTrackingOptedOut
+    shouldOptOut = kDefaultIDFVTrackingOptedOut;
+#endif
+    return shouldOptOut;
+}
+
+
++(BOOL)shouldOptOutIDFATracking{
+    BOOL shouldOptOut = false;
+#ifdef kDefaultIDFATrackingOptedOut
+    shouldOptOut = kDefaultIDFATrackingOptedOut;
+#endif
+    return shouldOptOut;
 }
 
 @end

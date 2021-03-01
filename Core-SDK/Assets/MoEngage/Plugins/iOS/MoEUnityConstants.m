@@ -7,8 +7,10 @@
 
 #import "MoEUnityConstants.h"
 
+NSString* const kUnityPluginVersion = @"2.0.0";
+
 // Callbacks Method Names
-NSString* const kUnityMethodNamePushTokenRegistered = @"PushToken";
+NSString* const kUnityMethodNamePushTokenGenerated = @"PushToken";
 NSString* const kUnityMethodNamePushClicked = @"PushClicked";
 NSString* const kUnityMethodNameInAppShown = @"InAppCampaignShown";
 NSString* const kUnityMethodNameInAppClicked = @"InAppCampaignClicked";

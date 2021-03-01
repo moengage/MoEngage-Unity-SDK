@@ -7,8 +7,10 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString* const kUnityPluginVersion;
+
 // Callbacks Method Names
-extern NSString* const kUnityMethodNamePushTokenRegistered;
+extern NSString* const kUnityMethodNamePushTokenGenerated;
 extern NSString* const kUnityMethodNamePushClicked;
 extern NSString* const kUnityMethodNameInAppShown;
 extern NSString* const kUnityMethodNameInAppClicked;
