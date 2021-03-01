@@ -3,7 +3,7 @@
     - Dropped support for iOS 9.*, plugin now supports iOS version `10.0` and above.
     - Native dependencies updated to support `MoEngage-iOS-SDK` version `7.0.0` and above.
 - Android 
-    - Android Native SDK updated to support version `11.0.04` and above.
+    - Android Native SDK updated to support version `11.0.04`.
 - Removed APIs
 
 |                             Then                            	|                               Now                              	|
