@@ -26,6 +26,6 @@ object ReleaseConfig {
     const val artifactId = "unity-wrapper"
     const val artifactName = "MoEngage Unity Wrapper"
     const val description = "Wrapper SDK for unity framework support on MoEngage Platform."
-    const val versionName = "2.0.00"
-    const val versionCode = 2000
+    const val versionName = "2.1.01"
+    const val versionCode = 2101
 }
