@@ -1,3 +1,6 @@
+### 2.1.0 (11-05-2021)
+- Android SDK updated to `11.2.00`
+
 ### 2.0.0 (01-03-2021)
 - iOS 
     - Dropped support for iOS 9.*, plugin now supports iOS version `10.0` and above.
