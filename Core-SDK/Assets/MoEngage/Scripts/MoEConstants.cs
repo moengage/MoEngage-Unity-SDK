@@ -48,6 +48,7 @@ namespace MoEngage
 
 		public const string ARGUMENT_CAMPAIGN_NAME = "campaignName";
 		public const string ARGUMENT_CAMPAIGN_ID = "campaignId";
+        public const string ARGUMENT_CAMPAIGN_CONTEXT = "campaignContext";
 		public const string ARGUMENT_SELF_HANDLED = "selfHandled";
 		public const string ARGUMENT_PAYLOAD = "payload";
 		public const string ARGUMENT_DISMISS_INTERVAL = "dismissInterval";
@@ -73,6 +74,7 @@ namespace MoEngage
         public const string PARAM_PLATFORM = "platform";
         public const string PARAM_CAMPAIGN_NAME = "campaignName";
         public const string PARAM_CAMPAIGN_ID = "campaignId";
+        public const string PARAM_CAMPAIGN_CONTEXT = "campaignContext";
 
         public const string PARAM_NAVIGATION = "navigation";
         public const string PARAM_NAVIGATION_TYPE = "navigationType";

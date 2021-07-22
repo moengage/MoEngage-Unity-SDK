@@ -112,11 +112,13 @@ namespace MoEngage
 		{
 
 			Dictionary<string, object> payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary<string, object>;
+
 			InAppCampaign campaign = new InAppCampaign
 			{
 				platform = payloadDictionary[MoEConstants.PARAM_PLATFORM] as string,
 				campaignId = payloadDictionary[MoEConstants.PARAM_CAMPAIGN_ID] as string,
-				campaignName = payloadDictionary[MoEConstants.PARAM_CAMPAIGN_NAME] as string
+				campaignName = payloadDictionary[MoEConstants.PARAM_CAMPAIGN_NAME] as string,
+				campaignContext = payloadDictionary[MoEConstants.PARAM_CAMPAIGN_CONTEXT] as Dictionary<string, object>
 			};
 
 			// Navigation Action Info
@@ -179,9 +181,9 @@ namespace MoEngage
 				{ MoEConstants.ARGUMENT_CAMPAIGN_ID, inAppCampaign.campaignId },
 				{ MoEConstants.ARGUMENT_CAMPAIGN_NAME, inAppCampaign.campaignName},
 				{ MoEConstants.ARGUMENT_SELF_HANDLED, selfHandledDictionary},
+				{ MoEConstants.ARGUMENT_CAMPAIGN_CONTEXT,inAppCampaign.campaignContext},
 				{ MoEConstants.ARGUMENT_TYPE, type}
 			};
-
 			return Json.Serialize(inAppCampaignDictionary);
 		}
 

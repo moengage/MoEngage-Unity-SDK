@@ -26,7 +26,7 @@ namespace MoEngage
         public NavigationAction navigation;
         public SelfHandled selfHandled;
         public CustomAction customAction;
-
+        public Dictionary<string, object> campaignContext;
     }
 }
 
