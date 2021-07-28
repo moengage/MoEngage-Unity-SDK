@@ -154,9 +154,13 @@ namespace MoEngage
 				var selfHandledDictionary = payloadDictionary[MoEConstants.PARAM_SELF_HANDLED] as Dictionary<string, object>;
 				SelfHandled selfHandled = new SelfHandled()
 				{
-					payload = selfHandledDictionary[MoEConstants.PARAM_PAYLOAD] as string,
-					dismissInterval = (long)selfHandledDictionary[MoEConstants.PARAM_DISMISS_INTERVAL]
+					payload = selfHandledDictionary[MoEConstants.PARAM_PAYLOAD] as string
 				};
+
+				if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_DISMISS_INTERVAL))
+                {
+					selfHandled.dismissInterval = (long)selfHandledDictionary[MoEConstants.PARAM_DISMISS_INTERVAL];
+                }
 
 				if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_IS_CANCELLABLE))
                 {
