@@ -1,5 +1,6 @@
 plugins {
     id("com.android.library")
+    id("kotlin-android")
 }
 
 ext {
@@ -30,10 +31,12 @@ android {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:${rootProject.extra["kotlin_version"]}")
     compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     compileOnly(Deps.appCompat)
     compileOnly(Deps.moengage)
     api(Deps.basePlugin)
+    compileOnly(project(":unity-library"))
 }
 
 apply(plugin="com.vanniktech.maven.publish")

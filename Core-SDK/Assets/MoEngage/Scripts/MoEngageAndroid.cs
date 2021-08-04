@@ -249,12 +249,20 @@ namespace MoEngage
 		}
 
 		public static void UpdateSdkState(bool state)
-    {
+		{
 #if !UNITY_EDITOR
 			Debug.Log(TAG + " EnabledSdk::");
 			string payload = MoEUtils.GetSdkStatePayload(state);
 			Debug.Log(TAG + " EnableSdk:: payload " + payload);
 			moengageAndroid.Call("updateSdkState", payload);
+#endif
+		}
+
+		public static void OnConfigurationChanged()
+		{
+#if !UNITY_EDITOR
+			Debug.Log(TAG + " OnConfigurationChanged::");
+			moengageAndroid.Call("onConfigurationChanged");
 #endif
 		}
 

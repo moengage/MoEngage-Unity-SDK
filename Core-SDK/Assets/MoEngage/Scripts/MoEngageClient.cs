@@ -519,6 +519,13 @@ namespace MoEngage
 #endif
         }
 
+        public static void OnConfigurationChanged()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.OnConfigurationChanged();
+#endif
+        }
+
         #endregion
 
     }

@@ -1,0 +1,27 @@
+plugins {
+  id("com.android.library")
+}
+
+android {
+  compileSdkVersion(SdkBuildConfig.compileSdkVersion)
+
+  defaultConfig {
+    minSdkVersion(SdkBuildConfig.minimumSdkVersion)
+    targetSdkVersion(SdkBuildConfig.targetSdkVersion)
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+
+dependencies {
+  compileOnly files('libs/classes.jar')
+}
