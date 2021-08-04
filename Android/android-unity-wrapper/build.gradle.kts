@@ -2,8 +2,6 @@
 buildscript {
   val kotlin_version by extra("1.3.72")
     repositories {
-    mavenLocal()
-    mavenCentral()
     google()
     mavenCentral()
     jcenter()
