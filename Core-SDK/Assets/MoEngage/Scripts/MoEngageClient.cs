@@ -519,10 +519,10 @@ namespace MoEngage
 #endif
         }
 
-        public static void OnConfigurationChanged()
+        public static void OnOrientationChanged()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            MoEngageAndroid.OnConfigurationChanged();
+            MoEngageAndroid.OnOrientationChanged();
 #endif
         }
 

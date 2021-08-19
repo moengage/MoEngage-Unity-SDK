@@ -258,11 +258,11 @@ namespace MoEngage
 #endif
 		}
 
-		public static void OnConfigurationChanged()
+		public static void OnOrientationChanged()
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " OnConfigurationChanged::");
-			moengageAndroid.Call("onConfigurationChanged");
+			Debug.Log(TAG + " OnOrientationChanged::");
+			moengageAndroid.Call("onOrientationChanged");
 #endif
 		}
 

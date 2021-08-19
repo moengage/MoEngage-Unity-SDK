@@ -37,7 +37,7 @@ namespace MoEngage
             return locationDict;
         }
 
-        public string ToString() {
+        public override string ToString() {
             return "{ latitude: " + latitude + ", longitude: " + longitude + " }";
         }
     }

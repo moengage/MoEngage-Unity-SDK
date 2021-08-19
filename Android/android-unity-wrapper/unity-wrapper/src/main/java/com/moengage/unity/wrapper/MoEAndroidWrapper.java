@@ -294,12 +294,12 @@ public class MoEAndroidWrapper {
     }
   }
 
-  public void onConfigurationChanged() {
+  public void onOrientationChanged() {
     try{
-      Logger.v(TAG + " onConfigurationChanged() : ");
+      Logger.v(TAG + " onOrientationChanged() : ");
       pluginHelper.onConfigurationChanged();
     }catch (Exception e){
-      Logger.e( TAG + " onConfigurationChanged() : ", e);
+      Logger.e( TAG + " onOrientationChanged() : ", e);
     }
   }
 
