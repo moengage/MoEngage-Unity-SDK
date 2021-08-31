@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dependencies>
   <androidPackages>
-    <androidPackage spec="com.moengage:moe-android-sdk:11.2.00"/>
+    <androidPackage spec="com.moengage:moe-android-sdk:11.4.00"/>
     <androidPackage spec="com.moengage:unity-wrapper:2.1.01"/>
   </androidPackages>
     
