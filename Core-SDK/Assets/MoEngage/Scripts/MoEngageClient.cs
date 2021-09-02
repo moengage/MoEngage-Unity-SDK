@@ -519,6 +519,13 @@ namespace MoEngage
 #endif
         }
 
+        public static void OnOrientationChanged()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.OnOrientationChanged();
+#endif
+        }
+
         #endregion
 
     }

@@ -294,5 +294,14 @@ public class MoEAndroidWrapper {
     }
   }
 
+  public void onOrientationChanged() {
+    try{
+      Logger.v(TAG + " onOrientationChanged() : ");
+      pluginHelper.onConfigurationChanged();
+    }catch (Exception e){
+      Logger.e( TAG + " onOrientationChanged() : ", e);
+    }
+  }
+
   private static final String ARGUMENT_GAME_OBJECT = "gameObjectName";
 }
