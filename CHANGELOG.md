@@ -1,3 +1,9 @@
+### 2.2.0 (02-09-2021)
+- Android
+  - Native SDK updated to support `11.4.00`
+- iOS
+  - Native dependencies updated to support `MoEngage-iOS-SDK` version `7.1.0` and above.
+  
 ### 2.1.0 (11-05-2021)
 - Android SDK updated to `11.2.00`
 
