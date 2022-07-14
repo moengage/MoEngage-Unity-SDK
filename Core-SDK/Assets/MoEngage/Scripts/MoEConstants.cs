@@ -41,18 +41,18 @@ namespace MoEngage
         public const string ATTRIBUTE_TYPE_TIMESTAMP = "timestamp";
         public const string ATTRIBUTE_TYPE_LOCATION = "location";
         public const string ATTRIBUTE_TYPE_SELF_HANDLED_IMPRESSION = "impression";
-		public const string ATTRIBUTE_TYPE_SELF_HANDLED_CLICK = "click";
-		public const string ATTRIBUTE_TYPE_SELF_HANDLED_DISMISSED = "dismissed";
-		public const string ATTRIBUTE_TYPE_SELF_HANDLED_PRIMARY_CLICKED = "primary_clicked";
+        public const string ATTRIBUTE_TYPE_SELF_HANDLED_CLICK = "click";
+        public const string ATTRIBUTE_TYPE_SELF_HANDLED_DISMISSED = "dismissed";
+        public const string ATTRIBUTE_TYPE_SELF_HANDLED_PRIMARY_CLICKED = "primary_clicked";
 
 
-		public const string ARGUMENT_CAMPAIGN_NAME = "campaignName";
-		public const string ARGUMENT_CAMPAIGN_ID = "campaignId";
+        public const string ARGUMENT_CAMPAIGN_NAME = "campaignName";
+        public const string ARGUMENT_CAMPAIGN_ID = "campaignId";
         public const string ARGUMENT_CAMPAIGN_CONTEXT = "campaignContext";
-		public const string ARGUMENT_SELF_HANDLED = "selfHandled";
-		public const string ARGUMENT_PAYLOAD = "payload";
-		public const string ARGUMENT_DISMISS_INTERVAL = "dismissInterval";
-		public const string ARGUMENT_IS_CANCELLABLE = "isCancellable";
+        public const string ARGUMENT_SELF_HANDLED = "selfHandled";
+        public const string ARGUMENT_PAYLOAD = "payload";
+        public const string ARGUMENT_DISMISS_INTERVAL = "dismissInterval";
+        public const string ARGUMENT_IS_CANCELLABLE = "isCancellable";
 
         public const string ARGUMENT_CONTEXTS = "contexts";
         public const string ARGUMENT_OPT_OUT_STATUS = "isOptedOut";
@@ -103,7 +103,10 @@ namespace MoEngage
         public const string FEATURE_STATUS_IS_SDK_ENABLED = "isSdkEnabled";
 
         /* ****************************** Push Service Type ***************************************** */
-        
+
         public const string PUSH_SERVICE_TYPE_FCM = "FCM";
+
+        public const string KEY_ANDROID_ID_TRACKING = "isAndroidIdTrackingEnabled";
+        public const string KEY_AD_ID_TRACKING = "isAdIdTrackingEnabled";
     }
 }

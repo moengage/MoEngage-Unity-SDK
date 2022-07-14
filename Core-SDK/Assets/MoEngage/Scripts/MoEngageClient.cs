@@ -415,8 +415,8 @@ namespace MoEngage
 #elif UNITY_IOS && !UNITY_EDITOR
             MoEngageiOS.optOutDataTracking(shouldOptOut);
 #endif
-        } 
-        
+        }
+
         public static void optOutPushTracking(bool shouldOptOut)
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -424,16 +424,16 @@ namespace MoEngage
 #elif UNITY_IOS && !UNITY_EDITOR
             MoEngageiOS.optOutPushTracking(shouldOptOut);
 #endif
-        } 
+        }
 
-         public static void optOutInAppTracking(bool shouldOptOut)
+        public static void optOutInAppTracking(bool shouldOptOut)
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
             MoEngageAndroid.optOutInAppTracking(shouldOptOut);
 #elif UNITY_IOS && !UNITY_EDITOR
             MoEngageiOS.optOutInAppTracking(shouldOptOut);
 #endif
-        } 
+        }
 
         #endregion
 
@@ -457,7 +457,7 @@ namespace MoEngage
 #endif
         }
 
-         #endregion
+        #endregion
 
         #region iOS Specific Methods
 
@@ -523,6 +523,34 @@ namespace MoEngage
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
             MoEngageAndroid.OnOrientationChanged();
+#endif
+        }
+
+        public static void EnableAdIdTracking()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.EnableAdIdTracking();
+#endif
+        }
+
+        public static void DisableAdIdTracking()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.DisableAdIdTracking();
+#endif
+        }
+
+        public static void EnableAndroidIdTracking()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.EnableAndroidIdTracking();
+#endif
+        }
+
+        public static void DisableAndroidIdTracking()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            MoEngageAndroid.DisableAndroidIdTracking();
 #endif
         }
 
