@@ -19,7 +19,6 @@ allprojects {
     google()
     mavenCentral()
     jcenter()
-    maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
   }
 }
 
