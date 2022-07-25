@@ -3,13 +3,6 @@ plugins {
     id("kotlin-android")
 }
 
-ext {
-    set(PomKeys.artifactId, ReleaseConfig.artifactId)
-    set(PomKeys.description, ReleaseConfig.description)
-    set(PomKeys.name, ReleaseConfig.artifactName)
-    set(PomKeys.versionName, ReleaseConfig.versionName)
-}
-
 android {
     compileSdkVersion(SdkBuildConfig.compileSdkVersion)
 

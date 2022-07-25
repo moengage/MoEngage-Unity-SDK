@@ -303,5 +303,14 @@ public class MoEAndroidWrapper {
     }
   }
 
+  public void deviceIdentifierTrackingStatusUpdate(String payload) {
+    try {
+      Logger.v(TAG + " deviceIdentifierTrackingStatusUpdate() : Arguments: " + payload);
+      pluginHelper.deviceIdentifierTrackingStatusUpdate(context, payload);
+    } catch (Exception e) {
+      Logger.e(TAG + " deviceIdentifierTrackingStatusUpdate() : ", e);
+    }
+  }
+
   private static final String ARGUMENT_GAME_OBJECT = "gameObjectName";
 }

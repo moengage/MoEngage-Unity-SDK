@@ -34,3 +34,14 @@ iOS/Geofence/ProjectSettings/
 iOS/Geofence/*.unitypackage
 
 ReleaseAttachments/
+
+Geofence/Library
+Geofence/ProjectSettings
+Geofence/Packages
+Geofence/Logs
+
+v2.2.0.zip
+
+.idea
+
+Build.log

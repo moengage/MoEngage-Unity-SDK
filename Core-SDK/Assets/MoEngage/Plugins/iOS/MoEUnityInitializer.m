@@ -80,7 +80,7 @@
     if (sdkConfig.moeAppID && sdkConfig.moeAppID.length > 0) {
         sdkConfig.pluginIntegrationType = UNITY;
         sdkConfig.pluginIntegrationVersion = kUnityPluginVersion;
-        [[MoEPluginInitializer sharedInstance] intializeSDKWithConfig:sdkConfig withSDKState:isSDKEnabled andLaunchOptions:launchOptions];
+        [[MoEPluginInitializer sharedInstance] initializeSDKWithConfig:sdkConfig withSDKState:isSDKEnabled andLaunchOptions:launchOptions];
     }
     else{
         NSAssert(NO, @"MoEngage - Provide the APP ID for your MoEngage App in MoEngageConfiguration.h file. To get the AppID login to your MoEngage account, after that go to Settings -> App Settings. You will find the App ID in this screen.");
