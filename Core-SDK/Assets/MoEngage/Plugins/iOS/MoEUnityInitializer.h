@@ -6,22 +6,21 @@
 //  Copyright © 2020 MoEngage. All rights reserved.
 //
 
+@protocol SFSafariViewControllerDelegate;
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <MoEngage/MoEngage.h>
+#import <MoEngageSDK/MoEngageSDK.h>
 
 @interface MoEUnityInitializer : NSObject
 @property(assign, nonatomic, readonly) BOOL isSDKIntialized;
 
 +(instancetype)sharedInstance;
-+(BOOL)isUnityAppControllerSwizzlingEnabled;
 
 - (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions;
-- (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions andSDKState:(BOOL)isSDKEnabled;
 
-- (void)intializeSDKWithConfig:(MOSDKConfig*)sdkConfig andLaunchOptions:(NSDictionary*)launchOptions;
-- (void)intializeSDKWithConfig:(MOSDKConfig*)sdkConfig withSDKState:(BOOL)isSDKEnabled andLaunchOptions:(NSDictionary*)launchOptions;
+- (void)intializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig andLaunchOptions:(NSDictionary*)launchOptions;
+- (void)intializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig withSDKState:(MoEngageSDKState)isSDKEnabled andLaunchOptions:(NSDictionary*)launchOptions;
 
-- (void)setupSDKWithGameObject:(NSString*)gameObjectName;
-
+- (void)setupSDKWithInitializePayload:(NSMutableDictionary*)payload;
 @end

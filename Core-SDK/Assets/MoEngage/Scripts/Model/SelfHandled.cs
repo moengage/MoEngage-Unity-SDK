@@ -17,27 +17,25 @@ using UnityEngine;
 
 namespace MoEngage
 {
-    [System.Serializable]
-    public class PushCampaign
-    {
-        public string platform;
-        public bool isDefaultAction;
-        public IDictionary<string,object> clickedAction;
-        public IDictionary<string,object> payload;
+  [System.Serializable]
+  public class SelfHandled
+  {
+    public string payload;
+    public long dismissInterval;
+    public bool isCancellable;
 
-        public PushCampaign(Dictionary<string, object> pushPayload)
-        {
-            platform = pushPayload[MoEConstants.PARAM_PLATFORM] as string;
+    public SelfHandled(Dictionary < string, object > selfHandledDictionary) {
+      if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_PAYLOAD)) {
+        payload = selfHandledDictionary[MoEConstants.PARAM_PAYLOAD] as string;
+      };
 
-            if (pushPayload.ContainsKey(MoEConstants.PARAM_IS_DEFAULT_ACTION)) {
-                isDefaultAction = (bool)pushPayload[MoEConstants.PARAM_IS_DEFAULT_ACTION];
-            }
+      if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_DISMISS_INTERVAL)) {
+        dismissInterval = (long) selfHandledDictionary[MoEConstants.PARAM_DISMISS_INTERVAL];
+      }
 
-            if (pushPayload.ContainsKey(MoEConstants.PARAM_CLICKED_ACTION)) {
-                clickedAction = pushPayload[MoEConstants.PARAM_CLICKED_ACTION] as  Dictionary<string, object>;
-            }
-
-            payload = pushPayload[MoEConstants.PARAM_PAYLOAD] as Dictionary<string, object>;
-        }
+      if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_IS_CANCELLABLE)) {
+        isCancellable = (bool) selfHandledDictionary[MoEConstants.PARAM_IS_CANCELLABLE];
+      }
     }
+  }
 }

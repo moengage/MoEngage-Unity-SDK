@@ -21,20 +21,23 @@ namespace MoEngage
 {
     public class MoEGameObject : MonoBehaviour
     {
+        [SerializeField]
+        private string appId;
+
         private const string TAG = "MoEGameObject";
 
-        public static event EventHandler<PushToken> PushTokenCallback;
-        public static event EventHandler<PushCampaign> PushNotifCallback;
-        public static event EventHandler<InAppCampaign> InAppShown;
-        public static event EventHandler<InAppCampaign> InAppClicked;
-        public static event EventHandler<InAppCampaign> InAppDismissed;
-        public static event EventHandler<InAppCampaign> InAppCustomAction;
-        public static event EventHandler<InAppCampaign> InAppSelfHandled;
+        public static event EventHandler < PushToken > PushTokenCallback;
+        public static event EventHandler < PushCampaignData > PushNotifCallback;
+        public static event EventHandler < InAppData > InAppShown;
+        public static event EventHandler < InAppClickData > InAppClicked;
+        public static event EventHandler < InAppData > InAppDismissed;
+        public static event EventHandler < InAppClickData > InAppCustomAction;
+        public static event EventHandler < InAppSelfHandledCampaignData > InAppSelfHandled;
 
         // Start is called before the first frame update
         void Start()
         {
-            MoEngageClient.Initialize(gameObject);
+            MoEngageClient.Initialize(gameObject, appId);
         }
 
         public void PushToken(string payload)
@@ -46,77 +49,76 @@ namespace MoEngage
 
         public void PushClicked(string payload)
         {
-            Debug.Log(TAG + "PushClicked() Callback from Native: " + payload);
-            Dictionary<string, object> dict = Json.Deserialize(payload) as Dictionary<string, object>;
-            PushCampaign campaign = new PushCampaign(dict);
-            OnPushClicked(campaign);
+           Debug.Log(TAG + "PushClicked() Callback from Native: " + payload);
+           PushCampaignData campaign = MoEUtils.GetPushClickPayload(payload);
+           OnPushClicked(campaign);
         }
 
         public void InAppCampaignShown(string payload)
         {
             Debug.Log(TAG + " InAppCampaignShown() Callback From Native" + payload);
-            InAppCampaign campaign = MoEUtils.GetInAppCampaignFromPayload(payload);
-            OnInAppShown(campaign);
+            InAppData inAppData = MoEUtils.GetInAppCampaignFromPayload(payload);
+            OnInAppShown(inAppData);
         }
 
         public void InAppCampaignClicked(string payload)
         {
             Debug.Log(TAG + " InAppCampaignClicked() Callback From Native" + payload);
-            InAppCampaign campaign = MoEUtils.GetInAppCampaignFromPayload(payload);
-            OnInAppClicked(campaign);
+            InAppClickData inAppData = MoEUtils.GetInAppClickData(payload);
+            OnInAppClicked(inAppData);
         }
 
         public void InAppCampaignDismissed(string payload)
         {
             Debug.Log(TAG + " InAppCampaignDismissed() Callback from Native: " + payload);
-            InAppCampaign campaign = MoEUtils.GetInAppCampaignFromPayload(payload);
-            OnInAppDismissed(campaign);
+            InAppData inAppData = MoEUtils.GetInAppCampaignFromPayload(payload);
+            OnInAppDismissed(inAppData);
         }
 
         public void InAppCampaignCustomAction(string payload)
         {
             Debug.Log(TAG + " InAppCampaignCustomAction() Callback from Native: " + payload);
-            InAppCampaign campaign = MoEUtils.GetInAppCampaignFromPayload(payload);
-            OnInAppCustomAction(campaign);
+            InAppClickData inAppData = MoEUtils.GetInAppClickData(payload);
+            OnInAppCustomAction(inAppData);
 
         }
 
         public void InAppCampaignSelfHandled(string payload)
         {
             Debug.Log(TAG + " InAppCampaignSelfHandled() Callback from Native: " + payload);
-            InAppCampaign campaign = MoEUtils.GetInAppCampaignFromPayload(payload);
-            OnInAppSelfHandled(campaign);
+            InAppSelfHandledCampaignData inAppData = MoEUtils.GetInAppSelfHandledData(payload);
+            OnInAppSelfHandled(inAppData);
         }
 
 
-        protected virtual void OnPushClicked(PushCampaign payload)
+        protected virtual void OnPushClicked(PushCampaignData payload)
         {
             PushNotifCallback?.Invoke(this, payload);
         }
 
-        protected virtual void OnInAppShown(InAppCampaign campaign)
+        protected virtual void OnInAppShown(InAppData inAppData)
         {
-            InAppShown?.Invoke(this, campaign);
+            InAppShown?.Invoke(this, inAppData);
         }
 
-        protected virtual void OnInAppClicked(InAppCampaign campaign)
+        protected virtual void OnInAppClicked(InAppClickData inAppData)
         {
-            InAppClicked?.Invoke(this, campaign);
+            InAppClicked?.Invoke(this, inAppData);
         }
 
-        protected virtual void OnInAppDismissed(InAppCampaign campaign)
+        protected virtual void OnInAppDismissed(InAppData inAppData)
         {
-            InAppDismissed?.Invoke(this, campaign);
+            InAppDismissed?.Invoke(this, inAppData);
         }
 
-        protected virtual void OnInAppCustomAction(InAppCampaign campaign)
+        protected virtual void OnInAppCustomAction(InAppClickData inAppData)
         {
-            InAppCustomAction?.Invoke(this, campaign);
+            InAppCustomAction?.Invoke(this, inAppData);
         }
 
-        protected virtual void OnInAppSelfHandled(InAppCampaign campaign)
+        protected virtual void OnInAppSelfHandled(InAppSelfHandledCampaignData inAppData)
         {
-            InAppSelfHandled?.Invoke(this, campaign);
+            InAppSelfHandled?.Invoke(this, inAppData);
         }
 
         protected virtual void OnPushTokenGenerated(PushToken pushToken)

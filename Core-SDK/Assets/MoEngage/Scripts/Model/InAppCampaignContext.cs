@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
@@ -15,14 +15,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage
-{
-  [System.Serializable]
-  public class NavigationAction
-  {
-    public string navigationType;
-    public string url;
-    public IDictionary<string, object> keyValuePairs;
-  }
+namespace MoEngage {
 
+  [System.Serializable]
+  public class InAppCampaignContext {
+    public string formattedCampaignId;
+    public Dictionary < string, object > attributes;
+
+    public InAppCampaignContext(Dictionary < string, object > campaignContextPayload) {
+      if (campaignContextPayload.ContainsKey(MoEConstants.PAYLOAD_INAPP_FORMATTED_CID)) {
+        formattedCampaignId = campaignContextPayload[MoEConstants.PAYLOAD_INAPP_FORMATTED_CID] as string;
+      }
+      attributes = campaignContextPayload;
+    }
+  }
 }

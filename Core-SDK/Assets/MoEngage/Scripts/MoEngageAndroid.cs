@@ -21,7 +21,7 @@ namespace MoEngage
 {
 
 #if UNITY_ANDROID
-	public class MoEngageAndroid 
+	public class MoEngageAndroid: MoEngageUnityPlatform
 	{
 		private const string TAG = "MoEngageAndroid";
 
@@ -32,82 +32,47 @@ namespace MoEngage
 		/// 
 		/// </summary>
 		/// <param name="gameObject"></param>
-		public static void Initialize(string gameObjectName) 
+		public void Initialize(string gameObjectPayload) 
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": Initialize:: ");
-			string gameObjPayload = MoEUtils.GetGameObjectPayload(gameObjectName);
 			moengageAndroid.Call("initialize", gameObjPayload);
 #endif
 	    }
 
-    public static void SetAppStatus(MoEAppStatus appStatus)
+    public void SetAppStatus(string appStatusPayload)
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": SetAppStatus:: appStatus: " + appStatus);
-			string appStatusPayload = MoEUtils.GetAppStatusPayload(appStatus);
-			Debug.Log(TAG + ": SetAppStatus:: appStatus: " + appStatusPayload);
 			moengageAndroid.Call("setAppStatus", appStatusPayload);
 #endif
 	    }
 
-		public static void SetAlias(string alias) 
+		public void SetAlias(string aliasPayload)
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": SetAlias:: alias: " + alias);
-			string aliasPayload = MoEUtils.GetAliasPayload(alias);
-			Debug.Log(TAG + ": SetAlias:: aliasPayload: " + aliasPayload);
 			moengageAndroid.Call("setAlias", aliasPayload);
 #endif
 	    }
 
-		public static void SetUserAttribute(string attributeName, object attributeValue) 
+		public void SetUserAttribute(string userAttributesPayload) 
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": SetUserAttribute:: attributeName: " + attributeName + ", attributeValue: " + attributeValue);
-			string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue);
-			Debug.Log(TAG + ": SetUserAttribute:: userAttributesPayload: " + userAttributesPayload);
 			moengageAndroid.Call("setUserAttribute", userAttributesPayload);
 #endif
 		}
-
-		public static void SetUserAttributeISODate(string attributeName, string isoDate) 
-		{
-#if !UNITY_EDITOR
-			Debug.Log(TAG + ": SetUserAttributeISODate:: attributeName: " + attributeName + ", attributeValue: " + isoDate);
-			string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_TIMESTAMP, isoDate);
-			Debug.Log(TAG + ": SetUserAttributeISODate:: userAttributesPayload: " + userAttributesPayload);
-			moengageAndroid.Call("setUserAttribute", userAttributesPayload);
-#endif
-		}
-
-		public static void SetUserAttributeLocation(string attributeName, GeoLocation location)
-		{
-#if !UNITY_EDITOR
-			Debug.Log(TAG + "SetUserAttributeLocation:: attributeName: " + attributeName + ", location: " + location.ToString());
-			Dictionary<string, double> locationDict = location.ToDictionary();
-			string locationPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_LOCATION, locationDict);
-			Debug.Log(TAG + ": SetUserAttributeLocation:: attributeName: " + attributeName + " locationPayload: " + locationPayload);
-			moengageAndroid.Call("setUserAttribute", locationPayload);
-#endif
-	    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="eventName"></param>
     /// <param name="attributes"></param>
-	    public static void TrackEvent(string eventName, Properties properties) 
+	    public void TrackEvent(string eventPayload) 
 	    {
 #if !UNITY_EDITOR
-	    Debug.Log(TAG + ": TrackEvent:: eventName: " + eventName + "\n properties: " + properties);
-			string eventPayload = MoEUtils.GetEventPayload(eventName, properties);
-			Debug.Log(TAG + ": TrackEvent:: eventPayload: " + eventPayload);
 			moengageAndroid.Call("trackEvent", eventPayload);
 #endif
 	    }
 
-	  public static void EnableSDKLogs()
+	  public void EnableSDKLogs()
 		{
 #if !UNITY_EDITOR
 			Debug.Log(TAG + ": EnableSDKLogs::");
@@ -115,15 +80,14 @@ namespace MoEngage
 #endif
 		}
 
-		public static void Logout() 
+		public void Logout(string accountPayload) 
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ":  Logout:: ");
 			moengageAndroid.Call("logout");
 #endif
 		}
 
-	    public static void GetSelfHandledInApp() 
+	    public void GetSelfHandledInApp(string accountPayload) 
 		{	
 #if !UNITY_EDITOR
 			Debug.Log(TAG + ": GetSelfHandledInApp::");
@@ -131,7 +95,7 @@ namespace MoEngage
 #endif
 		}
 
-		public static void ShowInApp() 
+		public void ShowInApp(string accountPayload) 
 		{
 #if !UNITY_EDITOR
 			Debug.Log(TAG + ": ShowInApp::");
@@ -160,57 +124,35 @@ namespace MoEngage
 #endif
 	    }
 
-		public static void SelfHandledShown(InAppCampaign campaign)
+		public void SelfHandledShown(string selfHandledPayload)
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " SelfHandledShown:: " );
-			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_IMPRESSION);
-			Debug.Log(TAG + " SelfHandledShown() Payload: " + payload);
-			moengageAndroid.Call("selfHandledCallback", payload);
+			moengageAndroid.Call("selfHandledCallback", selfHandledPayload);
 #endif
 		}
 
-		public static void SelfHandledClicked(InAppCampaign campaign)
+		public  SelfHandledClicked(string selfHandledPayload)
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " SelfHandledClicked:: ");
-			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_CLICK);
-			Debug.Log(TAG + " SelfHandledClicked:: Payload: " + payload);
-			moengageAndroid.Call("selfHandledCallback", payload);
+			moengageAndroid.Call("selfHandledCallback", selfHandledPayload);
 #endif
 		}
 
-		public static void SelfHandledPrimaryClicked(InAppCampaign campaign)
+		public void SelfHandledDismissed(string selfHandledPayload)
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " SelfHandledPrimaryClicked::");
-			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_PRIMARY_CLICKED);
-			Debug.Log(TAG + " SelfHandledPrimaryClicked:: Payload: " + payload);
-			moengageAndroid.Call("selfHandledCallback", payload);
+			moengageAndroid.Call("selfHandledCallback", selfHandledPayload);
 #endif
 		}
 
-		public static void SelfHandledDismissed(InAppCampaign campaign)
+		public void SetAppContext(string contextPayload)
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " SelfHandledDismissed::");
-			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_DISMISSED);
-			Debug.Log(TAG + " SelfHandledDismissed:: Payload: " + payload);
-			moengageAndroid.Call("selfHandledCallback", payload);
-#endif
-		}
-
-		public static void SetAppContext(string[] contexts)
-		{
-#if !UNITY_EDITOR
-			Debug.Log(TAG + " SetAppContext:: " );
-			string contextPayload = MoEUtils.GetContextsPayload(contexts);
-			Debug.Log(TAG + " SetAppContext: Payload: " + contextPayload);
 			moengageAndroid.Call("setAppContext", contextPayload);
 #endif
 		}
 
-		public static void InvalidateAppContext()
+		public void InvalidateAppContext(string accountPayload)
 		{
 #if !UNITY_EDITOR
 			Debug.Log(TAG + " InvalidateAppContext:: " );
@@ -218,47 +160,21 @@ namespace MoEngage
 #endif
 		}
 
-		public static void optOutDataTracking(bool shouldOptOut)
+		public  void optOutDataTracking(string optOutPayload)
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " optOutDataTracking::");
-			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_DATA, shouldOptOut);
-			Debug.Log(TAG + " optOutDataTracking:: payload: " + payload);
 			moengageAndroid.Call("optOutTracking", payload);
 #endif
 		}
 
-		public static void optOutPushTracking(bool shouldOptOut)
+		public void UpdateSdkState(string payload)
 		{
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " optOutPushTracking::");
-			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_PUSH, shouldOptOut);
-			Debug.Log(TAG + " optOutPushTracking:: payload: " + payload);
-			moengageAndroid.Call("optOutTracking", payload);
-#endif
-		}
-
-		public static void optOutInAppTracking(bool shouldOptOut)
-		{
-#if !UNITY_EDITOR
-			Debug.Log(TAG + " optOutInAppTracking::");
-			string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_INAPP, shouldOptOut);
-			Debug.Log(TAG + " optOutInAppTracking:: payload: " + payload);
-			moengageAndroid.Call("optOutTracking", payload);
-#endif
-		}
-
-		public static void UpdateSdkState(bool state)
-		{
-#if !UNITY_EDITOR
-			Debug.Log(TAG + " EnabledSdk::");
-			string payload = MoEUtils.GetSdkStatePayload(state);
-			Debug.Log(TAG + " EnableSdk:: payload " + payload);
 			moengageAndroid.Call("updateSdkState", payload);
 #endif
 		}
 
-		public static void OnOrientationChanged()
+		public  void OnOrientationChanged()
 		{
 #if !UNITY_EDITOR
 			Debug.Log(TAG + " OnOrientationChanged::");
@@ -303,6 +219,13 @@ namespace MoEngage
 			string payload = MoEUtils.GetAndroidIdTrackingStatus(false);
 			Debug.Log(TAG + " DisableAndroidIdTracking:: payload " + payload);
             moengageAndroid.Call("deviceIdentifierTrackingStatusUpdate", payload);
+#endif
+        }
+
+		public void RegisterForPush()
+        {
+#if !UNITY_EDITOR
+			Debug.Log("Not supported");
 #endif
         }
 

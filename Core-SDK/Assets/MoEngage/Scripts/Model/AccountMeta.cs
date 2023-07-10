@@ -15,22 +15,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage
-{
-    [System.Serializable]
-    public class PushToken
-    {
-        public string platform;
-        public string token;
-        public PushService pushService;
+namespace MoEngage {
+  [System.Serializable]
+  public class AccountMeta {
+    public string appId;
 
-        public PushToken(string platform, string token, PushService pushService)
-        {
-            this.platform = platform;
-            this.token = token;
-            this.pushService = pushService;
-        }
-
+    public AccountMeta(string appId) {
+      this.appId = appId;
     }
+  }
 }
-

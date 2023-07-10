@@ -107,6 +107,8 @@ public static class BuildPostProcessor
         // Weak link AppTrackingTransparency framework
         project.AddFrameworkToProject(unityFrameworkGUID,"AppTrackingTransparency.framework", true);
 
+        project.SetBuildProperty(project.GetUnityMainTargetGuid(), "ENABLE_BITCODE", "NO");
+        project.SetBuildProperty(unityFrameworkGUID, "ENABLE_BITCODE", "NO"); // Disabled to run on Xcode 14+
         project.SetBuildProperty(mainTargetGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
 
         AddOrUpdateEntitlements(
@@ -135,19 +137,52 @@ public static class BuildPostProcessor
         AddPushCapability(project, path, mainTargetGUID, mainTargetName);
 
         File.WriteAllText(projectPath, project.WriteToString());
+        
+        RemoveExtensionFilesFromMainTarget(path);
 
     }
-    /*
-     * TO DO: Try to embed frameworks with PostProcessBuildAttribute
+    
+    private static void RemoveExtensionFilesFromMainTarget(string path) {
+        string projPath = PBXProject.GetPBXProjectPath(path);
+        PBXProject project = new PBXProject();
+        project.ReadFromFile(projPath);
+        string targetGuid = project.TargetGuidByName("UnityFramework");
+
+        //Remove File From Build
+        project.RemoveFileFromBuild(targetGuid, "NotificationServices.m");
+        var notificationServiceFile = project.FindFileGuidByProjectPath("Libraries/MoEngage/Plugins/iOS/NotificationService.m");
+        project.RemoveFile(notificationServiceFile);
+        project.RemoveFrameworkFromProject(targetGuid, "NotificationService.m");
+
+        project.RemoveFileFromBuild(targetGuid, "NotificationServices.h");
+        var notificationServiceHeaderFile = project.FindFileGuidByProjectPath("Libraries/MoEngage/Plugins/iOS/NotificationService.h");
+        project.RemoveFile(notificationServiceHeaderFile);
+        project.RemoveFrameworkFromProject(targetGuid, "NotificationService.h");
+
+        project.RemoveFileFromBuild(targetGuid, "NotificationViewController.h");
+        var notificationViewControllerHeaderFile = project.FindFileGuidByProjectPath("Libraries/MoEngage/Plugins/iOS/PushTemplates/NotificationViewController.h");
+        project.RemoveFile(notificationViewControllerHeaderFile);
+        project.RemoveFrameworkFromProject(targetGuid, "NotificationViewController.h");
+
+        project.RemoveFileFromBuild(targetGuid, "NotificationViewController.m");
+        var notificationViewControllerFile = project.FindFileGuidByProjectPath("Libraries/MoEngage/Plugins/iOS/PushTemplates/NotificationViewController.m");
+        project.RemoveFile(notificationViewControllerFile);
+        project.RemoveFrameworkFromProject(targetGuid, "NotificationViewController.m");
+
+        File.WriteAllText(projPath, project.WriteToString());
+  }
+  
+    
+    // * TO DO: Try to embed frameworks with PostProcessBuildAttribute
     [PostProcessBuildAttribute(47)]//must be between 40 and 50 to ensure that it's not overriden by Podfile generation (40) and that it's added before "pod install" (50)
     public static void PostProcessBuild_iOS(BuildTarget target, string buildPath)
     {
         using (StreamWriter sw = File.AppendText(buildPath + "/Podfile"))
         {
-            sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MORichNotification' \nend");
+             sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.9.0' \nend");
+             sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.9.0' \nend");
         }
     }
-    */
 
     // Returns exisiting file if found, otherwises provides a default name to use
     private static string GetEntitlementsPath(string path, PBXProject project, string targetGUI, string targetName)
@@ -250,11 +285,12 @@ public static class BuildPostProcessor
 
         // Makes it so that the extension target is Universal (not just iPhone) and has an iOS 10 deployment target
         project.SetBuildProperty(extensionGUID, "TARGETED_DEVICE_FAMILY", "1,2");
-        project.SetBuildProperty(extensionGUID, "IPHONEOS_DEPLOYMENT_TARGET", "10.0");
+        project.SetBuildProperty(extensionGUID, "IPHONEOS_DEPLOYMENT_TARGET", "11.0");
 
         project.SetBuildProperty(extensionGUID, "ARCHS", "$(ARCHS_STANDARD)");
         project.SetBuildProperty(extensionGUID, "DEVELOPMENT_TEAM", PlayerSettings.iOS.appleDeveloperTeamID);
         project.SetBuildProperty(extensionGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
+        project.SetBuildProperty(extensionGUID, "ENABLE_BITCODE", "NO");
 
         project.WriteToFile(projectPath);
 
@@ -374,12 +410,13 @@ public static class BuildPostProcessor
 
         // Makes it so that the extension target is Universal (not just iPhone) and has an iOS 10 deployment target
         project.SetBuildProperty(extensionGUID, "TARGETED_DEVICE_FAMILY", "1,2");
-        project.SetBuildProperty(extensionGUID, "IPHONEOS_DEPLOYMENT_TARGET", "12.0");
+        project.SetBuildProperty(extensionGUID, "IPHONEOS_DEPLOYMENT_TARGET", "11.0");
 
         project.SetBuildProperty(extensionGUID, "ARCHS", "$(ARCHS_STANDARD)");
         project.SetBuildProperty(extensionGUID, "DEVELOPMENT_TEAM", PlayerSettings.iOS.appleDeveloperTeamID);
         project.SetBuildProperty(extensionGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
-
+        project.SetBuildProperty(extensionGUID, "ENABLE_BITCODE", "NO");
+        
         project.WriteToFile(projectPath);
 
         //var contents = File.ReadAllText(projectPath);
