@@ -50,23 +50,21 @@ import java.util.EnumMap
  * @author Umang Chamaria
  * Date: 2020/09/24
  */
-class EventEmitterImpl(private val gameObjectName: String) : EventEmitter {
-    companion object {
-        private const val tag = MODULE_TAG + "EventEmitterImpl"
-        private val eventMap = EnumMap<EventType, String>(
-            EventType::class.java
-        )
+internal class EventEmitterImpl(private val gameObjectName: String) : EventEmitter {
 
-        init {
-            eventMap[EventType.PUSH_CLICKED] = METHOD_NAME_PUSH_REDIRECTION
-            eventMap[EventType.INAPP_SHOWN] = METHOD_NAME_IN_APP_SHOWN
-            eventMap[EventType.INAPP_NAVIGATION] = METHOD_NAME_IN_APP_CLICKED
-            eventMap[EventType.INAPP_CLOSED] = METHOD_NAME_IN_APP_CLOSED
-            eventMap[EventType.INAPP_CUSTOM_ACTION] = METHOD_NAME_IN_APP_CUSTOM_ACTION
-            eventMap[EventType.INAPP_SELF_HANDLED_AVAILABLE] = METHOD_NAME_IN_APP_SELF_HANDLED
-            eventMap[EventType.PUSH_TOKEN_GENERATED] = METHOD_NAME_PUSH_TOKEN
-            eventMap[EventType.PERMISSION] = METHOD_NAME_PERMISSION_RESULT
-        }
+
+    private val tag = "${MODULE_TAG}EventEmitterImpl"
+    private val eventMap = EnumMap<EventType, String>(EventType::class.java)
+
+    init {
+        eventMap[EventType.PUSH_CLICKED] = METHOD_NAME_PUSH_REDIRECTION
+        eventMap[EventType.INAPP_SHOWN] = METHOD_NAME_IN_APP_SHOWN
+        eventMap[EventType.INAPP_NAVIGATION] = METHOD_NAME_IN_APP_CLICKED
+        eventMap[EventType.INAPP_CLOSED] = METHOD_NAME_IN_APP_CLOSED
+        eventMap[EventType.INAPP_CUSTOM_ACTION] = METHOD_NAME_IN_APP_CUSTOM_ACTION
+        eventMap[EventType.INAPP_SELF_HANDLED_AVAILABLE] = METHOD_NAME_IN_APP_SELF_HANDLED
+        eventMap[EventType.PUSH_TOKEN_GENERATED] = METHOD_NAME_PUSH_TOKEN
+        eventMap[EventType.PERMISSION] = METHOD_NAME_PERMISSION_RESULT
     }
 
     override fun emit(event: Event) {

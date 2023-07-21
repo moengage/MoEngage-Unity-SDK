@@ -38,7 +38,8 @@ import com.moengage.plugin.base.internal.PluginInitializer
  * Date: 26/06/20
  */
 object MoEInitializer {
-    private const val tag = MODULE_TAG + "MoEInitializer"
+    private const val tag = "${MODULE_TAG}MoEInitializer"
+
     fun initialize(context: Context, builder: MoEngage.Builder) {
         try {
             Logger.print { "$tag initialize() : Initialising MoEngage SDK." }

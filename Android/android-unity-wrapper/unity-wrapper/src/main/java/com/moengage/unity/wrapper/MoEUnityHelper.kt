@@ -9,7 +9,7 @@ import com.moengage.core.internal.logger.Logger
  */
 public class MoEUnityHelper {
 
-    private val tag = MODULE_TAG + "MoEUnityHelper"
+    private val tag = "${MODULE_TAG}MoEUnityHelper"
 
     public companion object {
 

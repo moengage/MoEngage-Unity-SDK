@@ -47,7 +47,7 @@ class MoEAndroidWrapper private constructor() {
     private val pluginHelper: PluginHelper = PluginHelper()
     private val geofencePluginHelper: GeofencePluginHelper = GeofencePluginHelper()
 
-    private val tag = MODULE_TAG + "MoEAndroidWrapper"
+    private val tag = "$MODULE_TAG}MoEAndroidWrapper"
     private var context: Context? = null
 
     companion object {

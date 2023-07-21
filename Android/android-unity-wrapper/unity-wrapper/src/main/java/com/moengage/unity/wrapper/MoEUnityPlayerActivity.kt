@@ -9,7 +9,7 @@ import com.unity3d.player.UnityPlayerActivity
  */
 class MoEUnityPlayerActivity : UnityPlayerActivity() {
 
-    private val tag = MODULE_TAG + "MoEUnityPlayerActivity"
+    private val tag = "${MODULE_TAG}MoEUnityPlayerActivity"
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
