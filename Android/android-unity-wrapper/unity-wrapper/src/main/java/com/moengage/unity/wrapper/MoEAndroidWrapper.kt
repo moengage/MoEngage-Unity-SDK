@@ -23,16 +23,15 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+package com.moengage.unity.wrapper
 
-package com.moengage.unity.wrapper;
-
-import android.content.Context;
-import com.moengage.core.internal.logger.Logger;
-import com.moengage.core.internal.utils.MoEUtils;
-import com.moengage.plugin.base.CallbackHelper;
-import com.moengage.plugin.base.PluginHelper;
-import com.moengage.plugin.base.model.PushService;
-import org.json.JSONObject;
+import android.content.Context
+import com.moengage.core.LogLevel
+import com.moengage.core.internal.logger.Logger
+import com.moengage.plugin.base.geofence.internal.GeofencePluginHelper
+import com.moengage.plugin.base.internal.PluginHelper
+import com.moengage.plugin.base.internal.setEventEmitter
+import org.json.JSONObject
 
 /**
  * Bridge between Unity and Android Native
@@ -40,277 +39,290 @@ import org.json.JSONObject;
  * @author Umang Chamaria
  * Date: 26/06/20
  */
-public class MoEAndroidWrapper {
 
-  private static final String TAG = Constants.MODULE_TAG + "MoEAndroidWrapper";
+private const val ARGUMENT_GAME_OBJECT = "gameObjectName"
 
-  private PluginHelper pluginHelper;
+class MoEAndroidWrapper private constructor() {
 
-  private MoEAndroidWrapper() {
-    pluginHelper = new PluginHelper();
-  }
+    private val pluginHelper: PluginHelper = PluginHelper()
+    private val geofencePluginHelper: GeofencePluginHelper = GeofencePluginHelper()
 
-  private static MoEAndroidWrapper instance = new MoEAndroidWrapper();
+    private val tag = MODULE_TAG + "MoEAndroidWrapper"
+    private var context: Context? = null
 
-  public static MoEAndroidWrapper getInstance() {
-    return instance;
-  }
+    companion object {
 
-  private Context context;
+        private var instance: MoEAndroidWrapper? = null
 
-  void setContext(Context context) {
-    this.context = context;
-  }
-
-  public void initialize(String initializePayload) {
-    try {
-      Logger.v(TAG + " initialize() : Initialization payload: " + initializePayload);
-      JSONObject initializationJson = new JSONObject(initializePayload);
-      String gameObjectName = initializationJson.getString(ARGUMENT_GAME_OBJECT);
-      if (MoEUtils.isEmptyString(gameObjectName)) {
-        Logger.e(TAG + " initialize() : Game object name is empty cannot pass callbacks");
-        return;
-      }
-      CallbackHelper.INSTANCE.setEventEmitter(new EventEmitterImpl(gameObjectName));
-      pluginHelper.initialize();
-    } catch (Exception e) {
-      Logger.e(TAG + " initialise() : ", e);
+        @JvmStatic
+        public fun getInstance(): MoEAndroidWrapper {
+            return instance ?: synchronized(MoEAndroidWrapper::class.java) {
+                val inst = instance ?: MoEAndroidWrapper()
+                instance = inst
+                inst
+            }
+        }
     }
-  }
 
-  public void trackEvent(String eventPayload) {
-    try {
-      Logger.v(TAG + " trackEvent() : Event Payload: " + eventPayload);
-      if (context == null) {
-        Logger.e(TAG + " trackEvent() : Context is null cannot process further.");
-        return;
-      }
-      pluginHelper.trackEvent(context, eventPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " trackEvent() : ", e);
+    fun setContext(context: Context) {
+        this.context = context
     }
-  }
 
-  public void passPushPayload(String pushPayload) {
-    try {
-      pluginHelper.passPushPayload(context, pushPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " passPushPayload() : ", e);
+    fun initialize(initializePayload: String) {
+        try {
+            Logger.print { "$tag initialize() : Initialization payload=$initializePayload" }
+            val initializationJson = JSONObject(initializePayload)
+            val gameObjectName = initializationJson.getString(ARGUMENT_GAME_OBJECT)
+            if (gameObjectName.isEmpty()) {
+                Logger.print(
+                    LogLevel.ERROR
+                ) { "$tag initialize() : Game object name is empty cannot pass callbacks" }
+                return
+            }
+            setEventEmitter(EventEmitterImpl(gameObjectName))
+            pluginHelper.initialise(initializationJson)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag initialise() : " }
+        }
     }
-  }
 
-  public void passPushToken(String tokenPayload) {
-    try {
-      Logger.v(TAG + " passPushToken() : Token Payload: " + tokenPayload);
-      pluginHelper.passPushToken(context, tokenPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " passPushToken() : ", e);
+    fun trackEvent(eventPayload: String) {
+        try {
+            Logger.print { "$tag trackEvent() : Event Payload: $eventPayload" }
+            pluginHelper.trackEvent(getContext(), eventPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag trackEvent() : " }
+        }
     }
-  }
 
-  public void getSelfHandledInApp() {
-    try {
-      Logger.v(TAG + " getSelfHandledInApp() : Will try to fetch self-handled in-app");
-      if (context == null) {
-        Logger.e(TAG + " getSelfHandledInApp() : Context is null cannot process further.");
-        return;
-      }
-      pluginHelper.getSelfHandledInApp(context);
-    } catch (Exception e) {
-      Logger.e(TAG + " getSelfHandledInApp() : ", e);
+    fun passPushPayload(pushPayload: String) {
+        try {
+            Logger.print { "$tag passPushPayload(): pushPayload=$pushPayload" }
+            pluginHelper.passPushPayload(getContext(), pushPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag passPushPayload() : " }
+        }
     }
-  }
 
-  public void showInApp() {
-    try {
-      Logger.v(TAG + " showInApp() : Will try to show in-app");
-      if (context == null) {
-        Logger.e(TAG + " showInApp() : Context is null cannot process further.");
-        return;
-      }
-      pluginHelper.showInApp(context);
-    } catch (Exception e) {
-      Logger.e(TAG + " showInApp() : ", e);
+    fun passPushToken(pushTokenPayload: String) {
+        try {
+            Logger.print { "$tag passPushToken() : Token Payload: $pushTokenPayload" }
+            pluginHelper.passPushToken(getContext(), pushTokenPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag passPushToken() : " }
+        }
     }
-  }
 
-  public void logout() {
-    try {
-      Logger.v(TAG + " logout() : Will try to logout user.");
-      if (context == null) {
-        Logger.e(TAG + " logout() : Context is null cannot process further.");
-        return;
-      }
-      pluginHelper.logout(context);
-    } catch (Exception e) {
-      Logger.e(TAG + " logout() : ", e);
+    fun getSelfHandledInApp(selfHandledPayload: String) {
+        try {
+            Logger.print { "$tag getSelfHandledInApp() : Will try to fetch self-handled in-app" }
+            pluginHelper.getSelfHandledInApp(getContext(), selfHandledPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag getSelfHandledInApp() : " }
+        }
     }
-  }
 
-  public void setAlias(String aliasPayload) {
-    try {
-      Logger.v(TAG + " setAlias() : Alias Payload: " + aliasPayload);
-      if (context == null) {
-        Logger.e(TAG + " setAlias() : Context is null cannot process further.");
-        return;
-      }
-      pluginHelper.setAlias(context, aliasPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " setAlias() : ", e);
+    fun showInApp(showInAppPayload: String) {
+        try {
+            Logger.print { "$tag showInApp() : Will try to show in-app" }
+            pluginHelper.showInApp(getContext(), showInAppPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag showInApp() : " }
+        }
     }
-  }
 
-  public void setAppStatus(String appStatusPayload) {
-    try {
-      Logger.v(TAG + " setAppStatus() : App status payload: " + appStatusPayload);
-      if (context == null) {
-        Logger.e(TAG + " setAppStatus() : Context is null cannot process further.");
-        return;
-      }
-      pluginHelper.setAppStatus(context, appStatusPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " setAppStatus() : ", e);
+    fun logout(logoutPayload: String) {
+        try {
+            Logger.print { "$tag logout() : Will try to logout user." }
+            pluginHelper.logout(getContext(), logoutPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag logout() : " }
+        }
     }
-  }
 
-  public void setUserAttribute(String userAttributePayload) {
-    try {
-      Logger.v(TAG + " setUserAttribute() : User Attribute payload: " + userAttributePayload);
-      if (context == null) {
-        Logger.e(TAG + " setUserAttribute() : Cannot proceed further context is null.");
-        return;
-      }
-      pluginHelper.setUserAttribute(context, userAttributePayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " setUserAttribute() : ", e);
+    fun setAlias(aliasPayload: String) {
+        try {
+            Logger.print { "$tag setAlias() : Alias Payload: $aliasPayload" }
+            pluginHelper.setAlias(getContext(), aliasPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag setAlias() : " }
+        }
     }
-  }
 
-  public void setAppContext(String contextPayload) {
-    try {
-      Logger.v(TAG + " setAppContext() : Context Payload: " + contextPayload);
-      if (context == null) {
-        Logger.e(TAG + " setAppContext() : Cannot proceed further context is null.");
-        return;
-      }
-      pluginHelper.setAppContext(context, contextPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " setAppContext() : ", e);
+    fun setAppStatus(appStatusPayload: String) {
+        try {
+            Logger.print { "$tag setAppStatus() : App status payload: $appStatusPayload" }
+            pluginHelper.setAppStatus(getContext(), appStatusPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag setAppStatus() : " }
+        }
     }
-  }
 
-  public void resetContext() {
-    try {
-      Logger.v(TAG + " resetContext() : Resetting app context");
-      if (context == null) {
-        Logger.e(TAG + " resetContext() : Cannot proceed further context is null.");
-        return;
-      }
-      pluginHelper.resetAppContext(context);
-    } catch (Exception e) {
-      Logger.e(TAG + " resetContext() : ", e);
+    fun setUserAttribute(userAttributePayload: String) {
+        try {
+            Logger.print { "$tag setUserAttribute() : User Attribute payload: $userAttributePayload" }
+            pluginHelper.setUserAttribute(getContext(), userAttributePayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag setUserAttribute() : " }
+        }
     }
-  }
 
-  public void selfHandledShown(String selfHandledPayload) {
-    try {
-      Logger.v(TAG + " selfHandledShown() : Campaign payload: " + selfHandledPayload);
-      if (context == null) {
-        Logger.e(TAG + " selfHandledShown() : Cannot proceed further context is null.");
-        return;
-      }
-      pluginHelper.selfHandledCallback(context, selfHandledPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " selfHandledShown() : ", e);
+    fun setAppContext(contextPayload: String) {
+        try {
+            Logger.print { "$tag setAppContext() : Context Payload: $contextPayload" }
+            pluginHelper.setAppContext(getContext(), contextPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag setAppContext() : " }
+        }
     }
-  }
 
-  public void selfHandledClicked(String selfHandledPayload) {
-    try {
-      Logger.v(TAG + " selfHandledClicked() : Campaign payload: " + selfHandledPayload);
-      if (context == null) {
-        Logger.e(TAG + " selfHandledClicked() : Cannot proceed further context is null.");
-        return;
-      }
-      pluginHelper.selfHandledCallback(context, selfHandledPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " selfHandledClicked() : ", e);
+    fun resetContext(resetContextPayload: String) {
+        try {
+            Logger.print { "$tag resetContext() : Resetting app context" }
+            pluginHelper.resetAppContext(getContext(), resetContextPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag resetContext() : " }
+        }
     }
-  }
 
-  public void selfHandledDismissed(String selfHandledPayload) {
-    try {
-      Logger.v(TAG + " selfHandledDismissed() : Campaign payload: " + selfHandledPayload);
-      if (context == null) {
-        Logger.e(TAG + " selfHandledDismissed() : Cannot proceed further context is null.");
-        return;
-      }
-      pluginHelper.selfHandledCallback(context, selfHandledPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " selfHandledDismissed() : ", e);
+    fun selfHandledShown(selfHandledPayload: String) {
+        try {
+            Logger.print { "$tag selfHandledShown() : Campaign payload: $selfHandledPayload" }
+            pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag selfHandledShown() : " }
+        }
     }
-  }
 
-  public void enableSDKLogs() {
-    Logger.v(TAG + " enableSDKLogs(): Enabling SDK logs.");
-    pluginHelper.enableSDKLogs();
-  }
-
-  public void selfHandledCallback(String selfHandledPayload) {
-    try {
-      Logger.v(TAG + " selfHandledCallback() : Campaign payload: " + selfHandledPayload);
-      if (context == null) {
-        Logger.e(TAG + " selfHandledCallback() : Cannot proceed further context is null.");
-        return;
-      }
-      pluginHelper.selfHandledCallback(context, selfHandledPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " selfHandledCallback() : ", e);
+    fun selfHandledClicked(selfHandledPayload: String) {
+        try {
+            Logger.print { "$tag selfHandledClicked() : Campaign payload: $selfHandledPayload" }
+            pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag selfHandledClicked() : " }
+        }
     }
-  }
 
-  public void optOutTracking(String optOutPayload) {
-    try {
-      Logger.v(TAG + " optOutTracking() : OptOut payload: " + optOutPayload);
-      if (context == null) {
-        Logger.e(TAG + " optOutTracking() : Cannot proceed further context is null.");
-        return;
-      }
-      pluginHelper.optOutTracking(context, optOutPayload);
-    } catch (Exception e) {
-      Logger.e(TAG + " optOutTracking() : ", e);
+    fun selfHandledDismissed(selfHandledPayload: String) {
+        try {
+            Logger.print { "$tag selfHandledDismissed() : Campaign payload: $selfHandledPayload" }
+            pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag selfHandledDismissed() : " }
+        }
     }
-  }
 
-  public void updateSdkState(String featureStatusPayload){
-    try{
-      Logger.v(TAG + " storeFeatureStatus() : Feature status payload: " + featureStatusPayload);
-      if (context == null){
-        Logger.e( TAG + " storeFeatureStatus() : Cannot proceed further context is null.");
-      }
-      pluginHelper.storeFeatureStatus(context, featureStatusPayload);
-    }catch (Exception e){
-      Logger.e( TAG + " storeFeatureStatus() : ", e);
+    fun selfHandledCallback(selfHandledPayload: String) {
+        try {
+            Logger.print { "$tag selfHandledCallback() : Campaign payload: $selfHandledPayload" }
+            pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag selfHandledCallback() : " }
+        }
     }
-  }
 
-  public void onOrientationChanged() {
-    try{
-      Logger.v(TAG + " onOrientationChanged() : ");
-      pluginHelper.onConfigurationChanged();
-    }catch (Exception e){
-      Logger.e( TAG + " onOrientationChanged() : ", e);
+    fun optOutTracking(optOutPayload: String) {
+        try {
+            Logger.print { "$tag optOutTracking() : OptOut payload: $optOutPayload" }
+            pluginHelper.optOutTracking(getContext(), optOutPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag optOutTracking() : " }
+        }
     }
-  }
 
-  public void deviceIdentifierTrackingStatusUpdate(String payload) {
-    try {
-      Logger.v(TAG + " deviceIdentifierTrackingStatusUpdate() : Arguments: " + payload);
-      pluginHelper.deviceIdentifierTrackingStatusUpdate(context, payload);
-    } catch (Exception e) {
-      Logger.e(TAG + " deviceIdentifierTrackingStatusUpdate() : ", e);
+    fun updateSdkState(featureStatusPayload: String) {
+        try {
+            Logger.print { "$tag storeFeatureStatus() : Feature status payload: $featureStatusPayload" }
+            pluginHelper.storeFeatureStatus(getContext(), featureStatusPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag storeFeatureStatus() : " }
+        }
     }
-  }
 
-  private static final String ARGUMENT_GAME_OBJECT = "gameObjectName";
+    fun onOrientationChanged() {
+        try {
+            Logger.print { "$tag onOrientationChanged() : " }
+            pluginHelper.onConfigurationChanged()
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag onOrientationChanged() : " }
+        }
+    }
+
+    fun deviceIdentifierTrackingStatusUpdate(payload: String) {
+        try {
+            Logger.print { "$tag deviceIdentifierTrackingStatusUpdate() : Arguments: $payload" }
+            pluginHelper.deviceIdentifierTrackingStatusUpdate(getContext(), payload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag deviceIdentifierTrackingStatusUpdate() : " }
+        }
+    }
+
+    fun permissionResponse(permissionResultPayload: String) {
+        try {
+            Logger.print { "$tag permissionResponse(): permissionResultPayload=$permissionResultPayload" }
+            pluginHelper.permissionResponse(getContext(), permissionResultPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag permissionResponse(): " }
+        }
+    }
+
+    fun setUpNotificationChannels() {
+        try {
+            Logger.print { "$tag setUpNotificationChannels(): " }
+            pluginHelper.setUpNotificationChannels(getContext())
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag setUpNotificationChannels(): " }
+        }
+    }
+
+    fun navigateToSettings() {
+        try {
+            Logger.print { "$tag navigateToSettings(): " }
+            pluginHelper.navigateToSettings(getContext())
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag navigateToSettings(): " }
+        }
+    }
+
+    fun requestPushPermission() {
+        try {
+            Logger.print { "$tag requestPushPermission(): " }
+            pluginHelper.requestPushPermission(getContext())
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag requestPushPermission(): " }
+        }
+    }
+
+    fun updatePushPermissionRequestCount(pushOptInMetaPayload: String) {
+        try {
+            Logger.print { "$tag updatePushPermissionRequestCount(): pushOptInMeta=$pushOptInMetaPayload" }
+            pluginHelper.updatePushPermissionRequestCount(getContext(), pushOptInMetaPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag updatePushPermissionRequestCount(): " }
+        }
+    }
+
+    fun startGeofenceMonitoring(instancePayload: String) {
+        try {
+            Logger.print { "$tag startGeofenceMonitoring(): instancePayload=$instancePayload" }
+            geofencePluginHelper.startGeofenceMonitoring(getContext(), instancePayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag startGeofenceMonitoring(): " }
+        }
+    }
+
+    fun stopGeofenceMonitoring(instancePayload: String) {
+        try {
+            Logger.print { "$tag stopGeofenceMonitoring(): instancePayload=$instancePayload" }
+            geofencePluginHelper.stopGeofenceMonitoring(getContext(), instancePayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag stopGeofenceMonitoring(): " }
+        }
+    }
+
+
+    @Throws(NullPointerException::class)
+    private fun getContext(): Context {
+        return context ?: throw NullPointerException("Cannot proceed with null context")
+    }
 }

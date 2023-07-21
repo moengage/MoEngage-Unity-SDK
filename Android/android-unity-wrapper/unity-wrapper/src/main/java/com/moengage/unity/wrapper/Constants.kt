@@ -23,24 +23,20 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
-package com.moengage.unity.wrapper;
+package com.moengage.unity.wrapper
 
 /**
  * @author Umang Chamaria
  * Date: 26/06/20
  */
-interface Constants {
-  String MODULE_TAG = "Unity_";
-  String INTEGRATION_TYPE = "unity";
-  String INTEGRATION_VERSION = "2.3.0";
-
-  String METHOD_NAME_PUSH_REDIRECTION = "PushClicked";
-  String METHOD_NAME_IN_APP_SHOWN = "InAppCampaignShown";
-  String METHOD_NAME_IN_APP_CLICKED = "InAppCampaignClicked";
-  String METHOD_NAME_IN_APP_CLOSED = "InAppCampaignDismissed";
-  String METHOD_NAME_IN_APP_CUSTOM_ACTION = "InAppCampaignCustomAction";
-  String METHOD_NAME_IN_APP_SELF_HANDLED = "InAppCampaignSelfHandled";
-  String METHOD_NAME_PUSH_TOKEN = "PushToken";
-
-}
+internal const val MODULE_TAG = "Unity_"
+internal const val INTEGRATION_TYPE = "unity"
+internal const val INTEGRATION_VERSION = "2.3.0"
+internal const val METHOD_NAME_PUSH_REDIRECTION = "PushClicked"
+internal const val METHOD_NAME_IN_APP_SHOWN = "InAppCampaignShown"
+internal const val METHOD_NAME_IN_APP_CLICKED = "InAppCampaignClicked"
+internal const val METHOD_NAME_IN_APP_CLOSED = "InAppCampaignDismissed"
+internal const val METHOD_NAME_IN_APP_CUSTOM_ACTION = "InAppCampaignCustomAction"
+internal const val METHOD_NAME_IN_APP_SELF_HANDLED = "InAppCampaignSelfHandled"
+internal const val METHOD_NAME_PUSH_TOKEN = "PushToken"
+internal const val METHOD_NAME_PERMISSION_RESULT = "onPermissionResult"
