@@ -15,22 +15,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage
-{
-    [System.Serializable]
-    public class PushToken
-    {
-        public Platform platform;
-        public string token;
-        public PushService pushService;
+namespace MoEngage {
+  [System.Serializable]
+  /// <summary>
+  /// PushToken Model
+  /// </summary>
+  public class PushToken {
+    /// <value> Native platform from which the callback was triggered.  </value>
+    public Platform platform;
 
-        public PushToken(Platform platform, string token, PushService pushService)
-        {
-            this.platform = platform;
-            this.token = token;
-            this.pushService = pushService;
-        }
+    /// <value> Push token value</value>
+    public string token;
 
-    }
+    /// <value> Type of PushService for which token is generated </value>
+    public PushService pushService;
+  }
 }
-

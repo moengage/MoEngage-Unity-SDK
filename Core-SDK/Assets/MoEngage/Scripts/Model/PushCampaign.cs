@@ -15,26 +15,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage
-{
-    [System.Serializable]
-    public class PushCampaign
-    {
-        public bool isDefaultAction;
-        public IDictionary<string,object> clickedAction;
-        public IDictionary<string,object> payload;
+namespace MoEngage {
+  [System.Serializable]
+  /// <summary>
+  /// Push Payload information
+  /// </summary>
+  public class PushCampaign {
+    /// <value> This key is present only for the Android Platform. It's a boolean value indicating if the user clicked on the default content or not. true if the user clicks on the default content else false.  </value>
+    public bool isDefaultAction;
 
-        public PushCampaign(Dictionary<string, object> pushPayload)
-        {
-            if (pushPayload.ContainsKey(MoEConstants.PARAM_IS_DEFAULT_ACTION)) {
-                isDefaultAction = (bool)pushPayload[MoEConstants.PARAM_IS_DEFAULT_ACTION];
-            }
+    /// <value> Action to be performed on notification click.  </value>
+    public IDictionary < string, object > clickedAction;
 
-            if (pushPayload.ContainsKey(MoEConstants.PARAM_CLICKED_ACTION)) {
-                clickedAction = pushPayload[MoEConstants.PARAM_CLICKED_ACTION] as  Dictionary<string, object>;
-            }
-
-            payload = pushPayload[MoEConstants.PARAM_PAYLOAD] as Dictionary<string, object>;
-        }
-    }
+    /// <value>Complete campaign payload. </value>
+    public IDictionary < string, object > payload;
+  }
 }

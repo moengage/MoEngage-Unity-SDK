@@ -15,15 +15,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage
-{
+namespace MoEngage {
   [System.Serializable]
-  public class NavigationAction: InAppClickAction
-  {
+  /// <summary>
+  /// InApp Navigation action model
+  /// </summary>
+  public class NavigationAction: InAppClickAction {
+    /// <value> Navigation action type </value>
     public ActionType actionType;
+
+    /// <value> Type of Navigation action.Possible value deep_linking or screen </value>
     public NavigationType navigationType;
+    
+    /// <value>  Deeplink Url or the Screen Name used for the action. </value>
     public string url;
-    public IDictionary<string, object> keyValuePairs;
+
+    /// <value> Additional Key-Value pairs entered on the MoEngage Platform for navigation action of the campaign</value>
+    public IDictionary < string, object > keyValuePairs;
   }
 
 }

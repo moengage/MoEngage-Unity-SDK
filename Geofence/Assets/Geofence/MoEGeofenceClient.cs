@@ -40,7 +40,7 @@ namespace MoEngage {
 
     #region Initialize
     /// <summary>
-    /// 
+    /// Initialize Geofence module
     /// </summary>
     /// <param name="appId">Account Identifier</param>
     public static void Initialize(string appId) {
@@ -51,7 +51,9 @@ namespace MoEngage {
     #endregion
 
     #region Geofence
-
+    /// <summary>
+    /// Start Geofence monitoring
+    /// </summary>
     public static void StartGeofenceMonitoring() {
       if (!isPluginInitialized()) return;
       #if(UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
@@ -61,6 +63,9 @@ namespace MoEngage {
       #endif
     }
 
+    /// <summary>
+    ///  Stop Geofence monitoring
+    /// </summary>
     public static void StopGeofenceMonitoring() {
       if (!isPluginInitialized()) return;
       #if(UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR

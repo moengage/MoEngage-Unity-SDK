@@ -18,15 +18,14 @@ using UnityEngine;
 namespace MoEngage {
 
   [System.Serializable]
+  /// <summary>
+  /// Additonal meta of InAppCampaign
+  /// </summary>
   public class InAppCampaignContext {
+    /// <value> Formatted campaign id </value>
     public string formattedCampaignId;
-    public Dictionary < string, object > attributes;
 
-    public InAppCampaignContext(Dictionary < string, object > campaignContextPayload) {
-      if (campaignContextPayload.ContainsKey(MoEConstants.PAYLOAD_INAPP_FORMATTED_CID)) {
-        formattedCampaignId = campaignContextPayload[MoEConstants.PAYLOAD_INAPP_FORMATTED_CID] as string;
-      }
-      attributes = campaignContextPayload;
-    }
+    /// <value> Context Payload </value>
+    public Dictionary < string, object > attributes;
   }
 }

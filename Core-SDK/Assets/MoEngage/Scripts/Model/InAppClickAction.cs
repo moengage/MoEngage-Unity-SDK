@@ -17,6 +17,9 @@ using UnityEngine;
 
 namespace MoEngage {
   [System.Serializable]
+  /// <summary>
+  /// Base class for InApp action
+  /// </summary>
   public class InAppClickAction {}
 
 }

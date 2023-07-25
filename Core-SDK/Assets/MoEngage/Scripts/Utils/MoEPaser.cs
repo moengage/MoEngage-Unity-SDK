@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
@@ -11,19 +11,34 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using MoEMiniJSON;
 
 namespace MoEngage {
-  [System.Serializable]
-  /// <summary>
-  /// Custom action performed on inapp
-  /// </summary>
-  public class CustomAction: InAppClickAction {
-    /// <value>Custom Action type </value>
-    public ActionType actionType;
-    /// <value> Key-Value Pair entered on the MoEngage Platform during campaign creation. </value>
-    public IDictionary < string, object > keyValuePairs;
+  /// Common Parser class to construct model objects 
+  public class MoEParser {
 
+    public static AccountMeta GetAccountMetaInstance(Dictionary < string, object > payloadDictionary) {
+      Dictionary < string, object > accountPayload = payloadDictionary[MoEConstants.PAYLOAD_ACCOUNT_META] as Dictionary < string, object > ;
+      AccountMeta accountMeta = new AccountMeta {
+        appId = accountPayload[MoEConstants.PAYLOAD_APPID] as string
+      };
+      return accountMeta;
+    }
+    
+    public static Platform GetPlatform(string platform) {
+      Platform currentPlatform = default;
+      switch (platform.ToLower()) {
+      case "ios":
+        currentPlatform = Platform.iOS;
+        break;
+      case "android":
+        currentPlatform = Platform.Android;
+        break;
+      }
+      return currentPlatform;
+    }
   }
 }

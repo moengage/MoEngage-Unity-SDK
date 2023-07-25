@@ -15,27 +15,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage
-{
+namespace MoEngage {
   [System.Serializable]
-  public class SelfHandled
-  {
+  /// <summary>
+  /// SelfHandled Payload information
+  /// </summary>
+  public class SelfHandled {
+    /// <value> Self handled campaign payload. </value>
     public string payload;
+
+    /// <value>  Interval after which in-app should be dismissed, unit - Seconds </value>
     public long dismissInterval;
+
+    /// <value>Should the campaign be dismissed by pressing the back button or using the back gesture. if the value is true campaign should be dismissed on back press.  </value>
     public bool isCancellable;
-
-    public SelfHandled(Dictionary < string, object > selfHandledDictionary) {
-      if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_PAYLOAD)) {
-        payload = selfHandledDictionary[MoEConstants.PARAM_PAYLOAD] as string;
-      };
-
-      if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_DISMISS_INTERVAL)) {
-        dismissInterval = (long) selfHandledDictionary[MoEConstants.PARAM_DISMISS_INTERVAL];
-      }
-
-      if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_IS_CANCELLABLE)) {
-        isCancellable = (bool) selfHandledDictionary[MoEConstants.PARAM_IS_CANCELLABLE];
-      }
-    }
   }
 }

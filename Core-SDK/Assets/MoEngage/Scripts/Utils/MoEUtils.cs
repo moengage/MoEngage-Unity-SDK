@@ -17,7 +17,9 @@ using System.Collections.Generic;
 using MoEMiniJSON;
 
 namespace MoEngage {
+  /// Class responsible to construct the dict and serialize it inorder to pass it to the native.
   public class MoEUtils {
+
     public static Dictionary < string, string > GetAppIdPayload(string appId) {
       var payloadDict = new Dictionary < string,
         string > () {
@@ -161,80 +163,7 @@ namespace MoEngage {
 
       return Json.Serialize(payloadDict);
     }
-
-    public static string GetPushPayload(IDictionary < string, string > payload, string service) {
-      Dictionary < string, object > pushPayloadDict = new Dictionary < string, object > {
-        {
-          MoEConstants.ARGUMENT_PAYLOAD, payload
-        },
-        {
-          MoEConstants.ARGUMENT_SERVICE,
-          service
-        }
-      };
-
-      string pushPayload = Json.Serialize(pushPayloadDict);
-      return pushPayload;
-    }
-
-    public static string GetPushTokenPayload(string pushToken, string service) {
-      Dictionary < string, string > tokenDict = new Dictionary < string, string > {
-        {
-          MoEConstants.ARGUMENT_TOKEN, pushToken
-        },
-        {
-          MoEConstants.ARGUMENT_SERVICE,
-          service
-        }
-      };
-
-      string pushTokenPayload = Json.Serialize(tokenDict);
-      return pushTokenPayload;
-    }
-
-    public static PushCampaignData GetPushClickPayload(string payload) {
-      Dictionary < string, object > payloadDict = Json.Deserialize(payload) as Dictionary < string, object > ;
-
-      AccountMeta accountMetaData = GetAccountMetaInstance(payloadDict);
-
-      var dataDictionary = payloadDict[MoEConstants.PAYLOAD_DATA] as Dictionary < string,
-        object > ;
-
-      PushCampaignData campaignData = new PushCampaignData {
-        accountMeta = accountMetaData,
-          data = new PushCampaign(dataDictionary),
-          platform = GetPlatform(dataDictionary[MoEConstants.PARAM_PLATFORM] as string)
-      };
-
-      return campaignData;
-    }
-
-    private static Platform GetPlatform(string platform) {
-      Platform currentPlatform = default;
-      switch (platform.ToLower()) {
-      case "ios":
-        currentPlatform = Platform.iOS;
-        break;
-      case "android":
-        currentPlatform = Platform.Android;
-        break;
-      }
-      return currentPlatform;
-    }
-
-    private static NavigationType GetNavigationType(string type) {
-      NavigationType navigationType = default;
-      switch (type.ToLower()) {
-      case "screen":
-        navigationType = NavigationType.Screen;
-        break;
-      case "deep_linking":
-        navigationType = NavigationType.Deeplink;
-        break;
-      }
-      return navigationType;
-    }
-
+    
     public static string GetContextsPayload(string[] contexts, string appId) {
       Dictionary < string, string[] > contextDict = new Dictionary < string, string[] > {
         {
@@ -255,128 +184,84 @@ namespace MoEngage {
       return Json.Serialize(payloadDict);
     }
 
-    public static InAppSelfHandledCampaignData GetInAppSelfHandledData(string payload) {
-      Dictionary < string, object > payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary < string, object > ;
-
-      AccountMeta accountMeta = GetAccountMetaInstance(payloadDictionary);
-
-      Dictionary < string, object > dataPayload = payloadDictionary[MoEConstants.PAYLOAD_DATA] as Dictionary < string, object > ;
-
-      if (isValidSelfHandledInAppPayload(dataPayload)) {
-
-        SelfHandled selfHandled = new SelfHandled(dataPayload[MoEConstants.PARAM_SELF_HANDLED] as Dictionary < string, object > );
-
-        InAppCampaignContext context = new InAppCampaignContext(dataPayload[MoEConstants.PARAM_CAMPAIGN_CONTEXT] as Dictionary < string, object > );
-
-        InAppCampaign campaign = new InAppCampaign(dataPayload[MoEConstants.PARAM_CAMPAIGN_ID] as string, dataPayload[MoEConstants.PARAM_CAMPAIGN_NAME] as string, context);
-
-        InAppSelfHandledCampaignData inAppData = new InAppSelfHandledCampaignData(accountMeta, campaign, GetPlatform(dataPayload[MoEConstants.PARAM_PLATFORM] as string), selfHandled);
-
-        return inAppData;
-
-      }
-
-      return null;
-
-    }
-
-    private static Boolean isValidInAppPayload(Dictionary < string, object > payload) {
-      if (payload.ContainsKey(MoEConstants.PARAM_CAMPAIGN_ID) && payload.ContainsKey(MoEConstants.PARAM_CAMPAIGN_NAME) && payload.ContainsKey(MoEConstants.PARAM_CAMPAIGN_CONTEXT) && payload.ContainsKey(MoEConstants.PARAM_PLATFORM)) {
-        return true;
-      }
-
-      return false;
-    }
-
-    private static Boolean isValidSelfHandledInAppPayload(Dictionary < string, object > payload) {
-      if (isValidInAppPayload(payload) && payload.ContainsKey(MoEConstants.PARAM_SELF_HANDLED)) {
-        return true;
-      }
-
-      return false;
-    }
-
-    public static InAppClickData GetInAppClickData(string payload) {
-      Dictionary < string, object > payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary < string, object > ;
-
-      AccountMeta accountMeta = GetAccountMetaInstance(payloadDictionary);
-
-      Dictionary < string, object > dataPayload = payloadDictionary[MoEConstants.PAYLOAD_DATA] as Dictionary < string, object > ;
-
-      if (isValidInAppPayload(dataPayload)) {
-
-        InAppCampaignContext context = new InAppCampaignContext(dataPayload[MoEConstants.PARAM_CAMPAIGN_CONTEXT] as Dictionary < string, object > );
-
-        InAppCampaign campaign = new InAppCampaign(dataPayload[MoEConstants.PARAM_CAMPAIGN_ID] as string, dataPayload[MoEConstants.PARAM_CAMPAIGN_NAME] as string, context);
-
-        InAppClickAction action = new InAppClickAction();
-
-        // Navigation Action Info
-        if (dataPayload.ContainsKey(MoEConstants.PARAM_NAVIGATION)) {
-          var navigationDictionary = dataPayload[MoEConstants.PARAM_NAVIGATION] as Dictionary < string,
-            object > ;
-
-          NavigationAction navigationAction = new NavigationAction() {
-            navigationType = GetNavigationType(navigationDictionary[MoEConstants.PARAM_NAVIGATION_TYPE] as string),
-              url = navigationDictionary[MoEConstants.PARAM_NAVIGATION_URL] as string,
-          };
-
-          if (navigationDictionary.ContainsKey(MoEConstants.PARAM_KEY_VALUE_PAIR)) {
-            navigationAction.keyValuePairs = navigationDictionary[MoEConstants.PARAM_KEY_VALUE_PAIR] as Dictionary < string, object > ;
+    public static string GetOptOutTrackingPayload(string type, bool shouldOptOut, string appId) {
+      var optOutTrackingDictionary = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.ARGUMENT_TYPE, type
+          }, {
+            MoEConstants.PARAM_STATE,
+            shouldOptOut
           }
+        };
 
-          navigationAction.actionType = ActionType.Navigation;
-          action = navigationAction;
-        }
+      var payloadDict = new Dictionary < string,
+        object > {
+          {
+            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+          },
+          {
+            MoEConstants.PAYLOAD_DATA,
+            optOutTrackingDictionary
+          }
+        };
 
-        /// Custom Action Info
-        if (dataPayload.ContainsKey(MoEConstants.PARAM_CUSTOM_ACTION)) {
-
-          CustomAction custom = new CustomAction() {
-            keyValuePairs = dataPayload[MoEConstants.PARAM_CUSTOM_ACTION] as Dictionary < string, object >
-          };
-
-          custom.actionType = ActionType.Custom;
-          action = custom;
-        }
-
-        InAppClickData inAppData = new InAppClickData(accountMeta, campaign, GetPlatform(dataPayload[MoEConstants.PARAM_PLATFORM] as string), action);
-
-        return inAppData;
-      };
-
-      return null;
+      return Json.Serialize(payloadDict);
     }
 
-    private static AccountMeta GetAccountMetaInstance(Dictionary < string, object > payloadDictionary) {
-      Dictionary < string, object > accountPayload = payloadDictionary[MoEConstants.PAYLOAD_ACCOUNT_META] as Dictionary < string, object > ;
-      var accountMeta = new AccountMeta(accountPayload[MoEConstants.PAYLOAD_APPID] as string);
-      return accountMeta;
+    public static string GetSdkStatePayload(bool isSdkEnabled, string appId) {
+      var sdkStatusDictionary = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.FEATURE_STATUS_IS_SDK_ENABLED, isSdkEnabled
+          },
+        };
+
+      var payloadDict = new Dictionary < string,
+        object > {
+          {
+            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+          },
+          {
+            MoEConstants.PAYLOAD_DATA,
+            sdkStatusDictionary
+          }
+        };
+
+      return Json.Serialize(sdkStatusDictionary);
     }
 
-    public static InAppData GetInAppCampaignFromPayload(string payload) {
+    public static string GetAndroidIdTrackingStatus(bool isEnabled) {
+      var sdkStatusDictionary = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.KEY_ANDROID_ID_TRACKING, isEnabled
+          },
+        };
 
-      Dictionary < string, object > payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary < string, object > ;
+      return Json.Serialize(sdkStatusDictionary);
+    }
 
-      Dictionary < string, object > dataPayload = payloadDictionary[MoEConstants.PAYLOAD_DATA] as Dictionary < string, object > ;
+    public static string GetAdIdTrackingStatus(bool isEnabled) {
+      var sdkStatusDictionary = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.KEY_AD_ID_TRACKING, isEnabled
+          },
+        };
 
-      if (isValidInAppPayload(dataPayload)) {
+      return Json.Serialize(sdkStatusDictionary);
+    }
 
-        var accountMeta = GetAccountMetaInstance(payloadDictionary);
+    public static string GetAccountPayload(string appId) {
+      var payloadDict = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+          }
+        };
 
-        var campaignContextPayload = dataPayload[MoEConstants.PARAM_CAMPAIGN_CONTEXT] as Dictionary < string,
-          object > ;
-
-        InAppCampaignContext context = new InAppCampaignContext(campaignContextPayload);
-
-        InAppCampaign campaign = new InAppCampaign(dataPayload[MoEConstants.PARAM_CAMPAIGN_ID] as string, dataPayload[MoEConstants.PARAM_CAMPAIGN_NAME] as string, context);
-
-        InAppData inappData = new InAppData(accountMeta, campaign, GetPlatform(dataPayload[MoEConstants.PARAM_PLATFORM] as string));
-
-        return inappData;
-      }
-
-      return null;
+      return Json.Serialize(payloadDict);
     }
 
     public static string GetSelfHandledPayload(InAppSelfHandledCampaignData inAppData, string type) {
@@ -427,96 +312,6 @@ namespace MoEngage {
           }
         };
       return Json.Serialize(impressionDictionary);
-    }
-
-    public static string GetOptOutTrackingPayload(string type, bool shouldOptOut, string appId) {
-      var optOutTrackingDictionary = new Dictionary < string,
-        object > () {
-          {
-            MoEConstants.ARGUMENT_TYPE, type
-          }, {
-            MoEConstants.PARAM_STATE,
-            shouldOptOut
-          }
-        };
-
-      var payloadDict = new Dictionary < string,
-        object > {
-          {
-            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
-          },
-          {
-            MoEConstants.PAYLOAD_DATA,
-            optOutTrackingDictionary
-          }
-        };
-
-      return Json.Serialize(payloadDict);
-    }
-
-    public static string GetSdkStatePayload(bool isSdkEnabled, string appId) {
-      var sdkStatusDictionary = new Dictionary < string,
-        object > () {
-          {
-            MoEConstants.FEATURE_STATUS_IS_SDK_ENABLED, isSdkEnabled
-          },
-        };
-
-      var payloadDict = new Dictionary < string,
-        object > {
-          {
-            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
-          },
-          {
-            MoEConstants.PAYLOAD_DATA,
-            sdkStatusDictionary
-          }
-        };
-
-      return Json.Serialize(sdkStatusDictionary);
-    }
-
-    public static PushToken GetPushTokenFromPayload(string payload) {
-      Dictionary < string, object > payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary < string, object > ;
-
-      return new PushToken(
-        GetPlatform(payloadDictionary[MoEConstants.PARAM_PLATFORM] as string),
-        payloadDictionary[MoEConstants.PARAM_PUSH_TOKEN] as string,
-        (PushService) Enum.Parse(typeof (PushService), payloadDictionary[MoEConstants.PARAM_PUSH_SERVICE] as string)
-      );
-    }
-
-    public static string GetAndroidIdTrackingStatus(bool isEnabled) {
-      var sdkStatusDictionary = new Dictionary < string,
-        object > () {
-          {
-            MoEConstants.KEY_ANDROID_ID_TRACKING, isEnabled
-          },
-        };
-
-      return Json.Serialize(sdkStatusDictionary);
-    }
-
-    public static string GetAdIdTrackingStatus(bool isEnabled) {
-      var sdkStatusDictionary = new Dictionary < string,
-        object > () {
-          {
-            MoEConstants.KEY_AD_ID_TRACKING, isEnabled
-          },
-        };
-
-      return Json.Serialize(sdkStatusDictionary);
-    }
-
-    public static string GetAccountPayload(string appId) {
-      var payloadDict = new Dictionary < string,
-        object > () {
-          {
-            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
-          }
-        };
-
-      return Json.Serialize(payloadDict);
     }
   }
 }

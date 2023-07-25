@@ -18,17 +18,20 @@ using UnityEngine;
 namespace MoEngage {
 
   [System.Serializable]
+  /// <summary>
+  /// InApp model when click action is performed.
+  /// </summary>
   public class InAppClickData {
+    /// <value> Account info </value>
     public AccountMeta accountMeta;
-    public InAppCampaign campaignData;
-    public Platform platform;
-    public InAppClickAction action;
 
-    public InAppClickData(AccountMeta accountMeta, InAppCampaign campaignData, Platform platform, InAppClickAction action) {
-      this.accountMeta = accountMeta;
-      this.campaignData = campaignData;
-      this.platform = platform;
-      this.action = action;
-    }
+    /// <value> InApp campaign info </value>
+    public InAppCampaign campaignData;
+
+    /// <value>  Native platform from which the callback was triggered. </value>
+    public Platform platform;
+
+    /// <value> Action info </value>
+    public InAppClickAction action;
   }
 }

@@ -43,42 +43,42 @@ namespace MoEngage
         public void PushToken(string payload)
         {
             Debug.Log(TAG + " PushToken() Callback from native: " + payload);
-            PushToken token = MoEUtils.GetPushTokenFromPayload(payload);
+            PushToken token = MoEPushParser.GetPushTokenFromPayload(payload);
             OnPushTokenGenerated(token);
         }
 
         public void PushClicked(string payload)
         {
            Debug.Log(TAG + "PushClicked() Callback from Native: " + payload);
-           PushCampaignData campaign = MoEUtils.GetPushClickPayload(payload);
+           PushCampaignData campaign = MoEPushParser.GetPushClickPayload(payload);
            OnPushClicked(campaign);
         }
 
         public void InAppCampaignShown(string payload)
         {
             Debug.Log(TAG + " InAppCampaignShown() Callback From Native" + payload);
-            InAppData inAppData = MoEUtils.GetInAppCampaignFromPayload(payload);
+            InAppData inAppData = MoEInAppParser.GetInAppCampaignFromPayload(payload);
             OnInAppShown(inAppData);
         }
 
         public void InAppCampaignClicked(string payload)
         {
             Debug.Log(TAG + " InAppCampaignClicked() Callback From Native" + payload);
-            InAppClickData inAppData = MoEUtils.GetInAppClickData(payload);
+            InAppClickData inAppData = MoEInAppParser.GetInAppClickData(payload);
             OnInAppClicked(inAppData);
         }
 
         public void InAppCampaignDismissed(string payload)
         {
             Debug.Log(TAG + " InAppCampaignDismissed() Callback from Native: " + payload);
-            InAppData inAppData = MoEUtils.GetInAppCampaignFromPayload(payload);
+            InAppData inAppData = MoEInAppParser.GetInAppCampaignFromPayload(payload);
             OnInAppDismissed(inAppData);
         }
 
         public void InAppCampaignCustomAction(string payload)
         {
             Debug.Log(TAG + " InAppCampaignCustomAction() Callback from Native: " + payload);
-            InAppClickData inAppData = MoEUtils.GetInAppClickData(payload);
+            InAppClickData inAppData = MoEInAppParser.GetInAppClickData(payload);
             OnInAppCustomAction(inAppData);
 
         }
@@ -86,7 +86,7 @@ namespace MoEngage
         public void InAppCampaignSelfHandled(string payload)
         {
             Debug.Log(TAG + " InAppCampaignSelfHandled() Callback from Native: " + payload);
-            InAppSelfHandledCampaignData inAppData = MoEUtils.GetInAppSelfHandledData(payload);
+            InAppSelfHandledCampaignData inAppData = MoEInAppParser.GetInAppSelfHandledData(payload);
             OnInAppSelfHandled(inAppData);
         }
 
