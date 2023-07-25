@@ -6,7 +6,7 @@
   </androidPackages>
   <!-- iOS Cocoapod dependencies can be specified by each iosPod element. -->
   <iosPods>
-    <iosPod name="MOGeofence" version="~> 3.2.0" minTargetSdk="10.0">
+    <iosPod name="MoEngagePluginGeofence" version="~> 2.3.0" minTargetSdk="11.0">
     </iosPod>
   </iosPods>
 </dependencies>

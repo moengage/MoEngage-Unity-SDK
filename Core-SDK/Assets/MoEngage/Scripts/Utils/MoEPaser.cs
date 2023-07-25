@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
@@ -12,25 +12,33 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using MoEMiniJSON;
 
-namespace MoEngage
-{
-    public enum MoEAppStatus : uint
-    {
-        INSTALL,
-        UPDATE
-    }
+namespace MoEngage {
+  /// Common Parser class to construct model objects 
+  public class MoEParser {
 
-    public enum MoEUserGender : uint
-    {
-        MALE,
-        FEMALE
+    public static AccountMeta GetAccountMetaInstance(Dictionary < string, object > payloadDictionary) {
+      Dictionary < string, object > accountPayload = payloadDictionary[MoEConstants.PAYLOAD_ACCOUNT_META] as Dictionary < string, object > ;
+      AccountMeta accountMeta = new AccountMeta {
+        appId = accountPayload[MoEConstants.PAYLOAD_APPID] as string
+      };
+      return accountMeta;
     }
-
-    public enum PushService : uint
-    {
-        APNS,
-        FCM,
-        MI_PUSH
+    
+    public static Platform GetPlatform(string platform) {
+      Platform currentPlatform = default;
+      switch (platform.ToLower()) {
+      case "ios":
+        currentPlatform = Platform.iOS;
+        break;
+      case "android":
+        currentPlatform = Platform.Android;
+        break;
+      }
+      return currentPlatform;
     }
+  }
 }

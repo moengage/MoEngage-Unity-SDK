@@ -9,8 +9,8 @@
 #import <objc/runtime.h>
 #import "UnityAppController.h"
 #import "MoEUnityInitializer.h"
+#import "MoEngageUnityUtils.h"
 #import <UserNotifications/UserNotifications.h>
-#import <MoEPluginBase/MoEPluginBase.h>
 
 @implementation UnityAppController (MoEngage)
 
@@ -19,7 +19,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        BOOL swizzleUnityAppController = [MoEUnityInitializer isUnityAppControllerSwizzlingEnabled];
+        BOOL swizzleUnityAppController = [MoEngageUnityUtils isUnityAppControllerSwizzlingEnabled];
         if(swizzleUnityAppController){
             Class class = [self class];
             
@@ -66,6 +66,3 @@
 
 
 @end
-
-
-

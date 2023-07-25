@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
@@ -11,22 +11,30 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage
-{
-    [System.Serializable]
-    public class InAppCampaign
-    {
-        public string campaignId;
-        public string campaignName;
-        public string platform;
-        public NavigationAction navigation;
-        public SelfHandled selfHandled;
-        public CustomAction customAction;
-        public Dictionary<string, object> campaignContext;
-    }
-}
+namespace MoEngage {
 
+  #if UNITY_ANDROID
+  public class MoEngageAndroid: MoEGeofenceUnityPlatform {
+    private
+    const string TAG = "MoEngageAndroid";
+
+    private static AndroidJavaClass moengageAndroidClass = new AndroidJavaClass("com.moengage.unity.wrapper.MoEAndroidWrapper");
+    private static AndroidJavaObject moengageAndroid = moengageAndroidClass.CallStatic < AndroidJavaObject > ("getInstance");
+
+    public void StartGeofenceMonitoring(string payload) {
+
+    }
+
+    public void StopGeofenceMonitoring(string payload) {
+
+    }
+
+  }
+
+  #endif
+}

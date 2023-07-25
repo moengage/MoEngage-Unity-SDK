@@ -22,10 +22,8 @@ namespace MoEngage
 {
 
 #if UNITY_IOS
-    public class MoEngageiOS
+    public class MoEngageiOS: MoEngageUnityPlatform
     {
-        private const string TAG = "MoEngageiOS";
-
         #region DLL Imports
 
         [DllImport("__Internal")]
@@ -44,37 +42,25 @@ namespace MoEngage
         private static extern void trackEvent(string eventPayload);
 
         [DllImport("__Internal")]
-        private static extern void resetUser();
-
-        [DllImport("__Internal")]
-        private static extern void enableLogs();
+        private static extern void resetUser(string accountPayload);
 
         [DllImport("__Internal")]
         private static extern void registerForPush();
 
         [DllImport("__Internal")]
-        private static extern void showInApp();
+        private static extern void showInApp(string accountPayload);
 
         [DllImport("__Internal")]
         private static extern void setInAppContexts(string contextsPayload);
 
         [DllImport("__Internal")]
-        private static extern void invalidateInAppContexts();
+        private static extern void invalidateInAppContexts(string accountPayload);
 
         [DllImport("__Internal")]
-        private static extern void getSelfHandledInApp();
+        private static extern void getSelfHandledInApp(string accountPayload);
 
         [DllImport("__Internal")]
         private static extern void updateSelfHandledInAppStatusWithPayload(string selfHandledPayload);
-
-        [DllImport("__Internal")]
-        private static extern void startGeofenceMonitoring();
-
-        [DllImport("__Internal")]
-        private static extern void optOutOfIDFATracking(string optOutPayload);
-
-        [DllImport("__Internal")]
-        private static extern void optOutOfIDFVTracking(string optOutPayload);
 
         [DllImport("__Internal")]
         private static extern void optOutGDPRTracking(string optOutPayload);
@@ -86,11 +72,9 @@ namespace MoEngage
 
         #region Initialize
 
-        public static void Initialize(string gameObjectName)
+        public void Initialize(string gameObjPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": Initialize:: ");
-			string gameObjPayload = MoEUtils.GetGameObjectPayload(gameObjectName);
 			initialize(gameObjPayload);
 #endif
         }
@@ -98,11 +82,9 @@ namespace MoEngage
         #endregion
 
         #region AppStatus 
-        public static void SetAppStatus(MoEAppStatus appStatus)
+        public void SetAppStatus(string appStatusPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": SetAppStatus:: appStatus: " + appStatus);
-			string appStatusPayload = MoEUtils.GetAppStatusPayload(appStatus);
 			setAppStatus(appStatusPayload);
 #endif
         }
@@ -110,40 +92,17 @@ namespace MoEngage
         #endregion
 
         #region UserAttribute Tracking
-        public static void SetAlias(string alias)
+        public void SetAlias(string aliasPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": SetAlias:: alias: " + alias);
-			string aliasPayload = MoEUtils.GetAliasPayload(alias);
 			setAlias(aliasPayload);
 #endif
         }
 
 
-        public static void SetUserAttribute<T>(string attributeName, T attributeValue)
+        public void SetUserAttribute(string userAttributesPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": SetUserAttribute:: attributeName: " + attributeName + "attributeValue: " + attributeValue);
-			string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue);
-			setUserAttribute(userAttributesPayload);
-#endif
-        }
-
-        public static void SetUserAttributeISODate(string attributeName, string isoDate)
-        {
-#if !UNITY_EDITOR
-			Debug.Log(TAG + ": SetUserAttributeISODate:: attributeName: " + attributeName + " isoDate: " + isoDate);
-			string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_TIMESTAMP, isoDate);
-			setUserAttribute(userAttributesPayload);
-#endif
-        }
-
-        public static void SetUserAttributeLocation(string attributeName, GeoLocation location)
-        {
-#if !UNITY_EDITOR
-			Dictionary<string,double> locationDict = location.ToDictionary();
-			Debug.Log(TAG + ": SetUserAttributeLocation:: attributeName: " + attributeName + " locationDict: " + locationDict);
-			string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_LOCATION, locationDict);
 			setUserAttribute(userAttributesPayload);
 #endif
         }
@@ -152,12 +111,9 @@ namespace MoEngage
 
         #region Event Tracking
 
-        public static void TrackEvent(string eventName, Properties properties)
+        public void TrackEvent(string eventPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": TrackEvent:: eventName: " + eventName + "\n properties: " + properties);
-			string eventPayload = MoEUtils.GetEventPayload(eventName, properties);
-			Debug.Log(TAG + ": TrackEvent:: eventPayload: " + eventPayload);
 			trackEvent(eventPayload);
 #endif
         }
@@ -166,10 +122,9 @@ namespace MoEngage
 
         #region Push Notifications
 
-        public static void RegisterForPush()
+        public void RegisterForPush()
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": RegisterForPush::");
 			registerForPush();
 #endif
         }
@@ -178,157 +133,63 @@ namespace MoEngage
 
         #region InApp Methods
 
-        public static void ShowInApp()
+        public void ShowInApp(string accountPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": ShowInApp::");
-			showInApp();
+			showInApp(accountPayload);
 #endif
         }
 
-        public static void SetInAppContexts(string[] contexts)
+        public void SetInAppContexts(string contextPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": SetInAppContexts::");
-			string contextPayload = MoEUtils.GetContextsPayload(contexts);
-			Debug.Log(TAG + ": SetInAppContexts:: contextPayload: " + contextPayload);
 			setInAppContexts(contextPayload);	
 #endif
         }
 
-        public static void InvalidateInAppContexts()
+        public void InvalidateInAppContexts(string accountPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": InvalidateInAppContexts::");
-			invalidateInAppContexts();
+			invalidateInAppContexts(accountPayload);
 #endif
         }
 
-        public static void GetSelfHandledInApp()
+        public void GetSelfHandledInApp(string accountPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + ": GetSelfHandledInApp::");
-			getSelfHandledInApp();
+			getSelfHandledInApp(accountPayload);
 #endif
         }
 
-        public static void SelfHandledShown(InAppCampaign campaign)
+        public void SelfHandledShown(string selfHandledPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " SelfHandledShown:: " );
-			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_IMPRESSION);
-			Debug.Log(TAG + " SelfHandledShown() Payload: " + payload);
-			updateSelfHandledInAppStatusWithPayload(payload);	
+			updateSelfHandledInAppStatusWithPayload(selfHandledPayload);	
 #endif
         }
 
-        public static void SelfHandledClicked(InAppCampaign campaign)
+        public void SelfHandledClicked(string selfHandledPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " SelfHandledClicked:: ");
-			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_CLICK);
-			Debug.Log(TAG + " SelfHandledClicked:: Payload: " + payload);
-			updateSelfHandledInAppStatusWithPayload(payload);	
+			updateSelfHandledInAppStatusWithPayload(selfHandledPayload);	
 #endif
         }
 
-        public static void SelfHandledPrimaryClicked(InAppCampaign campaign)
-	{
-#if !UNITY_EDITOR
-			Debug.Log(TAG + " SelfHandledPrimaryClicked::");
-			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_PRIMARY_CLICKED);
-			Debug.Log(TAG + " SelfHandledPrimaryClicked:: Payload: " + payload);
-			updateSelfHandledInAppStatusWithPayload(payload);
-#endif
-	}
-
-        public static void SelfHandledDismissed(InAppCampaign campaign)
+        public void SelfHandledDismissed(string selfHandledPayload)
         {
 #if !UNITY_EDITOR
-			Debug.Log(TAG + " SelfHandledDismissed::");
-			string payload = MoEUtils.GetSelfHandledPayload(campaign, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_DISMISSED);
-			Debug.Log(TAG + " SelfHandledDismissed:: Payload: " + payload);
-			updateSelfHandledInAppStatusWithPayload(payload);	
+			updateSelfHandledInAppStatusWithPayload(selfHandledPayload);	
 #endif
         }
 
         #endregion
 
-        #region Geofence Method
+       #region Utils and OptOuts
 
-        public static void StartGeofenceMonitoring()
-        {
-#if !UNITY_EDITOR
-			Debug.Log(TAG + ": StartGeofenceMonitoring::");
-			startGeofenceMonitoring();
-#endif
-        }
-
-        #endregion
-
-        #region Utils and OptOuts
-
-        public static void EnableSDKLogs()
-        {
-#if !UNITY_EDITOR
-			Debug.Log(TAG + ": EnableSDKLogs::");
-			enableLogs();
-#endif
-        }
-
-        public static void OptOutOfIDFATracking(bool optOut)
-        {
-#if !UNITY_EDITOR
-            Debug.Log(TAG + " OptOutOfIDFATracking::");
-            var optOutDict = new Dictionary<string, bool>()
-            {
-                { MoEConstants.ARGUMENT_OPT_OUT_STATUS, optOut }
-            };
-            string payload = Json.Serialize(optOutDict);
-            optOutOfIDFATracking(payload);
-#endif
-        }
-
-        public static void OptOutOfIDFVTracking(bool optOut)
-        {
-#if !UNITY_EDITOR
-            Debug.Log(TAG + " OptOutOfIDFVTracking::");
-            var optOutDict = new Dictionary<string, bool>()
-            {
-                { MoEConstants.ARGUMENT_OPT_OUT_STATUS, optOut }
-            };
-            string payload = Json.Serialize(optOutDict);
-            optOutOfIDFVTracking(payload);
-#endif
-        }
-
-        public static void optOutDataTracking(bool shouldOptOut)
+        public void optOutDataTracking(string optOutPayload)
 	{
 #if !UNITY_EDITOR
-	        Debug.Log(TAG + " optOutDataTracking::");
-		string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_DATA, shouldOptOut);
-		Debug.Log(TAG + " optOutDataTracking:: payload: " + payload);
-		optOutGDPRTracking(payload);
-#endif
-	}
-
-	public static void optOutPushTracking(bool shouldOptOut)
-	{
-#if !UNITY_EDITOR
-		Debug.Log(TAG + " optOutPushTracking::");
-		string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_PUSH, shouldOptOut);
-		Debug.Log(TAG + " optOutPushTracking:: payload: " + payload);
-		optOutGDPRTracking(payload);
-#endif
-	}
-
-	public static void optOutInAppTracking(bool shouldOptOut)
-	{
-#if !UNITY_EDITOR
-		Debug.Log(TAG + " optOutInAppTracking::");
-		string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_INAPP, shouldOptOut);
-		Debug.Log(TAG + " optOutInAppTracking:: payload: " + payload);
-		optOutGDPRTracking(payload);
+		optOutGDPRTracking(optOutPayload);
 #endif
 	}
 
@@ -336,11 +197,10 @@ namespace MoEngage
 
         #region Reset User
 
-        public static void Logout()
+        public void Logout(string accountPayload)
         {
 #if !UNITY_EDITOR
-		Debug.Log(TAG + ":  ResetUser::");
-		resetUser();
+		resetUser(accountPayload);
 #endif
         }
 
@@ -348,12 +208,9 @@ namespace MoEngage
 
         #region Reset User
 
-        public static void UpdateSdkState(bool state)
+        public void UpdateSdkState(string payload)
         {
 #if !UNITY_EDITOR
-		Debug.Log(TAG + " UpdateSdkState::");
-		string payload = MoEUtils.GetSdkStatePayload(state);
-		Debug.Log(TAG + " UpdateSdkState:: payload " + payload);
 		updateSdkState(payload);
 #endif
 	}

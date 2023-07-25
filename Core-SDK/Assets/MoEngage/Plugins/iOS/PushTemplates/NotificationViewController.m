@@ -6,11 +6,13 @@
 //  Copyright © 2020 MoEngage Inc. All rights reserved.
 //
 
+
+#import <UIKit/UIKit.h>
 #import "NotificationViewController.h"
 #import <UserNotifications/UserNotifications.h>
 #import <UserNotificationsUI/UserNotificationsUI.h>
 #import <WebKit/WebKit.h>
-#import <MORichNotification/MORichNotification.h>
+#import <MoEngageRichNotification/MoEngageRichNotification-Swift.h>
 
 @interface NotificationViewController () <UNNotificationContentExtension>
 
@@ -21,12 +23,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Set App Group ID
-    [MORichNotification setAppGroupID:[self getAppGroupID]];
+    [MoEngageSDKRichNotification setAppGroupID:[self getAppGroupID]];
 }
 
 - (void)didReceiveNotification:(UNNotification *)notification {
     // Method to add template to UI
-    [[MOPushTemplateHandler sharedInstance] addPushTemplateToController:self withNotification:notification];
+    [MoEngageSDKRichNotification addPushTemplateToController: self withNotification:notification];
 }
 
 -(NSString*)getAppGroupID{

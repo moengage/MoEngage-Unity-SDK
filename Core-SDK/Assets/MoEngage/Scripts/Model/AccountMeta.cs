@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
@@ -15,13 +15,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage
-{
+namespace MoEngage {
   [System.Serializable]
-  public class SelfHandled
-  {
-    public string payload;
-    public long dismissInterval;
-    public bool isCancellable;
+  /// <summary>
+  /// Meta-data related to your MoEngage account.
+  /// </summary>
+  public class AccountMeta {
+    /// <value> Account Identifier  </value>
+    public string appId;
   }
 }
