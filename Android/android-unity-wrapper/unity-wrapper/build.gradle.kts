@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(SdkBuildConfig.compileSdkVersion)
+    compileSdk = SdkBuildConfig.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion(SdkBuildConfig.minimumSdkVersion)
-        targetSdkVersion(SdkBuildConfig.targetSdkVersion)
+        minSdk = SdkBuildConfig.minimumSdkVersion
+        targetSdk = SdkBuildConfig.targetSdkVersion
     }
 
     buildTypes {
@@ -24,12 +24,14 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${rootProject.extra["kotlin_version"]}")
     compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     compileOnly(Deps.appCompat)
     compileOnly(Deps.moengage)
+    compileOnly(Deps.inapp)
+    compileOnly(Deps.geofence)
     api(Deps.basePlugin)
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
     compileOnly(project(":unity-library"))
 }
 
-apply(plugin="com.vanniktech.maven.publish")
+apply(plugin = "com.vanniktech.maven.publish")
