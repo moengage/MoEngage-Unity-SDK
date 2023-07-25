@@ -18,6 +18,7 @@ using UnityEngine;
 namespace MoEngage {
 
   [System.Serializable]
+<<<<<<< HEAD
   public class InAppCampaignContext {
     public string formattedCampaignId;
     public Dictionary < string, object > attributes;
@@ -28,5 +29,16 @@ namespace MoEngage {
       }
       attributes = campaignContextPayload;
     }
+=======
+  /// <summary>
+  /// Additonal meta of InAppCampaign
+  /// </summary>
+  public class InAppCampaignContext {
+    /// <value> Formatted campaign id </value>
+    public string formattedCampaignId;
+
+    /// <value> Context Payload </value>
+    public Dictionary < string, object > attributes;
+>>>>>>> MOEN-20006-Unity-Multiinstance
   }
 }

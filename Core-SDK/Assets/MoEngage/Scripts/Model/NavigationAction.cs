@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+/*
+=======
 ﻿/*
+>>>>>>> MOEN-20006-Unity-Multiinstance
  * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
@@ -15,9 +19,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage
-{
+namespace MoEngage {
   [System.Serializable]
+<<<<<<< HEAD
+<<<<<<<< HEAD:Core-SDK/Assets/MoEngage/Scripts/Model/NavigationAction.cs
   public class NavigationAction: InAppClickAction
   {
     public ActionType actionType;
@@ -25,5 +30,29 @@ namespace MoEngage
     public string url;
     public IDictionary<string, object> keyValuePairs;
   }
+========
+  /// <summary>
+  /// Base class for InApp action
+  /// </summary>
+  public class InAppClickAction {}
+>>>>>>>> MOEN-20006-Unity-Multiinstance:Core-SDK/Assets/MoEngage/Scripts/Model/InAppClickAction.cs
+=======
+  /// <summary>
+  /// InApp Navigation action model
+  /// </summary>
+  public class NavigationAction: InAppClickAction {
+    /// <value> Navigation action type </value>
+    public ActionType actionType;
+
+    /// <value> Type of Navigation action.Possible value deep_linking or screen </value>
+    public NavigationType navigationType;
+    
+    /// <value>  Deeplink Url or the Screen Name used for the action. </value>
+    public string url;
+
+    /// <value> Additional Key-Value pairs entered on the MoEngage Platform for navigation action of the campaign</value>
+    public IDictionary < string, object > keyValuePairs;
+  }
+>>>>>>> MOEN-20006-Unity-Multiinstance
 
 }

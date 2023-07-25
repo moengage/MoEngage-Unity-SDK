@@ -16,8 +16,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoEngage {
+  /// <summary>
+  /// Common interface for iOS and android
+  /// </summary>
   public interface MoEngageUnityPlatform {
-
     void Initialize(string gameObjectPayload);
     void SetAppStatus(string appStatusPayload);
     void SetAlias(string aliasPayload);

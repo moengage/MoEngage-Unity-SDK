@@ -9,7 +9,7 @@ import com.moengage.core.internal.logger.Logger
  */
 public class MoEUnityHelper {
 
-    private val tag = Constants.MODULE_TAG + "MoEUnityHelper"
+    private val tag = "${MODULE_TAG}MoEUnityHelper"
 
     public companion object {
 
@@ -26,8 +26,8 @@ public class MoEUnityHelper {
     }
 
     public fun onConfigurationChanged() {
-        if (!InAppManager.getInstance().hasModule()) {
-            Logger.v("$tag onConfigurationChanged() : InApp module not found.")
+        if (!InAppManager.hasModule()) {
+            Logger.print { "$tag onConfigurationChanged() : InApp module not found." }
             return
         }
         MoEInAppHelper.getInstance().onConfigurationChanged()

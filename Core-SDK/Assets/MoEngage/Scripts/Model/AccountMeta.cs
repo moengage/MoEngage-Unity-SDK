@@ -17,11 +17,11 @@ using UnityEngine;
 
 namespace MoEngage {
   [System.Serializable]
+  /// <summary>
+  /// Meta-data related to your MoEngage account.
+  /// </summary>
   public class AccountMeta {
+    /// <value> Account Identifier  </value>
     public string appId;
-
-    public AccountMeta(string appId) {
-      this.appId = appId;
-    }
   }
 }

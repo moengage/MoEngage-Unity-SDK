@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021 MoEngage Inc.
+ * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
  *
@@ -10,11 +10,24 @@
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/**
- * @author Umang Chamaria
- */
-object SdkBuildConfig {
-    const val minimumSdkVersion = 21
-    const val targetSdkVersion = 33
-    const val compileSdkVersion = 33
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace MoEngage {
+
+  [System.Serializable]
+  public class PermissionResultData {
+    public Platform platform;
+    public bool isGranted;
+    public PermissionType type;
+
+    public PermissionResultData(Platform platform, bool isGranted, PermissionType type) {
+      this.platform = platform;
+      this.isGranted = isGranted;
+      this.type = type;
+    }
+  }
+
 }

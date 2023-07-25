@@ -18,6 +18,7 @@ using UnityEngine;
 namespace MoEngage {
 
   [System.Serializable]
+<<<<<<< HEAD
   public class InAppData {
     public AccountMeta accountMeta;
     public InAppCampaign campaignData;
@@ -28,5 +29,19 @@ namespace MoEngage {
       this.campaignData = campaignData;
       this.platform = platform;
     }
+=======
+  /// <summary>
+  /// InApp Campaign model
+  /// </summary>
+  public class InAppData {
+    /// <value> Account info </value>
+    public AccountMeta accountMeta;
+
+    /// <value> InApp campaign info </value>
+    public InAppCampaign campaignData;
+
+    /// <value>  Native platform from which the callback was triggered. </value>
+    public Platform platform;
+>>>>>>> MOEN-20006-Unity-Multiinstance
   }
 }

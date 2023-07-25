@@ -23,24 +23,44 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+package com.moengage.unity.wrapper
 
-package com.moengage.unity.wrapper;
+import android.content.Context
+import com.moengage.core.LogLevel
+import com.moengage.core.MoEngage
+import com.moengage.core.internal.logger.Logger
+import com.moengage.core.internal.model.IntegrationMeta
+import com.moengage.core.model.SdkState
+import com.moengage.plugin.base.internal.PluginInitializer
 
 /**
  * @author Umang Chamaria
  * Date: 26/06/20
  */
-interface Constants {
-  String MODULE_TAG = "Unity_";
-  String INTEGRATION_TYPE = "unity";
-  String INTEGRATION_VERSION = "2.3.0";
+object MoEInitializer {
+    private const val tag = "${MODULE_TAG}MoEInitializer"
 
-  String METHOD_NAME_PUSH_REDIRECTION = "PushClicked";
-  String METHOD_NAME_IN_APP_SHOWN = "InAppCampaignShown";
-  String METHOD_NAME_IN_APP_CLICKED = "InAppCampaignClicked";
-  String METHOD_NAME_IN_APP_CLOSED = "InAppCampaignDismissed";
-  String METHOD_NAME_IN_APP_CUSTOM_ACTION = "InAppCampaignCustomAction";
-  String METHOD_NAME_IN_APP_SELF_HANDLED = "InAppCampaignSelfHandled";
-  String METHOD_NAME_PUSH_TOKEN = "PushToken";
+    fun initialize(context: Context, builder: MoEngage.Builder) {
+        try {
+            Logger.print { "$tag initialize() : Initialising MoEngage SDK." }
+            initialize(context, builder, SdkState.ENABLED)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag initialize() : " }
+        }
+    }
 
+    fun initialize(context: Context, builder: MoEngage.Builder, sdkState: SdkState) {
+        try {
+            Logger.print { "$tag initialize() : Initialising MoEngage SDK." }
+            MoEAndroidWrapper.getInstance().setContext(context)
+            PluginInitializer.initialize(
+                builder,
+                IntegrationMeta(INTEGRATION_TYPE, INTEGRATION_VERSION),
+                sdkState
+            )
+            Logger.print { "$tag initialize() : Initialising MoEngage SDK." }
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag initialize() : " }
+        }
+    }
 }

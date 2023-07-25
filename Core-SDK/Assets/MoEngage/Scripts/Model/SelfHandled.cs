@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿/*
+=======
+/*
+>>>>>>> MOEN-20006-Unity-Multiinstance
  * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
@@ -15,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+<<<<<<< HEAD
 namespace MoEngage
 {
   [System.Serializable]
@@ -39,3 +44,30 @@ namespace MoEngage
     }
   }
 }
+=======
+namespace MoEngage {
+  [System.Serializable]
+<<<<<<<< HEAD:Core-SDK/Assets/MoEngage/Scripts/Model/AccountMeta.cs
+  public class AccountMeta {
+    public string appId;
+
+    public AccountMeta(string appId) {
+      this.appId = appId;
+    }
+========
+  /// <summary>
+  /// SelfHandled Payload information
+  /// </summary>
+  public class SelfHandled {
+    /// <value> Self handled campaign payload. </value>
+    public string payload;
+
+    /// <value>  Interval after which in-app should be dismissed, unit - Seconds </value>
+    public long dismissInterval;
+
+    /// <value>Should the campaign be dismissed by pressing the back button or using the back gesture. if the value is true campaign should be dismissed on back press.  </value>
+    public bool isCancellable;
+>>>>>>>> MOEN-20006-Unity-Multiinstance:Core-SDK/Assets/MoEngage/Scripts/Model/SelfHandled.cs
+  }
+}
+>>>>>>> MOEN-20006-Unity-Multiinstance

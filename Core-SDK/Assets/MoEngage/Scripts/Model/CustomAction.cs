@@ -14,12 +14,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage
-{
-    [System.Serializable]
-    public class CustomAction: InAppClickAction
-    {
-        public ActionType actionType;
-        public IDictionary<string, object> keyValuePairs;
-    }
+namespace MoEngage {
+  [System.Serializable]
+  /// <summary>
+  /// Custom action performed on inapp
+  /// </summary>
+  public class CustomAction: InAppClickAction {
+    /// <value>Custom Action type </value>
+    public ActionType actionType;
+    /// <value> Key-Value Pair entered on the MoEngage Platform during campaign creation. </value>
+    public IDictionary < string, object > keyValuePairs;
+
+  }
 }

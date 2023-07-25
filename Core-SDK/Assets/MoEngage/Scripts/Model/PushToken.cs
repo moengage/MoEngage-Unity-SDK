@@ -15,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+<<<<<<< HEAD
 namespace MoEngage
 {
     [System.Serializable]
@@ -33,4 +34,21 @@ namespace MoEngage
 
     }
 }
+=======
+namespace MoEngage {
+  [System.Serializable]
+  /// <summary>
+  /// PushToken Model
+  /// </summary>
+  public class PushToken {
+    /// <value> Native platform from which the callback was triggered.  </value>
+    public Platform platform;
 
+    /// <value> Push token value</value>
+    public string token;
+>>>>>>> MOEN-20006-Unity-Multiinstance
+
+    /// <value> Type of PushService for which token is generated </value>
+    public PushService pushService;
+  }
+}

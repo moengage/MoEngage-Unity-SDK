@@ -11,7 +11,7 @@
 #define kMoEngageAppID @"YOUR APPID"
 
 /// Set DataCenter
-#define kMoEngageRegion @"DATA_CENTER_01" // DATA_CENTER_01/DATA_CENTER_02/DATA_CENTER_03/DATA_CENTER_04/DATA_CENTER_05
+#define kMoEngageRegion NULL// DATA_CENTER_01/DATA_CENTER_02/DATA_CENTER_03/DATA_CENTER_04/DATA_CENTER_05
 
 /// Set Xcode console logs
 #define kMoEngageLogsEnabled YES // YES/NO

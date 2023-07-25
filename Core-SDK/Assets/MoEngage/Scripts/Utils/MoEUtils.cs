@@ -17,7 +17,13 @@ using System.Collections.Generic;
 using MoEMiniJSON;
 
 namespace MoEngage {
+<<<<<<< HEAD
   public class MoEUtils {
+=======
+  /// Class responsible to construct the dict and serialize it inorder to pass it to the native.
+  public class MoEUtils {
+
+>>>>>>> MOEN-20006-Unity-Multiinstance
     public static Dictionary < string, string > GetAppIdPayload(string appId) {
       var payloadDict = new Dictionary < string,
         string > () {
@@ -161,6 +167,7 @@ namespace MoEngage {
 
       return Json.Serialize(payloadDict);
     }
+<<<<<<< HEAD
 
     public static string GetPushPayload(IDictionary < string, string > payload, string service) {
       Dictionary < string, object > pushPayloadDict = new Dictionary < string, object > {
@@ -235,6 +242,9 @@ namespace MoEngage {
       return navigationType;
     }
 
+=======
+    
+>>>>>>> MOEN-20006-Unity-Multiinstance
     public static string GetContextsPayload(string[] contexts, string appId) {
       Dictionary < string, string[] > contextDict = new Dictionary < string, string[] > {
         {
@@ -255,6 +265,7 @@ namespace MoEngage {
       return Json.Serialize(payloadDict);
     }
 
+<<<<<<< HEAD
     public static InAppSelfHandledCampaignData GetInAppSelfHandledData(string payload) {
       Dictionary < string, object > payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary < string, object > ;
 
@@ -377,6 +388,86 @@ namespace MoEngage {
       }
 
       return null;
+=======
+    public static string GetOptOutTrackingPayload(string type, bool shouldOptOut, string appId) {
+      var optOutTrackingDictionary = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.ARGUMENT_TYPE, type
+          }, {
+            MoEConstants.PARAM_STATE,
+            shouldOptOut
+          }
+        };
+
+      var payloadDict = new Dictionary < string,
+        object > {
+          {
+            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+          },
+          {
+            MoEConstants.PAYLOAD_DATA,
+            optOutTrackingDictionary
+          }
+        };
+
+      return Json.Serialize(payloadDict);
+    }
+
+    public static string GetSdkStatePayload(bool isSdkEnabled, string appId) {
+      var sdkStatusDictionary = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.FEATURE_STATUS_IS_SDK_ENABLED, isSdkEnabled
+          },
+        };
+
+      var payloadDict = new Dictionary < string,
+        object > {
+          {
+            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+          },
+          {
+            MoEConstants.PAYLOAD_DATA,
+            sdkStatusDictionary
+          }
+        };
+
+      return Json.Serialize(sdkStatusDictionary);
+    }
+
+    public static string GetAndroidIdTrackingStatus(bool isEnabled) {
+      var sdkStatusDictionary = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.KEY_ANDROID_ID_TRACKING, isEnabled
+          },
+        };
+
+      return Json.Serialize(sdkStatusDictionary);
+    }
+
+    public static string GetAdIdTrackingStatus(bool isEnabled) {
+      var sdkStatusDictionary = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.KEY_AD_ID_TRACKING, isEnabled
+          },
+        };
+
+      return Json.Serialize(sdkStatusDictionary);
+    }
+
+    public static string GetAccountPayload(string appId) {
+      var payloadDict = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+          }
+        };
+
+      return Json.Serialize(payloadDict);
+>>>>>>> MOEN-20006-Unity-Multiinstance
     }
 
     public static string GetSelfHandledPayload(InAppSelfHandledCampaignData inAppData, string type) {
@@ -428,6 +519,7 @@ namespace MoEngage {
         };
       return Json.Serialize(impressionDictionary);
     }
+<<<<<<< HEAD
 
     public static string GetOptOutTrackingPayload(string type, bool shouldOptOut, string appId) {
       var optOutTrackingDictionary = new Dictionary < string,
@@ -518,5 +610,7 @@ namespace MoEngage {
 
       return Json.Serialize(payloadDict);
     }
+=======
+>>>>>>> MOEN-20006-Unity-Multiinstance
   }
 }
