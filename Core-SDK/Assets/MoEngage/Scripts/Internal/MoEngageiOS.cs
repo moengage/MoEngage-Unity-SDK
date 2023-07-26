@@ -122,7 +122,7 @@ namespace MoEngage
 
         #region Push Notifications
 
-        public void RegisterForPush()
+        public static void RegisterForPush()
         {
 #if !UNITY_EDITOR
 			registerForPush();

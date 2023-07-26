@@ -552,7 +552,7 @@ namespace MoEngage {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " Regiter for Push");
       #if UNITY_IOS && !UNITY_EDITOR
-      moengageHandler.RegisterForPush();
+      MoEngageiOS.RegisterForPush();
       #endif
     }
 
