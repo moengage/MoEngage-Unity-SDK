@@ -107,9 +107,6 @@ namespace MoEngage
 
         public const string PUSH_SERVICE_TYPE_FCM = "FCM";
 
-        public const string KEY_ANDROID_ID_TRACKING = "isAndroidIdTrackingEnabled";
-        public const string KEY_AD_ID_TRACKING = "isAdIdTrackingEnabled";
-
         /* ****************************** Payload Keys ***************************************** */
 
         public const string PAYLOAD_ACCOUNT_META = "accountMeta";
@@ -118,5 +115,15 @@ namespace MoEngage
         public const string PAYLOAD_GAME_OBJECT = "gameObjectName";
 
         public const string PAYLOAD_INAPP_FORMATTED_CID = "cid";
+
+        /* ****************************** Push Permission Keys ***************************************** */
+        public const string PARAM_IS_PERMISSION_GRANTED = "isGranted";
+        public const string PARAM_IS_PERMISSION_TYPE = "type";
+        public const string PARAM_UPDATE_PUSH_PERMISSION_COUNT = "pushOptinInAttemptCount";
+
+        /* ****************************** Device Identifiers Keys ***************************************** */
+        public const string KEY_ANDROID_ID = "isAndroidIdTrackingEnabled";
+        public const string KEY_AD_ID = "isAdIdTrackingEnabled";
+        public const string KEY_DEVICE_ID = "isDeviceIdTrackingEnabled";
     }
 }

@@ -17,131 +17,112 @@ using System.Collections.Generic;
 using UnityEngine;
 using MoEMiniJSON;
 
-namespace MoEngage
-{
-    public class MoEGameObject : MonoBehaviour
-    {
-        [SerializeField]
-        private string appId;
+namespace MoEngage {
+  public class MoEGameObject: MonoBehaviour {
+    [SerializeField]
+    private string appId;
 
-        private const string TAG = "MoEGameObject";
+    private
+    const string TAG = "MoEGameObject";
 
-        public static event EventHandler < PushToken > PushTokenCallback;
-        public static event EventHandler < PushCampaignData > PushNotifCallback;
-        public static event EventHandler < InAppData > InAppShown;
-        public static event EventHandler < InAppClickData > InAppClicked;
-        public static event EventHandler < InAppData > InAppDismissed;
-        public static event EventHandler < InAppClickData > InAppCustomAction;
-        public static event EventHandler < InAppSelfHandledCampaignData > InAppSelfHandled;
-        public static event EventHandler < PermissionResultData > PermissionResultCallback;
+    public static event EventHandler < PushToken > PushTokenCallback;
+    public static event EventHandler < PushCampaignData > PushNotifCallback;
+    public static event EventHandler < InAppData > InAppShown;
+    public static event EventHandler < InAppClickData > InAppClicked;
+    public static event EventHandler < InAppData > InAppDismissed;
+    public static event EventHandler < InAppClickData > InAppCustomAction;
+    public static event EventHandler < InAppSelfHandledCampaignData > InAppSelfHandled;
+    public static event EventHandler < PermissionResultData > PermissionResultCallback;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            MoEngageClient.Initialize(gameObject, appId);
-        }
-
-        public void PushToken(string payload)
-        {
-            Debug.Log(TAG + " PushToken() Callback from native: " + payload);
-            PushToken token = MoEPushParser.GetPushTokenFromPayload(payload);
-            OnPushTokenGenerated(token);
-        }
-
-        public void PushClicked(string payload)
-        {
-           Debug.Log(TAG + "PushClicked() Callback from Native: " + payload);
-           PushCampaignData campaign = MoEPushParser.GetPushClickPayload(payload);
-           OnPushClicked(campaign);
-        }
-
-        public void InAppCampaignShown(string payload)
-        {
-            Debug.Log(TAG + " InAppCampaignShown() Callback From Native" + payload);
-            InAppData inAppData = MoEInAppParser.GetInAppCampaignFromPayload(payload);
-            OnInAppShown(inAppData);
-        }
-
-        public void InAppCampaignClicked(string payload)
-        {
-            Debug.Log(TAG + " InAppCampaignClicked() Callback From Native" + payload);
-            InAppClickData inAppData = MoEInAppParser.GetInAppClickData(payload);
-            OnInAppClicked(inAppData);
-        }
-
-        public void InAppCampaignDismissed(string payload)
-        {
-            Debug.Log(TAG + " InAppCampaignDismissed() Callback from Native: " + payload);
-            InAppData inAppData = MoEInAppParser.GetInAppCampaignFromPayload(payload);
-            OnInAppDismissed(inAppData);
-        }
-
-        public void InAppCampaignCustomAction(string payload)
-        {
-            Debug.Log(TAG + " InAppCampaignCustomAction() Callback from Native: " + payload);
-            InAppClickData inAppData = MoEInAppParser.GetInAppClickData(payload);
-            OnInAppCustomAction(inAppData);
-        }
-
-        public void InAppCampaignSelfHandled(string payload)
-        {
-            Debug.Log(TAG + " InAppCampaignSelfHandled() Callback from Native: " + payload);
-            InAppSelfHandledCampaignData inAppData = MoEInAppParser.GetInAppSelfHandledData(payload);
-            OnInAppSelfHandled(inAppData);
-        }
-
-public void PermissionResult(string payload)
-{
-    try {
-    Debug.Log(TAG + " PermissionResult() : Callback from Native: " + payload);
-    PermissionResultData permissionResultData = MoEUtils.GetPermissionResultData(payload);
-    OnPushPermissionCallbackReceived(permissionResultData);
-    } catch(Exception e) {
-       Debug.LogError("PermissionResult() : couldn't send callback due to exception." +
-       $"\n{e.Message}" +
-       $"\n{e.StackTrace}"); 
+    // Start is called before the first frame update
+    void Start() {
+      MoEngageClient.Initialize(gameObject, appId);
     }
-}
 
-
-        protected virtual void OnPushClicked(PushCampaignData payload)
-        {
-            PushNotifCallback?.Invoke(this, payload);
-        }
-
-        protected virtual void OnInAppShown(InAppData inAppData)
-        {
-            InAppShown?.Invoke(this, inAppData);
-        }
-
-        protected virtual void OnInAppClicked(InAppClickData inAppData)
-        {
-            InAppClicked?.Invoke(this, inAppData);
-        }
-
-        protected virtual void OnInAppDismissed(InAppData inAppData)
-        {
-            InAppDismissed?.Invoke(this, inAppData);
-        }
-
-        protected virtual void OnInAppCustomAction(InAppClickData inAppData)
-        {
-            InAppCustomAction?.Invoke(this, inAppData);
-        }
-
-        protected virtual void OnInAppSelfHandled(InAppSelfHandledCampaignData inAppData)
-        {
-            InAppSelfHandled?.Invoke(this, inAppData);
-        }
-
-        protected virtual void OnPushTokenGenerated(PushToken pushToken)
-        {
-            PushTokenCallback?.Invoke(this, pushToken);
-        }
-
-        protected virtual void OnPushPermissionCallbackReceived(PermissionResultData permissionResultData)
-{
-    PermissionResultCallback?.Invoke(this, permissionResultData);
-}
+    public void PushToken(string payload) {
+      Debug.Log(TAG + " PushToken() Callback from native: " + payload);
+      PushToken token = MoEPushParser.GetPushTokenFromPayload(payload);
+      OnPushTokenGenerated(token);
     }
+
+    public void PushClicked(string payload) {
+      Debug.Log(TAG + "PushClicked() Callback from Native: " + payload);
+      PushCampaignData campaign = MoEPushParser.GetPushClickPayload(payload);
+      OnPushClicked(campaign);
+    }
+
+    public void InAppCampaignShown(string payload) {
+      Debug.Log(TAG + " InAppCampaignShown() Callback From Native" + payload);
+      InAppData inAppData = MoEInAppParser.GetInAppCampaignFromPayload(payload);
+      OnInAppShown(inAppData);
+    }
+
+    public void InAppCampaignClicked(string payload) {
+      Debug.Log(TAG + " InAppCampaignClicked() Callback From Native" + payload);
+      InAppClickData inAppData = MoEInAppParser.GetInAppClickData(payload);
+      OnInAppClicked(inAppData);
+    }
+
+    public void InAppCampaignDismissed(string payload) {
+      Debug.Log(TAG + " InAppCampaignDismissed() Callback from Native: " + payload);
+      InAppData inAppData = MoEInAppParser.GetInAppCampaignFromPayload(payload);
+      OnInAppDismissed(inAppData);
+    }
+
+    public void InAppCampaignCustomAction(string payload) {
+      Debug.Log(TAG + " InAppCampaignCustomAction() Callback from Native: " + payload);
+      InAppClickData inAppData = MoEInAppParser.GetInAppClickData(payload);
+      OnInAppCustomAction(inAppData);
+    }
+
+    public void InAppCampaignSelfHandled(string payload) {
+      Debug.Log(TAG + " InAppCampaignSelfHandled() Callback from Native: " + payload);
+      InAppSelfHandledCampaignData inAppData = MoEInAppParser.GetInAppSelfHandledData(payload);
+      OnInAppSelfHandled(inAppData);
+    }
+
+    public void PermissionResult(string payload) {
+      try {
+        Debug.Log(TAG + " PermissionResult() : Callback from Native: " + payload);
+        PermissionResultData permissionResultData = MoEParser.GetPermissionResultData(payload);
+        OnPushPermissionCallbackReceived(permissionResultData);
+      } catch (Exception e) {
+        Debug.LogError("PermissionResult() : couldn't send callback due to exception." +
+          $"\n{e.Message}" +
+          $"\n{e.StackTrace}");
+      }
+    }
+
+    protected virtual void OnPushClicked(PushCampaignData payload) {
+      PushNotifCallback?.Invoke(this, payload);
+    }
+
+    protected virtual void OnInAppShown(InAppData inAppData) {
+      InAppShown?.Invoke(this, inAppData);
+    }
+
+    protected virtual void OnInAppClicked(InAppClickData inAppData) {
+      InAppClicked?.Invoke(this, inAppData);
+    }
+
+    protected virtual void OnInAppDismissed(InAppData inAppData) {
+      InAppDismissed?.Invoke(this, inAppData);
+    }
+
+    protected virtual void OnInAppCustomAction(InAppClickData inAppData) {
+      InAppCustomAction?.Invoke(this, inAppData);
+    }
+
+    protected virtual void OnInAppSelfHandled(InAppSelfHandledCampaignData inAppData) {
+      InAppSelfHandled?.Invoke(this, inAppData);
+    }
+
+    protected virtual void OnPushTokenGenerated(PushToken pushToken) {
+      PushTokenCallback?.Invoke(this, pushToken);
+    }
+
+    protected virtual void OnPushPermissionCallbackReceived(PermissionResultData permissionResultData) {
+      PermissionResultCallback?.Invoke(this, permissionResultData);
+    }
+  }
 }

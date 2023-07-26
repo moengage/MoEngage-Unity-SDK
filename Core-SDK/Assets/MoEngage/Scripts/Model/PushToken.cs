@@ -15,26 +15,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-<<<<<<< HEAD
-namespace MoEngage
-{
-    [System.Serializable]
-    public class PushToken
-    {
-        public Platform platform;
-        public string token;
-        public PushService pushService;
-
-        public PushToken(Platform platform, string token, PushService pushService)
-        {
-            this.platform = platform;
-            this.token = token;
-            this.pushService = pushService;
-        }
-
-    }
-}
-=======
 namespace MoEngage {
   [System.Serializable]
   /// <summary>
@@ -46,7 +26,6 @@ namespace MoEngage {
 
     /// <value> Push token value</value>
     public string token;
->>>>>>> MOEN-20006-Unity-Multiinstance
 
     /// <value> Type of PushService for which token is generated </value>
     public PushService pushService;

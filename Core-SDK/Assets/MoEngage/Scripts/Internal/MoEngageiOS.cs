@@ -147,7 +147,7 @@ namespace MoEngage
 #endif
         }
 
-        public void InvalidateInAppContexts(string accountPayload)
+        public void ResetInAppContexts(string accountPayload)
         {
 #if !UNITY_EDITOR
 			invalidateInAppContexts(accountPayload);

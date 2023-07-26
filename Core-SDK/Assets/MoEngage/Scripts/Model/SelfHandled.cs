@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-﻿/*
-=======
 /*
->>>>>>> MOEN-20006-Unity-Multiinstance
  * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
@@ -19,42 +15,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-<<<<<<< HEAD
-namespace MoEngage
-{
-  [System.Serializable]
-  public class SelfHandled
-  {
-    public string payload;
-    public long dismissInterval;
-    public bool isCancellable;
-
-    public SelfHandled(Dictionary < string, object > selfHandledDictionary) {
-      if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_PAYLOAD)) {
-        payload = selfHandledDictionary[MoEConstants.PARAM_PAYLOAD] as string;
-      };
-
-      if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_DISMISS_INTERVAL)) {
-        dismissInterval = (long) selfHandledDictionary[MoEConstants.PARAM_DISMISS_INTERVAL];
-      }
-
-      if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_IS_CANCELLABLE)) {
-        isCancellable = (bool) selfHandledDictionary[MoEConstants.PARAM_IS_CANCELLABLE];
-      }
-    }
-  }
-}
-=======
 namespace MoEngage {
   [System.Serializable]
-<<<<<<<< HEAD:Core-SDK/Assets/MoEngage/Scripts/Model/AccountMeta.cs
-  public class AccountMeta {
-    public string appId;
-
-    public AccountMeta(string appId) {
-      this.appId = appId;
-    }
-========
   /// <summary>
   /// SelfHandled Payload information
   /// </summary>
@@ -67,7 +29,5 @@ namespace MoEngage {
 
     /// <value>Should the campaign be dismissed by pressing the back button or using the back gesture. if the value is true campaign should be dismissed on back press.  </value>
     public bool isCancellable;
->>>>>>>> MOEN-20006-Unity-Multiinstance:Core-SDK/Assets/MoEngage/Scripts/Model/SelfHandled.cs
   }
 }
->>>>>>> MOEN-20006-Unity-Multiinstance

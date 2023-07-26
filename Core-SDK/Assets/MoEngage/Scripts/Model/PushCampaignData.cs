@@ -17,11 +17,6 @@ using UnityEngine;
 
 namespace MoEngage {
   [System.Serializable]
-<<<<<<< HEAD
-  public class PushCampaignData {
-    public AccountMeta accountMeta;
-    public PushCampaign data;
-=======
   /// <summary>
   /// PushClick payload
   /// </summary>
@@ -33,7 +28,6 @@ namespace MoEngage {
     public PushCampaign data;
 
     /// <value> Native platform from which the callback was triggered. </value>
->>>>>>> MOEN-20006-Unity-Multiinstance
     public Platform platform;
   }
 }
