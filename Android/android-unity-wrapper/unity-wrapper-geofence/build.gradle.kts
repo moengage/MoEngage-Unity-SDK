@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021 MoEngage Inc.
+ * Copyright (c) 2014-2023 MoEngage Inc.
  *
  * All rights reserved.
  *
@@ -12,10 +12,31 @@
  */
 
 plugins {
-    `kotlin-dsl`
+    alias(moengageInternal.plugins.plugin.android.lib)
+    alias(moengageInternal.plugins.plugin.kotlin.android)
 }
 
+android {
+    namespace = "com.moengage.unity.wrapper.geofence"
+    compileSdk = 33
 
-repositories {
-    mavenCentral()
+    defaultConfig {
+        minSdk = 21
+        targetSdk = 33
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compileOnly(moengage.core)
+    api(moengage.basePluginGeofence)
 }

@@ -1,14 +1,14 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(moengageInternal.plugins.plugin.android.lib)
+    alias(moengageInternal.plugins.plugin.kotlin.android)
 }
 
 android {
-    compileSdk = SdkBuildConfig.compileSdkVersion
-
+    namespace = "com.moengage.unity.wrapper"
+    compileSdk = 33
     defaultConfig {
-        minSdk = SdkBuildConfig.minimumSdkVersion
-        targetSdk = SdkBuildConfig.targetSdkVersion
+        minSdk = 21
+        targetSdk = 33
     }
 
     buildTypes {
@@ -20,18 +20,15 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-      }
+    }
 }
 
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    compileOnly(Deps.appCompat)
-    compileOnly(Deps.moengage)
-    compileOnly(Deps.inapp)
-    compileOnly(Deps.geofence)
-    api(Deps.basePlugin)
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
+    implementation(moengageInternal.kotlinStdLib)
+    compileOnly(moengage.appCompat)
+    compileOnly(moengage.core)
+    compileOnly(moengage.inapp)
+    api(moengage.basePlugin)
     compileOnly(project(":unity-library"))
 }
-
-apply(plugin = "com.vanniktech.maven.publish")

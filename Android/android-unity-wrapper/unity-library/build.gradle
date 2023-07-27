@@ -1,13 +1,12 @@
 plugins {
-  id("com.android.library")
+  alias(moengageInternal.plugins.plugin.android.lib)
 }
 
 android {
-  compileSdkVersion(SdkBuildConfig.compileSdkVersion)
-
+  compileSdk 33
   defaultConfig {
-    minSdkVersion(SdkBuildConfig.minimumSdkVersion)
-    targetSdkVersion(SdkBuildConfig.targetSdkVersion)
+    minSdk 21
+    targetSdk 33
   }
 
   buildTypes {

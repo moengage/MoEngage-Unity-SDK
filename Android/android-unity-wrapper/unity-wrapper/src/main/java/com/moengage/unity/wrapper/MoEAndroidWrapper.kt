@@ -28,7 +28,6 @@ package com.moengage.unity.wrapper
 import android.content.Context
 import com.moengage.core.LogLevel
 import com.moengage.core.internal.logger.Logger
-import com.moengage.plugin.base.geofence.internal.GeofencePluginHelper
 import com.moengage.plugin.base.internal.PluginHelper
 import com.moengage.plugin.base.internal.setEventEmitter
 import org.json.JSONObject
@@ -45,9 +44,8 @@ private const val ARGUMENT_GAME_OBJECT = "gameObjectName"
 class MoEAndroidWrapper private constructor() {
 
     private val pluginHelper: PluginHelper = PluginHelper()
-    private val geofencePluginHelper: GeofencePluginHelper = GeofencePluginHelper()
 
-    private val tag = "$MODULE_TAG}MoEAndroidWrapper"
+    private val tag = "${MODULE_TAG}MoEAndroidWrapper"
     private var context: Context? = null
 
     companion object {
@@ -301,25 +299,6 @@ class MoEAndroidWrapper private constructor() {
             Logger.print(LogLevel.ERROR, t) { "$tag updatePushPermissionRequestCount(): " }
         }
     }
-
-    fun startGeofenceMonitoring(instancePayload: String) {
-        try {
-            Logger.print { "$tag startGeofenceMonitoring(): instancePayload=$instancePayload" }
-            geofencePluginHelper.startGeofenceMonitoring(getContext(), instancePayload)
-        } catch (t: Throwable) {
-            Logger.print(LogLevel.ERROR, t) { "$tag startGeofenceMonitoring(): " }
-        }
-    }
-
-    fun stopGeofenceMonitoring(instancePayload: String) {
-        try {
-            Logger.print { "$tag stopGeofenceMonitoring(): instancePayload=$instancePayload" }
-            geofencePluginHelper.stopGeofenceMonitoring(getContext(), instancePayload)
-        } catch (t: Throwable) {
-            Logger.print(LogLevel.ERROR, t) { "$tag stopGeofenceMonitoring(): " }
-        }
-    }
-
 
     @Throws(NullPointerException::class)
     private fun getContext(): Context {
