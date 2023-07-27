@@ -36,6 +36,7 @@ namespace MoEngage
         public const string ARGUMENT_ALIAS = "alias";
         public const string ARGUMENT_TOKEN = "token";
         public const string ARGUMENT_SERVICE = "service";
+        public const string ARGUEMENT_PLATFORM = "platform";
 
         public const string ATTRIBUTE_TYPE_GENERAL = "general";
         public const string ATTRIBUTE_TYPE_TIMESTAMP = "timestamp";
@@ -108,5 +109,14 @@ namespace MoEngage
 
         public const string KEY_ANDROID_ID_TRACKING = "isAndroidIdTrackingEnabled";
         public const string KEY_AD_ID_TRACKING = "isAdIdTrackingEnabled";
+
+        /* ****************************** Payload Keys ***************************************** */
+
+        public const string PAYLOAD_ACCOUNT_META = "accountMeta";
+        public const string PAYLOAD_APPID = "appId";
+        public const string PAYLOAD_DATA = "data";
+        public const string PAYLOAD_GAME_OBJECT = "gameObjectName";
+
+        public const string PAYLOAD_INAPP_FORMATTED_CID = "cid";
     }
 }
