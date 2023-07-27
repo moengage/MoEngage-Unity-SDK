@@ -18,6 +18,11 @@ import com.moengage.core.LogLevel
 import com.moengage.core.internal.logger.Logger
 import com.moengage.plugin.base.geofence.internal.GeofencePluginHelper
 
+/**
+ * Bridge between Unity and Android Native
+ * @author Rishabh Harish
+ * @since TODO
+ */
 class MoEGeofenceWrapper private constructor() {
 
     private val tag = "${MODULE_TAG}MoEGeofenceWrapper"

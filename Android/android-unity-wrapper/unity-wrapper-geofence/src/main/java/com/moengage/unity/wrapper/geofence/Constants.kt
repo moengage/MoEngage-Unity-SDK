@@ -13,4 +13,4 @@
 
 package com.moengage.unity.wrapper.geofence
 
-internal const val MODULE_TAG = "GeofenceUnity_"
+internal const val MODULE_TAG = "UnityGeofence_"
