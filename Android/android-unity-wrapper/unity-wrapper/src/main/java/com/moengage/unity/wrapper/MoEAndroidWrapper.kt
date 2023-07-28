@@ -41,14 +41,14 @@ import org.json.JSONObject
 
 private const val ARGUMENT_GAME_OBJECT = "gameObjectName"
 
-class MoEAndroidWrapper private constructor() {
+public class MoEAndroidWrapper private constructor() {
 
     private val pluginHelper: PluginHelper = PluginHelper()
 
     private val tag = "${MODULE_TAG}MoEAndroidWrapper"
     private var context: Context? = null
 
-    companion object {
+    public companion object {
 
         private var instance: MoEAndroidWrapper? = null
 
@@ -62,11 +62,11 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun setContext(context: Context) {
+    public fun setContext(context: Context) {
         this.context = context
     }
 
-    fun initialize(initializePayload: String) {
+    public fun initialize(initializePayload: String) {
         try {
             Logger.print { "$tag initialize() : Initialization payload=$initializePayload" }
             val initializationJson = JSONObject(initializePayload)
@@ -84,7 +84,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun trackEvent(eventPayload: String) {
+    public fun trackEvent(eventPayload: String) {
         try {
             Logger.print { "$tag trackEvent() : Event Payload: $eventPayload" }
             pluginHelper.trackEvent(getContext(), eventPayload)
@@ -93,7 +93,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun passPushPayload(pushPayload: String) {
+    public fun passPushPayload(pushPayload: String) {
         try {
             Logger.print { "$tag passPushPayload(): pushPayload=$pushPayload" }
             pluginHelper.passPushPayload(getContext(), pushPayload)
@@ -102,7 +102,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun passPushToken(pushTokenPayload: String) {
+    public fun passPushToken(pushTokenPayload: String) {
         try {
             Logger.print { "$tag passPushToken() : Token Payload: $pushTokenPayload" }
             pluginHelper.passPushToken(getContext(), pushTokenPayload)
@@ -111,7 +111,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun getSelfHandledInApp(selfHandledPayload: String) {
+    public fun getSelfHandledInApp(selfHandledPayload: String) {
         try {
             Logger.print { "$tag getSelfHandledInApp() : Will try to fetch self-handled in-app" }
             pluginHelper.getSelfHandledInApp(getContext(), selfHandledPayload)
@@ -120,7 +120,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun showInApp(showInAppPayload: String) {
+    public fun showInApp(showInAppPayload: String) {
         try {
             Logger.print { "$tag showInApp() : Will try to show in-app" }
             pluginHelper.showInApp(getContext(), showInAppPayload)
@@ -129,7 +129,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun logout(logoutPayload: String) {
+    public fun logout(logoutPayload: String) {
         try {
             Logger.print { "$tag logout() : Will try to logout user." }
             pluginHelper.logout(getContext(), logoutPayload)
@@ -138,7 +138,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun setAlias(aliasPayload: String) {
+    public fun setAlias(aliasPayload: String) {
         try {
             Logger.print { "$tag setAlias() : Alias Payload: $aliasPayload" }
             pluginHelper.setAlias(getContext(), aliasPayload)
@@ -147,7 +147,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun setAppStatus(appStatusPayload: String) {
+    public fun setAppStatus(appStatusPayload: String) {
         try {
             Logger.print { "$tag setAppStatus() : App status payload: $appStatusPayload" }
             pluginHelper.setAppStatus(getContext(), appStatusPayload)
@@ -156,7 +156,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun setUserAttribute(userAttributePayload: String) {
+    public fun setUserAttribute(userAttributePayload: String) {
         try {
             Logger.print { "$tag setUserAttribute() : User Attribute payload: $userAttributePayload" }
             pluginHelper.setUserAttribute(getContext(), userAttributePayload)
@@ -165,7 +165,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun setAppContext(contextPayload: String) {
+    public fun setAppContext(contextPayload: String) {
         try {
             Logger.print { "$tag setAppContext() : Context Payload: $contextPayload" }
             pluginHelper.setAppContext(getContext(), contextPayload)
@@ -174,7 +174,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun resetContext(resetContextPayload: String) {
+    public fun resetContext(resetContextPayload: String) {
         try {
             Logger.print { "$tag resetContext() : Resetting app context" }
             pluginHelper.resetAppContext(getContext(), resetContextPayload)
@@ -183,7 +183,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun selfHandledShown(selfHandledPayload: String) {
+    public fun selfHandledShown(selfHandledPayload: String) {
         try {
             Logger.print { "$tag selfHandledShown() : Campaign payload: $selfHandledPayload" }
             pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
@@ -192,7 +192,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun selfHandledClicked(selfHandledPayload: String) {
+    public fun selfHandledClicked(selfHandledPayload: String) {
         try {
             Logger.print { "$tag selfHandledClicked() : Campaign payload: $selfHandledPayload" }
             pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
@@ -201,7 +201,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun selfHandledDismissed(selfHandledPayload: String) {
+    public fun selfHandledDismissed(selfHandledPayload: String) {
         try {
             Logger.print { "$tag selfHandledDismissed() : Campaign payload: $selfHandledPayload" }
             pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
@@ -210,7 +210,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun selfHandledCallback(selfHandledPayload: String) {
+    public fun selfHandledCallback(selfHandledPayload: String) {
         try {
             Logger.print { "$tag selfHandledCallback() : Campaign payload: $selfHandledPayload" }
             pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
@@ -219,7 +219,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun optOutTracking(optOutPayload: String) {
+    public fun optOutTracking(optOutPayload: String) {
         try {
             Logger.print { "$tag optOutTracking() : OptOut payload: $optOutPayload" }
             pluginHelper.optOutTracking(getContext(), optOutPayload)
@@ -228,7 +228,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun updateSdkState(featureStatusPayload: String) {
+    public fun updateSdkState(featureStatusPayload: String) {
         try {
             Logger.print { "$tag storeFeatureStatus() : Feature status payload: $featureStatusPayload" }
             pluginHelper.storeFeatureStatus(getContext(), featureStatusPayload)
@@ -237,7 +237,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun onOrientationChanged() {
+    public fun onOrientationChanged() {
         try {
             Logger.print { "$tag onOrientationChanged() : " }
             pluginHelper.onConfigurationChanged()
@@ -246,7 +246,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun deviceIdentifierTrackingStatusUpdate(payload: String) {
+    public fun deviceIdentifierTrackingStatusUpdate(payload: String) {
         try {
             Logger.print { "$tag deviceIdentifierTrackingStatusUpdate() : Arguments: $payload" }
             pluginHelper.deviceIdentifierTrackingStatusUpdate(getContext(), payload)
@@ -255,7 +255,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun permissionResponse(permissionResultPayload: String) {
+    public fun permissionResponse(permissionResultPayload: String) {
         try {
             Logger.print { "$tag permissionResponse(): permissionResultPayload=$permissionResultPayload" }
             pluginHelper.permissionResponse(getContext(), permissionResultPayload)
@@ -264,7 +264,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun setUpNotificationChannels() {
+    public fun setUpNotificationChannels() {
         try {
             Logger.print { "$tag setUpNotificationChannels(): " }
             pluginHelper.setUpNotificationChannels(getContext())
@@ -273,7 +273,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun navigateToSettings() {
+    public fun navigateToSettings() {
         try {
             Logger.print { "$tag navigateToSettings(): " }
             pluginHelper.navigateToSettings(getContext())
@@ -282,7 +282,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun requestPushPermission() {
+    public fun requestPushPermission() {
         try {
             Logger.print { "$tag requestPushPermission(): " }
             pluginHelper.requestPushPermission(getContext())
@@ -291,7 +291,7 @@ class MoEAndroidWrapper private constructor() {
         }
     }
 
-    fun updatePushPermissionRequestCount(pushOptInMetaPayload: String) {
+    public fun updatePushPermissionRequestCount(pushOptInMetaPayload: String) {
         try {
             Logger.print { "$tag updatePushPermissionRequestCount(): pushOptInMeta=$pushOptInMetaPayload" }
             pluginHelper.updatePushPermissionRequestCount(getContext(), pushOptInMetaPayload)
