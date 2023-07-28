@@ -37,30 +37,44 @@ import com.moengage.plugin.base.internal.PluginInitializer
  * @author Umang Chamaria
  * Date: 26/06/20
  */
-object MoEInitializer {
+public object MoEInitializer {
+
     private const val tag = "${MODULE_TAG}MoEInitializer"
 
-    fun initialize(context: Context, builder: MoEngage.Builder) {
+    /**
+     * Initialise the default instance of SDK with configuration provided in [MoEngage.Builder]
+     *
+     * @param context Context
+     * @param builder Instance of [MoEngage.Builder]
+     * @since TODO
+     */
+    fun initialiseDefaultInstance(context: Context, builder: MoEngage.Builder) {
         try {
-            Logger.print { "$tag initialize() : Initialising MoEngage SDK." }
-            initialize(context, builder, SdkState.ENABLED)
+            initialiseDefaultInstance(context, builder, SdkState.ENABLED)
         } catch (t: Throwable) {
-            Logger.print(LogLevel.ERROR, t) { "$tag initialize() : " }
+            Logger.print(LogLevel.ERROR, t) { "$tag initialiseDefaultInstance(): " }
         }
     }
 
-    fun initialize(context: Context, builder: MoEngage.Builder, sdkState: SdkState) {
+    /**
+     * Initialise the default instance of SDK with configuration provided in [MoEngage.Builder]
+     *
+     * @param context Context
+     * @param builder Instance of [MoEngage.Builder]
+     * @param sdkState [SdkState.ENABLED]
+     * @since TODO
+     */
+    fun initialiseDefaultInstance(context: Context, builder: MoEngage.Builder, sdkState: SdkState) {
         try {
-            Logger.print { "$tag initialize() : Initialising MoEngage SDK." }
+            Logger.print { "$tag initialiseDefaultInstance(): : Will try to initialise the sdk" }
             MoEAndroidWrapper.getInstance().setContext(context)
             PluginInitializer.initialize(
-                builder,
-                IntegrationMeta(INTEGRATION_TYPE, INTEGRATION_VERSION),
-                sdkState
+                builder, IntegrationMeta(
+                    INTEGRATION_TYPE, BuildConfig.MOENGAGE_ANDROID_UNITY_WRAPPER
+                ), sdkState
             )
-            Logger.print { "$tag initialize() : Initialising MoEngage SDK." }
         } catch (t: Throwable) {
-            Logger.print(LogLevel.ERROR, t) { "$tag initialize() : " }
+            Logger.print(LogLevel.ERROR, t) { "$tag initialiseDefaultInstance(): " }
         }
     }
 }
