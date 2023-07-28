@@ -23,13 +23,13 @@ import com.moengage.plugin.base.geofence.internal.GeofencePluginHelper
  * @author Rishabh Harish
  * @since TODO
  */
-class MoEGeofenceWrapper private constructor() {
+public class MoEGeofenceWrapper private constructor() {
 
     private val tag = "${MODULE_TAG}MoEGeofenceWrapper"
     private val geofencePluginHelper = GeofencePluginHelper()
     private var context: Context? = null
 
-    companion object {
+    public companion object {
 
         private var instance: MoEGeofenceWrapper? = null
 
@@ -43,11 +43,11 @@ class MoEGeofenceWrapper private constructor() {
         }
     }
 
-    fun setContext(context: Context) {
+    public fun setContext(context: Context) {
         this.context = context
     }
 
-    fun startGeofenceMonitoring(geofencePayload: String) {
+    public fun startGeofenceMonitoring(geofencePayload: String) {
         try {
             Logger.print { "$tag startGeofenceMonitoring(): " }
             geofencePluginHelper.startGeofenceMonitoring(getContext(), geofencePayload)
@@ -56,7 +56,7 @@ class MoEGeofenceWrapper private constructor() {
         }
     }
 
-    fun stopGeofenceMonitoring(geofencePayload: String) {
+    public fun stopGeofenceMonitoring(geofencePayload: String) {
         try {
             Logger.print { "$tag stopGeofenceMonitoring(): " }
             geofencePluginHelper.stopGeofenceMonitoring(getContext(), geofencePayload)

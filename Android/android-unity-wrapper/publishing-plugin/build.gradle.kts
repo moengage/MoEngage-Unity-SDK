@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2023 MoEngage Inc.
+ * Copyright (c) 2014-2022 MoEngage Inc.
  *
  * All rights reserved.
  *
@@ -11,70 +11,16 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
-apply plugin: 'com.android.library'
-
-android {
-  publishing {
-    singleVariant('release') {
-      withSourcesJar()
-    }
-  }
+plugins {
+    kotlin("jvm") version "1.5.10"
+    `kotlin-dsl`
 }
 
-def mavenCentralUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-
-def versionName = project.findProperty("VERSION_NAME") as String
-
-def repositoryUsername = project.findProperty("mavenCentralUsername") as String
-def repositoryPassword = project.findProperty("mavenCentralPassword") as String
-
-publishing {
-  publications {
-    release(MavenPublication) {
-      groupId = GROUP
-      artifactId = POM_ARTIFACT_ID
-      version = versionName
-
-      afterEvaluate {
-        from components.release
-      }
-      pom {
-        name = NAME
-        description = POM_DESCRIPTION
-        url = POM_URL
-        licenses {
-          license {
-            name = POM_LICENCE_NAME
-            url = POM_LICENCE_URL
-          }
-        }
-        developers {
-          developer {
-            id = POM_DEVELOPER_ID
-            name = POM_DEVELOPER_NAME
-          }
-        }
-        scm {
-          url = POM_SCM_URL
-          connection = POM_SCM_CONNECTION
-          developerConnection = POM_SCM_DEV_CONNECTION
-        }
-      }
-    }
-  }
-  repositories {
-    maven {
-      url = mavenCentralUrl
-      credentials {
-        username = repositoryUsername
-        password = repositoryPassword
-      }
-    }
-  }
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
 }
 
-signing {
-  sign publishing.publications
+dependencies {
+    implementation(kotlin("stdlib"))
 }

@@ -2,22 +2,14 @@ plugins {
   alias(moengageInternal.plugins.plugin.android.lib)
 }
 
-android {
-  compileSdk 33
-  defaultConfig {
-    minSdk 21
-    targetSdk 33
-  }
+apply from: '../scripts/common.gradle'
 
+android {
   buildTypes {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
-  }
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
   }
 }
 
