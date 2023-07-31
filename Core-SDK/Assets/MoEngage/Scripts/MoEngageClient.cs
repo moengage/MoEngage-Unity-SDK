@@ -17,7 +17,8 @@ using UnityEngine;
 
 namespace MoEngage {
   public class MoEngageClient: MonoBehaviour {
-    private const string TAG = "MoEngageAndroid";
+    private
+    const string TAG = "MoEngageAndroid";
     private static string appId;
 
     private static MoEngageUnityPlatform _moengageHandler;
@@ -64,7 +65,7 @@ namespace MoEngage {
 
     #region AppStatus Method
     /// <summary>
-    /// 
+    /// Sets App status
     /// </summary>
     /// <param name="appStatus">Instance of MoEAppStatus</param>
     public static void SetAppStatus(MoEAppStatus appStatus) {
@@ -75,15 +76,13 @@ namespace MoEngage {
       moengageHandler.SetAppStatus(appStatusPayload);
       #endif
     }
-
     #endregion
 
     #region UserAttribute Tracking Methods
-
     /// <summary>
     /// Updates the already set unique identifier, sets a unique identifier if not set already.
     /// </summary>
-    /// <param name="alias"></param>
+    /// <param name="alias">Value for alias</param>
     public static void SetAlias(string alias) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetAlias:: alias: " + alias);
@@ -96,7 +95,7 @@ namespace MoEngage {
     /// <summary>
     /// Tracks a unique identifier for the user.
     /// </summary>
-    /// <param name="uniqueId"></param>
+    /// <param name="uniqueId">Unique ID value of type string</param>
     public static void SetUniqueId(string uniqueId) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_UNIQUE_ID + " : attributeValue: " + uniqueId);
@@ -109,7 +108,7 @@ namespace MoEngage {
     /// <summary>
     /// Track user's first name.
     /// </summary>
-    /// <param name="firstName"></param>
+    /// <param name="firstName">Value for First Name</param>
     public static void SetFirstName(string firstName) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_USER_FIRST_NAME + " : attributeValue: " + firstName);
@@ -122,7 +121,7 @@ namespace MoEngage {
     /// <summary>
     /// Track user's last name.
     /// </summary>
-    /// <param name="lastName"></param>
+    /// <param name="lastName">Value for Last Name</param>
     public static void SetLastName(string lastName) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_USER_LAST_NAME + " : attributeValue: " + lastName);
@@ -135,7 +134,7 @@ namespace MoEngage {
     /// <summary>
     /// Track user's email-id.
     /// </summary>
-    /// <param name="emailId"></param>
+    /// <param name="emailId">Value for Email Id</param>
     public static void SetEmail(string emailId) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_USER_EMAIL + " : attributeValue: " + emailId);
@@ -148,7 +147,7 @@ namespace MoEngage {
     /// <summary>
     /// Track user's phone number.
     /// </summary>
-    /// <param name="phoneNumber"></param>
+    /// <param name="phoneNumber">Value for Phone number</param>
     public static void SetPhoneNumber(string phoneNumber) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_USER_MOBILE + " : attributeValue: " + phoneNumber);
@@ -161,7 +160,7 @@ namespace MoEngage {
     /// <summary>
     /// Track user's gender.
     /// </summary>
-    /// <param name="gender"></param>
+    /// <param name="gender">Instance of MoEUserGender</param>
     public static void SetGender(MoEUserGender gender) {
       if (!isPluginInitialized()) return;
 
@@ -190,7 +189,7 @@ namespace MoEngage {
     /// <summary>
     /// Tracks user's location as attribute.
     /// </summary>
-    /// <param name="location"></param>
+    /// <param name="location">Instance of GeoLocation</param>
     public static void SetUserLocation(GeoLocation location) {
       if (!isPluginInitialized()) return;
       Dictionary < string, double > locationDict = location.ToDictionary();
@@ -214,8 +213,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks a user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Attribute value type of int</param>
     public static void SetUserAttribute(string attributeName, int attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -228,8 +227,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks array of user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Array of attribute values of type int</param>
     public static void SetUserAttribute(string attributeName, int[] attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -242,8 +241,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks a user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Attribute value of type double.</param>
     public static void SetUserAttribute(string attributeName, double attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -256,8 +255,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks array of user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Array of attribute values of type double</param>
     public static void SetUserAttribute(string attributeName, double[] attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -270,8 +269,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks a user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Attribute value of type float</param>
     public static void SetUserAttribute(string attributeName, float attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -284,8 +283,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks array of user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Array of attribute values of type float</param>
     public static void SetUserAttribute(string attributeName, float[] attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -298,8 +297,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks a user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Attribute value of type bool</param>
     public static void SetUserAttribute(string attributeName, bool attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -312,8 +311,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks a user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Attribute value of type long</param>
     public static void SetUserAttribute(string attributeName, long attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -326,8 +325,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks array of user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Array of attribute values of type long</param>
     public static void SetUserAttribute(string attributeName, long[] attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -340,8 +339,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks a user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Attribute value of type string</param>
     public static void SetUserAttribute(string attributeName, string attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -354,8 +353,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks array of user attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="attributeValue"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="attributeValue">Array of attribute values of type string</param>
     public static void SetUserAttribute(string attributeName, string[] attributeValue) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
@@ -368,7 +367,7 @@ namespace MoEngage {
     /// <summary>
     /// Tracks a user date attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
+    /// <param name="attributeName">Attribute name</param>
     /// <param name="isoDate" - Supported format - [yyyy-MM-dd|yyyyMMdd][T(hh:mm[:ss[.sss]]|hhmm[ss[.sss]])]?[Z|[+-]hh:mm]]></param>
     public static void SetUserAttributeISODate(string attributeName, string isoDate) {
       if (!isPluginInitialized()) return;
@@ -382,8 +381,8 @@ namespace MoEngage {
     /// <summary>
     /// Tracks a user location attribute.
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="location"></param>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="location">Instance of GeoLocation</param>
     public static void SetUserAttributeLocation(string attributeName, GeoLocation location) {
       if (!isPluginInitialized()) return;
       Dictionary < string, double > locationDict = location.ToDictionary();
@@ -408,11 +407,9 @@ namespace MoEngage {
       moengageHandler.Logout(accountPayload);
       #endif
     }
-
     #endregion
 
     #region Track Event
-
     /// <summary>
     /// Tracks an event.
     /// </summary>
@@ -432,7 +429,7 @@ namespace MoEngage {
 
     #region InApp Methods
     /// <summary>
-    /// 
+    ///  Try to show an InApp Message.
     /// </summary>
     public static void ShowInApp() {
       if (!isPluginInitialized()) return;
@@ -443,6 +440,10 @@ namespace MoEngage {
       #endif
     }
 
+    /// <summary>
+    ///  Set the user context in which In-App should be shown 
+    /// </summary>
+    /// <param name="contexts">List of User Contexts</param>
     public static void SetInAppContexts(string[] contexts) {
       if (!isPluginInitialized()) return;
       string contextPayload = MoEUtils.GetContextsPayload(contexts, appId);
@@ -454,6 +455,9 @@ namespace MoEngage {
 
     }
 
+    /// <summary>
+    ///  Resets the user context for In-App.
+    /// </summary>
     public static void ResetInAppContexts() {
       if (!isPluginInitialized()) return;
       string accountPayload = MoEUtils.GetAccountPayload(appId);
@@ -463,6 +467,10 @@ namespace MoEngage {
       #endif
     }
 
+    /// <summary>
+    ///  Try to return a self handled in-app to the callback listener.
+    /// Ensure self handled in-app listener is set before you call this.
+    /// </summary>
     public static void GetSelfHandledInApp() {
       if (!isPluginInitialized()) return;
       string accountPayload = MoEUtils.GetAccountPayload(appId);
@@ -471,9 +479,11 @@ namespace MoEngage {
       moengageHandler.GetSelfHandledInApp(accountPayload);
       #endif
     }
+
     /// <summary>
-    /// Track shown impression for SelfHandled campaign.
+    /// Track Shown impression for SelfHandled campaign.
     /// </summary>
+    /// <param name="inAppData">Instance of InAppSelfHandledCampaignData</param>
     public static void SelfHandledShown(InAppSelfHandledCampaignData inAppData) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + "  SelfHandledShown:: ");
@@ -487,6 +497,7 @@ namespace MoEngage {
     /// <summary>
     /// Track Clicked impression for SelfHandled campaign
     /// </summary>
+    /// <param name="inAppData">Instance of InAppSelfHandledCampaignData</param>
     public static void SelfHandledClicked(InAppSelfHandledCampaignData inAppData) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + "  SelfHandledClicked:: ");
@@ -500,6 +511,7 @@ namespace MoEngage {
     /// <summary>
     /// Track Dismissed impression for SelfHandled campaign
     /// </summary>
+    /// <param name="inAppData">Instance of InAppSelfHandledCampaignData</param>
     public static void SelfHandledDismissed(InAppSelfHandledCampaignData inAppData) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + "  SelfHandledDismissed::");
@@ -512,7 +524,10 @@ namespace MoEngage {
     #endregion
 
     #region GDPR OptOut Methods
-
+    /// <summary>
+    /// Track Dismissed impression for SelfHandled campaign
+    /// </summary>
+    /// <param name="inAppData">Instance of InAppSelfHandledCampaignData</param>
     public static void optOutDataTracking(bool shouldOptOut) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + "  optOutDataTracking::");
@@ -527,6 +542,11 @@ namespace MoEngage {
 
     #region Enable / Disable SDK Methods
 
+    ///<summary> 
+    /// API to enable SDK usage.
+    /// Note: By default the SDK is enabled, should only be called to enabled the
+    /// SDK if you have called [DisableSdk()] at some point.
+    ///</summary>
     public static void EnableSdk() {
       if (!isPluginInitialized()) return;
       string payload = MoEUtils.GetSdkStatePayload(true, appId);
@@ -536,6 +556,9 @@ namespace MoEngage {
       #endif
     }
 
+    ///<summary>
+    ///API to disable all features of the SDK.
+    ///</summary>
     public static void DisableSdk() {
       if (!isPluginInitialized()) return;
       string payload = MoEUtils.GetSdkStatePayload(false, appId);
@@ -544,7 +567,6 @@ namespace MoEngage {
       moengageHandler.UpdateSdkState(payload);
       #endif
     }
-
     #endregion
 
     #region iOS Specific Methods
@@ -559,7 +581,10 @@ namespace MoEngage {
     #endregion
 
     #region Android Specific Methods
-
+    ///<summary>
+    /// Pass FCM Push Payload to the MoEngage SDK.
+    ///</summary>
+    /// <param name="pushPayload">FCM Push payload received.</param>
     public static void PassFcmPushPayload(IDictionary < string, string > pushPayload) {
       Debug.Log(TAG + " PassFcmPushPayload:: payload " + pushPayload);
       if (!isPluginInitialized()) return;
@@ -568,6 +593,10 @@ namespace MoEngage {
       #endif
     }
 
+    ///<summary>
+    /// Pass FCM Token Payload to the MoEngage SDK.
+    ///</summary>
+    /// <param name="pushToken">FCM Push Token</param>
     public static void PassFcmPushToken(string pushToken) {
       Debug.Log(TAG + " PassFcmPushToken:: payload " + pushToken);
       if (!isPluginInitialized()) return;
@@ -576,6 +605,9 @@ namespace MoEngage {
       #endif
     }
 
+    ///<summary>
+    /// API to enable Advertising Id tracking for the given instance.
+    ///<summary>
     public static void EnableAdIdTracking() {
       Debug.Log(TAG + " EnableAdIdTracking:: ");
       if (!isPluginInitialized()) return;
@@ -584,6 +616,9 @@ namespace MoEngage {
       #endif
     }
 
+    ///<summary>
+    /// API to disable Advertising Id tracking for the given instance.
+    ///<summary>
     public static void DisableAdIdTracking() {
       Debug.Log(TAG + " DisableAdIdTracking:: ");
       if (!isPluginInitialized()) return;
@@ -592,6 +627,9 @@ namespace MoEngage {
       #endif
     }
 
+    ///<summary>
+    /// API to enable Android Id tracking for the given instance.
+    ///<summary>
     public static void EnableAndroidIdTracking() {
       Debug.Log(TAG + " EnableAndroidIdTracking:: ");
       if (!isPluginInitialized()) return;
@@ -600,6 +638,9 @@ namespace MoEngage {
       #endif
     }
 
+    ///<summary>
+    /// API to disable Android Id tracking for the given instance.
+    ///<summary>
     public static void DisableAndroidIdTracking() {
       Debug.Log(TAG + " DisableAndroidIdTracking:: ");
       if (!isPluginInitialized()) return;
@@ -608,6 +649,9 @@ namespace MoEngage {
       #endif
     }
 
+    ///<summary>
+    /// API to create notification channels on Android.
+    ///<summary>
     public static void SetupNotificationChannelsAndroid() {
       Debug.Log(TAG + " SetupNotificationChannelsAndroid:: ");
       if (!isPluginInitialized()) return;
@@ -616,6 +660,10 @@ namespace MoEngage {
       #endif
     }
 
+    ///<summary>
+    /// Notify the SDK on notification permission granted to the application.
+    ///<summary>
+    /// <param name="isGranted">True if the push permission was granted by the User else, false.</param>
     public static void PushPermissionResponseAndroid(bool isGranted) {
       Debug.Log(TAG + " PushPermissionResponseAndroid:: isGranted: " + isGranted);
       if (!isPluginInitialized()) return;
@@ -624,22 +672,11 @@ namespace MoEngage {
       #endif
     }
 
-    public static void NavigateToSettingsAndroid() {
-      Debug.Log(TAG + " NavigateToSettingsAndroid:: ");
-      if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
-      MoEngageAndroid.NavigateToSettingsAndroid();
-      #endif
-    }
-
-    public static void RequestPushPermissionAndroid() {
-      Debug.Log(TAG + " RequestPushPermissionAndroid:: ");
-      if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
-      MoEngageAndroid.RequestPushPermissionAndroid();
-      #endif
-    }
-
+    ///<summary>
+    /// Updates the number of the times Notification permission is requested
+    /// @param [requestCount] This count will be incremented to existing value
+    ///<summary>
+    ///<param name="requestCount">Number of fresh request attempts.</param>
     public static void UpdatePushPermissionRequestCountAndroid(int requestCount) {
       Debug.Log(TAG + " UpdatePushPermissionRequestCountAndroid:: requestCount: " + requestCount);
       if (!isPluginInitialized()) return;
@@ -648,6 +685,33 @@ namespace MoEngage {
       #endif
     }
 
+    ///<summary>
+    /// Navigates the user to the Notification settings on Android 8 or above,
+    /// on older versions the user is navigated the application settings or
+    /// application info screen.
+    ///<summary>
+    public static void NavigateToSettingsAndroid() {
+      Debug.Log(TAG + " NavigateToSettingsAndroid:: ");
+      if (!isPluginInitialized()) return;
+      #if UNITY_ANDROID && !UNITY_EDITOR
+      MoEngageAndroid.NavigateToSettingsAndroid();
+      #endif
+    }
+
+    ///<summary>
+    /// Requests the push permission on Android 13 and above.
+    ///</summary>
+    public static void RequestPushPermissionAndroid() {
+      Debug.Log(TAG + " RequestPushPermissionAndroid:: ");
+      if (!isPluginInitialized()) return;
+      #if UNITY_ANDROID && !UNITY_EDITOR
+      MoEngageAndroid.RequestPushPermissionAndroid();
+      #endif
+    }
+
+    ///<summary>
+    /// Enable Device-id tracking. It is enabled by default, and should be called only if tracking is disabled at some point.
+    ///</summary>
     public static void EnableDeviceIdTracking() {
       Debug.Log(TAG + " EnableDeviceIdTracking:: ");
       if (!isPluginInitialized()) return;
@@ -656,6 +720,9 @@ namespace MoEngage {
       #endif
     }
 
+    ///<summary>
+    ///Disables Device-id tracking
+    ///</summary>
     public static void DisableDeviceIdTracking() {
       Debug.Log(TAG + " DisableDeviceIdTracking:: ");
       if (!isPluginInitialized()) return;
@@ -663,7 +730,6 @@ namespace MoEngage {
       MoEngageAndroid.UpdateDeviceIdentifierTrackingStatus(MoEUtils.GetDeviceIdentifiersPayload(appId, MoEConstants.KEY_DEVICE_ID, false));
       #endif
     }
-
     #endregion
 
   }
