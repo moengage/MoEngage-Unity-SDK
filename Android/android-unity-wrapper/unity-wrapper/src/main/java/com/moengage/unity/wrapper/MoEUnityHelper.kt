@@ -1,8 +1,8 @@
 package com.moengage.unity.wrapper
 
-import com.moengage.inapp.MoEInAppHelper;
 import com.moengage.core.internal.inapp.InAppManager
 import com.moengage.core.internal.logger.Logger
+import com.moengage.inapp.MoEInAppHelper
 
 /**
  * @author Arshiya Khanum

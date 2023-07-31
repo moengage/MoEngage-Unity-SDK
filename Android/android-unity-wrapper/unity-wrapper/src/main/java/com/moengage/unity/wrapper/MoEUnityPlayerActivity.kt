@@ -7,7 +7,7 @@ import com.unity3d.player.UnityPlayerActivity
 /**
  * @author Arshiya Khanum
  */
-class MoEUnityPlayerActivity : UnityPlayerActivity() {
+public class MoEUnityPlayerActivity : UnityPlayerActivity() {
 
     private val tag = "${MODULE_TAG}MoEUnityPlayerActivity"
 
