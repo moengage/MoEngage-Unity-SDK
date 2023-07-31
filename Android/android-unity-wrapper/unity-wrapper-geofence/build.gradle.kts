@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021 MoEngage Inc.
+ * Copyright (c) 2014-2023 MoEngage Inc.
  *
  * All rights reserved.
  *
@@ -10,14 +10,30 @@
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+plugins {
+    alias(moengageInternal.plugins.plugin.android.lib)
+    alias(moengageInternal.plugins.plugin.kotlin.android)
+    id("mvn-publish")
+}
 
-/**
- * @author Umang Chamaria
- */
-object Deps {
-    val moengage = "com.moengage:moe-android-sdk:12.8.00"
-    val basePlugin = "com.moengage:plugin-base:3.3.1"
-    val appCompat = "androidx.appcompat:appcompat:1.2.0"
-    val inapp = "com.moengage:inapp:6.7.0"
-    val geofence = "com.moengage:plugin-base-geofence:1.1.0"
+val libVersionName = project.findProperty("VERSION_NAME") as String
+
+apply(from = file("../scripts/common.gradle"))
+
+android {
+    namespace = "com.moengage.unity.wrapper.geofence"
+    defaultConfig {
+        buildConfigField("String", "MOENGAGE_UNITY_WRAPPER_GEOFENCE", libVersionName)
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
+    }
+}
+
+dependencies {
+    compileOnly(libs.core)
+    api(libs.basePluginGeofence)
 }
