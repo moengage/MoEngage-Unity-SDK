@@ -70,7 +70,7 @@ public class MoEAndroidWrapper private constructor() {
         try {
             Logger.print { "$tag initialize() : Initialization payload=$initializePayload" }
             val initializationJson = JSONObject(initializePayload)
-            val gameObjectName = initializationJson.getString(ARGUMENT_GAME_OBJECT)
+            val gameObjectName = initializationJson.getJSONObject("data").getString(ARGUMENT_GAME_OBJECT)
             if (gameObjectName.isEmpty()) {
                 Logger.print(
                     LogLevel.ERROR
@@ -183,33 +183,6 @@ public class MoEAndroidWrapper private constructor() {
         }
     }
 
-    public fun selfHandledShown(selfHandledPayload: String) {
-        try {
-            Logger.print { "$tag selfHandledShown() : Campaign payload: $selfHandledPayload" }
-            pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
-        } catch (t: Throwable) {
-            Logger.print(LogLevel.ERROR, t) { "$tag selfHandledShown() : " }
-        }
-    }
-
-    public fun selfHandledClicked(selfHandledPayload: String) {
-        try {
-            Logger.print { "$tag selfHandledClicked() : Campaign payload: $selfHandledPayload" }
-            pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
-        } catch (t: Throwable) {
-            Logger.print(LogLevel.ERROR, t) { "$tag selfHandledClicked() : " }
-        }
-    }
-
-    public fun selfHandledDismissed(selfHandledPayload: String) {
-        try {
-            Logger.print { "$tag selfHandledDismissed() : Campaign payload: $selfHandledPayload" }
-            pluginHelper.selfHandledCallback(getContext(), selfHandledPayload)
-        } catch (t: Throwable) {
-            Logger.print(LogLevel.ERROR, t) { "$tag selfHandledDismissed() : " }
-        }
-    }
-
     public fun selfHandledCallback(selfHandledPayload: String) {
         try {
             Logger.print { "$tag selfHandledCallback() : Campaign payload: $selfHandledPayload" }
@@ -230,10 +203,10 @@ public class MoEAndroidWrapper private constructor() {
 
     public fun updateSdkState(featureStatusPayload: String) {
         try {
-            Logger.print { "$tag storeFeatureStatus() : Feature status payload: $featureStatusPayload" }
+            Logger.print { "$tag updateSdkState() : Feature status payload: $featureStatusPayload" }
             pluginHelper.storeFeatureStatus(getContext(), featureStatusPayload)
         } catch (t: Throwable) {
-            Logger.print(LogLevel.ERROR, t) { "$tag storeFeatureStatus() : " }
+            Logger.print(LogLevel.ERROR, t) { "$tag updateSdkState() : " }
         }
     }
 

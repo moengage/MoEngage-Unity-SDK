@@ -163,7 +163,7 @@ namespace MoEngage {
 
       return Json.Serialize(payloadDict);
     }
-    
+
     public static string GetContextsPayload(string[] contexts, string appId) {
       Dictionary < string, string[] > contextDict = new Dictionary < string, string[] > {
         {
@@ -231,28 +231,6 @@ namespace MoEngage {
       return Json.Serialize(sdkStatusDictionary);
     }
 
-    public static string GetAndroidIdTrackingStatus(bool isEnabled) {
-      var sdkStatusDictionary = new Dictionary < string,
-        object > () {
-          {
-            MoEConstants.KEY_ANDROID_ID_TRACKING, isEnabled
-          },
-        };
-
-      return Json.Serialize(sdkStatusDictionary);
-    }
-
-    public static string GetAdIdTrackingStatus(bool isEnabled) {
-      var sdkStatusDictionary = new Dictionary < string,
-        object > () {
-          {
-            MoEConstants.KEY_AD_ID_TRACKING, isEnabled
-          },
-        };
-
-      return Json.Serialize(sdkStatusDictionary);
-    }
-
     public static string GetAccountPayload(string appId) {
       var payloadDict = new Dictionary < string,
         object > () {
@@ -312,6 +290,101 @@ namespace MoEngage {
           }
         };
       return Json.Serialize(impressionDictionary);
+    }
+
+    public static string GetPushPermissionResponsePayload(bool isGranted, PermissionType type) {
+      var payloadDict = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.PARAM_IS_PERMISSION_GRANTED, isGranted
+          }, {
+            MoEConstants.PARAM_IS_PERMISSION_TYPE,
+            type.ToString()
+          }
+        };
+
+      return Json.Serialize(payloadDict);
+    }
+
+    public static string GetUpdatePushPermissionRequestCountPayload(int requestCount) {
+      var payloadDict = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.PARAM_UPDATE_PUSH_PERMISSION_COUNT, requestCount
+          }
+        };
+
+      return Json.Serialize(payloadDict);
+    }
+
+    public static string GetDeviceIdentifiersPayload(string appId, string identifierType, bool state) {
+      var dataPayload = new Dictionary < string,
+        object > () {
+          {
+            identifierType,
+            state
+          }
+        };
+
+      var deviceIdentifierDictionary = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+          }, {
+            MoEConstants.PAYLOAD_DATA,
+            dataPayload
+          }
+        };
+
+      return Json.Serialize(deviceIdentifierDictionary);
+    }
+
+    public static string GetPushPayload(string appId, IDictionary < string, string > payload, string service) {
+      Dictionary < string, object > dataPayload = new Dictionary < string, object > {
+        {
+          MoEConstants.ARGUMENT_PAYLOAD, payload
+        },
+        {
+          MoEConstants.ARGUMENT_SERVICE,
+          service
+        }
+      };
+
+      var pushPayload = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+          }, {
+            MoEConstants.PAYLOAD_DATA,
+            dataPayload
+          }
+        };
+
+      return Json.Serialize(pushPayload);
+    }
+
+    public static string GetPushTokenPayload(string appId, string pushToken, string service) {
+      Dictionary < string, string > dataPayload = new Dictionary < string, string > {
+        {
+          MoEConstants.ARGUMENT_TOKEN, pushToken
+        },
+        {
+          MoEConstants.ARGUMENT_SERVICE,
+          service
+        }
+      };
+
+      var pushTokenPayload = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+          }, {
+            MoEConstants.PAYLOAD_DATA,
+            dataPayload
+          }
+        };
+
+      return Json.Serialize(pushTokenPayload);
     }
   }
 }

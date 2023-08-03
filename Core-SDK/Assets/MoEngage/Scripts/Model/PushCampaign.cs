@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.

@@ -23,7 +23,7 @@ apply(from = file("../scripts/common.gradle"))
 android {
     namespace = "com.moengage.unity.wrapper.geofence"
     defaultConfig {
-        buildConfigField("String", "MOENGAGE_UNITY_WRAPPER_GEOFENCE", "\"$libVersionName\"")
+        buildConfigField("String", "MOENGAGE_UNITY_WRAPPER_GEOFENCE",  "\"$libVersionName\"")
     }
     buildTypes {
         getByName("release") {
