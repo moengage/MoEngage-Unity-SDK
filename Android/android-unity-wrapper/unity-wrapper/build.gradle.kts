@@ -24,7 +24,7 @@ apply(from = file("../scripts/common.gradle"))
 android {
     namespace = "com.moengage.unity.wrapper"
     defaultConfig {
-        buildConfigField("String", "MOENGAGE_ANDROID_UNITY_WRAPPER", libVersionName)
+        buildConfigField("String", "MOENGAGE_ANDROID_UNITY_WRAPPER", "\"$libVersionName\"")
     }
 
     buildTypes {

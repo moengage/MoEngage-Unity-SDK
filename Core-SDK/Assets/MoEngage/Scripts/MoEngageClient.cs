@@ -601,7 +601,7 @@ namespace MoEngage {
       Debug.Log(TAG + " PassFcmPushToken:: payload " + pushToken);
       if (!isPluginInitialized()) return;
       #if UNITY_ANDROID && !UNITY_EDITOR
-      MoEngageAndroid.PassFcmPushToken(MoEUtils.GetPushTokenPayload(appid, pushToken, MoEConstants.PUSH_SERVICE_TYPE_FCM));
+      MoEngageAndroid.PassFcmPushToken(MoEUtils.GetPushTokenPayload(appId, pushToken, MoEConstants.PUSH_SERVICE_TYPE_FCM));
       #endif
     }
 
@@ -668,7 +668,7 @@ namespace MoEngage {
       Debug.Log(TAG + " PushPermissionResponseAndroid:: isGranted: " + isGranted);
       if (!isPluginInitialized()) return;
       #if UNITY_ANDROID && !UNITY_EDITOR
-      MoEngageAndroid.PushPermissionResponseAndroid(MoEUtils.GetPushPermissionResponsePayload(isGranted, PermissionType.PUSH););
+      MoEngageAndroid.PushPermissionResponseAndroid(MoEUtils.GetPushPermissionResponsePayload(isGranted, PermissionType.PUSH));
       #endif
     }
 
@@ -728,6 +728,13 @@ namespace MoEngage {
       if (!isPluginInitialized()) return;
       #if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.UpdateDeviceIdentifierTrackingStatus(MoEUtils.GetDeviceIdentifiersPayload(appId, MoEConstants.KEY_DEVICE_ID, false));
+      #endif
+    }
+
+    public static void OnOrientationChanged() {
+      #if UNITY_ANDROID && !UNITY_EDITOR
+      Debug.Log(TAG + " OnOrientationChanged::");
+      MoEngageAndroid.OnOrientationChanged();
       #endif
     }
     #endregion

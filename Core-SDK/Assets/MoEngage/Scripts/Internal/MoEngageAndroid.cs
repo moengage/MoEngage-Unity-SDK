@@ -32,7 +32,7 @@ namespace MoEngage {
     /// <param name="gameObject"></param>
     public void Initialize(string gameObjectPayload) {
       #if!UNITY_EDITOR
-      moengageAndroid.Call("initialize", gameObjPayload);
+      moengageAndroid.Call("initialize", gameObjectPayload);
       #endif
     }
 
@@ -81,14 +81,14 @@ namespace MoEngage {
     public void GetSelfHandledInApp(string accountPayload) {
       #if!UNITY_EDITOR
       Debug.Log(TAG + ": GetSelfHandledInApp::");
-      moengageAndroid.Call("getSelfHandledInApp");
+      moengageAndroid.Call("getSelfHandledInApp", accountPayload);
       #endif
     }
 
     public void ShowInApp(string accountPayload) {
       #if!UNITY_EDITOR
       Debug.Log(TAG + ": ShowInApp::");
-      moengageAndroid.Call("showInApp");
+      moengageAndroid.Call("showInApp", accountPayload);
       #endif
     }
 
@@ -133,13 +133,13 @@ namespace MoEngage {
     public void ResetInAppContexts(string accountPayload) {
       #if!UNITY_EDITOR
       Debug.Log(TAG + " resetInAppContexts:: ");
-      moengageAndroid.Call("resetContext");
+      moengageAndroid.Call("resetContext", accountPayload);
       #endif
     }
 
     public void optOutDataTracking(string optOutPayload) {
       #if!UNITY_EDITOR
-      moengageAndroid.Call("optOutTracking", payload);
+      moengageAndroid.Call("optOutTracking", optOutPayload);
       #endif
     }
 
@@ -149,7 +149,7 @@ namespace MoEngage {
       #endif
     }
 
-    public void OnOrientationChanged() {
+    public static void OnOrientationChanged() {
       #if!UNITY_EDITOR
       Debug.Log(TAG + " OnOrientationChanged::");
       moengageAndroid.Call("onOrientationChanged");
@@ -194,7 +194,7 @@ namespace MoEngage {
     public static void UpdateDeviceIdentifierTrackingStatus(string payload) {
       #if!UNITY_EDITOR
       Debug.Log(TAG + " UpdateDeviceIdentifierTrackingStatus:: payload: " + payload);
-      moengageAndroid.Call("UpdateDeviceIdentifierTrackingStatus", payload);
+      moengageAndroid.Call("deviceIdentifierTrackingStatusUpdate", payload);
       #endif
     }
   }
