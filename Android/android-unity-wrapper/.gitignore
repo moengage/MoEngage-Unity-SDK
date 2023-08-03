@@ -13,5 +13,5 @@
 .externalNativeBuild
 .cxx
 .idea/
-buildSrc/build
-buildSrc/.gradle
+publishing-plugin/build
+publishing-plugin/.gradle
