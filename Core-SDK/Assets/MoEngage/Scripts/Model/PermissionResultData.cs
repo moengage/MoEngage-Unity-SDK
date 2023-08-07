@@ -16,25 +16,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoEngage {
-  /// <summary>
-  /// Common interface for iOS and android
-  /// </summary>
-  public interface MoEngageUnityPlatform {
-    void Initialize(string gameObjectPayload);
-    void SetAppStatus(string appStatusPayload);
-    void SetAlias(string aliasPayload);
-    void SetUserAttribute(string userAttributesPayload);
-    void TrackEvent(string eventPayload);
-    void Logout(string accountPayload);
-    void ShowInApp(string accountPayload);
-    void SetInAppContexts(string contextPayload);
-    void InvalidateInAppContexts(string accountPayload);
-    void GetSelfHandledInApp(string accountPayload);
-    void optOutDataTracking(string optOutPayload);
-    void SelfHandledShown(string selfHandledPayload);
-    void SelfHandledClicked(string selfHandledPayload);
-    void SelfHandledDismissed(string selfHandledPayload);
-    void UpdateSdkState(string payload);
-    void RegisterForPush();
+
+  [System.Serializable]
+  public class PermissionResultData {
+    public Platform platform;
+    public bool isGranted;
+    public PermissionType type;
+
+    public PermissionResultData(Platform platform, bool isGranted, PermissionType type) {
+      this.platform = platform;
+      this.isGranted = isGranted;
+      this.type = type;
+    }
   }
+
 }

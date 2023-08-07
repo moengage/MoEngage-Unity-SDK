@@ -122,7 +122,7 @@ namespace MoEngage
 
         #region Push Notifications
 
-        public void RegisterForPush()
+        public static void RegisterForPush()
         {
 #if !UNITY_EDITOR
 			registerForPush();
@@ -147,7 +147,7 @@ namespace MoEngage
 #endif
         }
 
-        public void InvalidateInAppContexts(string accountPayload)
+        public void ResetInAppContexts(string accountPayload)
         {
 #if !UNITY_EDITOR
 			invalidateInAppContexts(accountPayload);

@@ -53,7 +53,8 @@ public object MoEInitializer {
             Logger.print { "$tag initialiseDefaultInstance(): : Will try to initialise the sdk" }
             MoEAndroidWrapper.getInstance().setContext(context)
             PluginInitializer.initialize(
-                builder, IntegrationMeta(
+                builder,
+                IntegrationMeta(
                     INTEGRATION_TYPE, BuildConfig.MOENGAGE_ANDROID_UNITY_WRAPPER
                 )
             )
@@ -70,7 +71,11 @@ public object MoEInitializer {
      * @param sdkState [SdkState.ENABLED]
      * @since TODO
      */
-    public fun initialiseDefaultInstance(context: Context, builder: MoEngage.Builder, sdkState: SdkState) {
+    public fun initialiseDefaultInstance(
+        context: Context,
+        builder: MoEngage.Builder,
+        sdkState: SdkState
+    ) {
         try {
             Logger.print { "$tag initialiseDefaultInstance(): : Will try to initialise the sdk" }
             MoEAndroidWrapper.getInstance().setContext(context)

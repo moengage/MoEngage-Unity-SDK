@@ -16,17 +16,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoEngage {
-  [System.Serializable]
   /// <summary>
   /// InApp Campaign Details
   /// </summary>
+  [System.Serializable]
   public class InAppCampaign {
     /// <value> Unique identifier for each campaign. </value>
     public string campaignId;
-    
+
     /// <value> Campaign Name </value>
     public string campaignName;
-    
+
     /// <value> Additional meta data of campaign </value>
     public InAppCampaignContext campaignContext;
   }

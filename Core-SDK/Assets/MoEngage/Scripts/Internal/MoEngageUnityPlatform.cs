@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
@@ -11,44 +11,29 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace MoEngage
-{
-    public enum MoEAppStatus : uint
-    {
-        INSTALL,
-        UPDATE
-    }
-
-    public enum MoEUserGender : uint
-    {
-        MALE,
-        FEMALE
-    }
-
-    public enum PushService : uint
-    {
-        APNS,
-        FCM,
-        MI_PUSH
-    }
-
-    public enum ActionType
-    {
-        Navigation,
-        Custom
-    }
-
-    public enum NavigationType
-    {
-        Screen,
-        Deeplink
-    }
-     
-    public enum Platform {
-         iOS,
-         Android
-     }
-
+namespace MoEngage {
+  /// <summary>
+  /// Common interface for iOS and android
+  /// </summary>
+  public interface MoEngageUnityPlatform {
+    void Initialize(string gameObjectPayload);
+    void SetAppStatus(string appStatusPayload);
+    void SetAlias(string aliasPayload);
+    void SetUserAttribute(string userAttributesPayload);
+    void TrackEvent(string eventPayload);
+    void Logout(string accountPayload);
+    void ShowInApp(string accountPayload);
+    void SetInAppContexts(string contextPayload);
+    void ResetInAppContexts(string accountPayload);
+    void GetSelfHandledInApp(string accountPayload);
+    void optOutDataTracking(string optOutPayload);
+    void SelfHandledShown(string selfHandledPayload);
+    void SelfHandledClicked(string selfHandledPayload);
+    void SelfHandledDismissed(string selfHandledPayload);
+    void UpdateSdkState(string payload);
+  }
 }
