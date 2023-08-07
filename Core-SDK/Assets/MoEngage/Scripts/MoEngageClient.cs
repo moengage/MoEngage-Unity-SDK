@@ -681,7 +681,7 @@ namespace MoEngage {
       Debug.Log(TAG + " UpdatePushPermissionRequestCountAndroid:: requestCount: " + requestCount);
       if (!isPluginInitialized()) return;
       #if UNITY_ANDROID && !UNITY_EDITOR
-      MoEngageAndroid.UpdatePushPermissionRequestCountAndroid(MoEUtils.GetUpdatePushPermissionRequestCountPayload(requestCount));
+      MoEngageAndroid.UpdatePushPermissionRequestCountAndroid(MoEUtils.GetUpdatePushPermissionRequestCountPayload(appId, requestCount));
       #endif
     }
 
