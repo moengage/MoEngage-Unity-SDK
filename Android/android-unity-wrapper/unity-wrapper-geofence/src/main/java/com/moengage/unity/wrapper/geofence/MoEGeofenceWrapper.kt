@@ -13,10 +13,10 @@
 
 package com.moengage.unity.wrapper.geofence
 
-import android.content.Context
 import com.moengage.core.LogLevel
 import com.moengage.core.internal.logger.Logger
 import com.moengage.plugin.base.geofence.internal.GeofencePluginHelper
+import com.moengage.unity.wrapper.MoEAndroidWrapper
 
 /**
  * Bridge between Unity and Android Native
@@ -27,7 +27,6 @@ public class MoEGeofenceWrapper private constructor() {
 
     private val tag = "${MODULE_TAG}MoEGeofenceWrapper"
     private val geofencePluginHelper = GeofencePluginHelper()
-    private var context: Context? = null
 
     public companion object {
 
@@ -43,14 +42,14 @@ public class MoEGeofenceWrapper private constructor() {
         }
     }
 
-    public fun setContext(context: Context) {
-        this.context = context
-    }
 
     public fun startGeofenceMonitoring(geofencePayload: String) {
         try {
             Logger.print { "$tag startGeofenceMonitoring(): " }
-            geofencePluginHelper.startGeofenceMonitoring(getContext(), geofencePayload)
+            geofencePluginHelper.startGeofenceMonitoring(
+                MoEAndroidWrapper.getInstance().getContext(),
+                geofencePayload
+            )
         } catch (t: Throwable) {
             Logger.print(LogLevel.ERROR, t) { "$tag startGeofenceMonitoring(): " }
         }
@@ -59,14 +58,13 @@ public class MoEGeofenceWrapper private constructor() {
     public fun stopGeofenceMonitoring(geofencePayload: String) {
         try {
             Logger.print { "$tag stopGeofenceMonitoring(): " }
-            geofencePluginHelper.stopGeofenceMonitoring(getContext(), geofencePayload)
+            geofencePluginHelper.stopGeofenceMonitoring(
+                MoEAndroidWrapper.getInstance().getContext(),
+                geofencePayload
+            )
         } catch (t: Throwable) {
             Logger.print(LogLevel.ERROR, t) { "$tag stopGeofenceMonitoring(): " }
         }
     }
 
-    @Throws(NullPointerException::class)
-    private fun getContext(): Context {
-        return context ?: throw NullPointerException("cannot proceed with null context")
-    }
 }
