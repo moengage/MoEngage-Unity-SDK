@@ -276,7 +276,7 @@ public class MoEAndroidWrapper private constructor() {
     }
 
     @Throws(NullPointerException::class)
-    private fun getContext(): Context {
+    public fun getContext(): Context {
         return context ?: throw NullPointerException("Cannot proceed with null context")
     }
 }
