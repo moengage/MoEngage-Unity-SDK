@@ -36,4 +36,5 @@ android {
 dependencies {
     compileOnly(libs.core)
     api(libs.basePluginGeofence)
+    compileOnly(project(":unity-wrapper"))
 }
