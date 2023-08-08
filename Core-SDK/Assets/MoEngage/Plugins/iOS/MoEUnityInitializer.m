@@ -106,7 +106,7 @@
 
     sdkConfig.storageConfig = [[MoEngageStorageConfig alloc] initWithEncryptionConfig:[[MoEngageStorageEncryptionConfig alloc] initWithIsEncryptionEnabled:[MoEngageUnityUtils isStorageEncryptionEnabled]]];
     
-    sdkConfig.networkConfig = [[MoEngageNetworkRequestConfig alloc] initWithAuthorizationConfig:[[MoEngageNetworkAuthorizationConfig alloc]initWithIsJwtEnbaled:[MoEngageUnityUtils isJWTEnabled]] dataSecurityConfig:[[MoEngageNetworkDataSecurityConfig alloc] initWithIsEncryptionEnabled:[MoEngageUnityUtils isApiEncryptionEnabled] encryptionKeyDebug:[MoEngageUnityUtils fetchDebugNetworkApiKey] encryptionKeyRelease:[MoEngageUnityUtils fetchReleaseNetworkApiKey]]];
+    sdkConfig.networkConfig = [[MoEngageNetworkRequestConfig alloc] initWithAuthorizationConfig:[[MoEngageNetworkAuthorizationConfig alloc]initWithIsJwtEnbaled:[MoEngageUnityUtils isJWTEnabled]] dataSecurityConfig:[[MoEngageNetworkDataSecurityConfig alloc] initWithIsEncryptionEnabled:[MoEngageUnityUtils isApiEncryptionEnabled] encryptionKeyDebug:[MoEngageUnityUtils fetchDebugNetworkApiKey] encryptionKeyRelease:[MoEngageUnityUtils fetchReleaseNetworkApiKey]] sslVerificationConfig:[[MoEngageSSLVerificationConfig alloc] initWithIsEnabled:false certificateData:nil]];
     
     NSString* keyChainGroupName = [MoEngageUnityUtils fetchKeyChainGroupName];
     if (keyChainGroupName) {
