@@ -228,7 +228,7 @@ namespace MoEngage {
           }
         };
 
-      return Json.Serialize(sdkStatusDictionary);
+      return Json.Serialize(payloadDict);
     }
 
     public static string GetAccountPayload(string appId) {
@@ -306,11 +306,21 @@ namespace MoEngage {
       return Json.Serialize(payloadDict);
     }
 
-    public static string GetUpdatePushPermissionRequestCountPayload(int requestCount) {
-      var payloadDict = new Dictionary < string,
+    public static string GetUpdatePushPermissionRequestCountPayload(string appId, int requestCount) {
+      var dataPayload = new Dictionary < string,
         object > () {
           {
             MoEConstants.PARAM_UPDATE_PUSH_PERMISSION_COUNT, requestCount
+          }
+        };
+
+      var payloadDict = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+          }, {
+            MoEConstants.PAYLOAD_DATA,
+            dataPayload
           }
         };
 

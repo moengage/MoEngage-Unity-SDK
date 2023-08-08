@@ -159,7 +159,7 @@ namespace MoEngage {
     public static void SetupNotificationChannelsAndroid() {
       #if!UNITY_EDITOR
       Debug.Log(TAG + " SetupNotificationChannelsAndroid::");
-      moengageAndroid.Call("setupNotificationChannels");
+      moengageAndroid.Call("setUpNotificationChannels");
       #endif
     }
 

@@ -48,7 +48,7 @@ namespace MoEngage {
 
     #region Initialize
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="gameObject">Instance of Game Object</param>
     /// <param name="appId">Account Identifier</param>
@@ -441,7 +441,7 @@ namespace MoEngage {
     }
 
     /// <summary>
-    ///  Set the user context in which In-App should be shown 
+    ///  Set the user context in which In-App should be shown
     /// </summary>
     /// <param name="contexts">List of User Contexts</param>
     public static void SetInAppContexts(string[] contexts) {
@@ -542,7 +542,7 @@ namespace MoEngage {
 
     #region Enable / Disable SDK Methods
 
-    ///<summary> 
+    ///<summary>
     /// API to enable SDK usage.
     /// Note: By default the SDK is enabled, should only be called to enabled the
     /// SDK if you have called [DisableSdk()] at some point.
@@ -681,7 +681,7 @@ namespace MoEngage {
       Debug.Log(TAG + " UpdatePushPermissionRequestCountAndroid:: requestCount: " + requestCount);
       if (!isPluginInitialized()) return;
       #if UNITY_ANDROID && !UNITY_EDITOR
-      MoEngageAndroid.UpdatePushPermissionRequestCountAndroid(MoEUtils.GetUpdatePushPermissionRequestCountPayload(requestCount));
+      MoEngageAndroid.UpdatePushPermissionRequestCountAndroid(MoEUtils.GetUpdatePushPermissionRequestCountPayload(appId, requestCount));
       #endif
     }
 
