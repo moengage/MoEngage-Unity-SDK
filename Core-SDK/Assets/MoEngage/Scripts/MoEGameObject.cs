@@ -46,7 +46,7 @@ namespace MoEngage {
     }
 
     public void PushClicked(string payload) {
-      Debug.Log(TAG + "PushClicked() Callback from Native: " + payload);
+      Debug.Log(TAG + " PushClicked() Callback from Native: " + payload);
       PushCampaignData campaign = MoEPushParser.GetPushClickPayload(payload);
       OnPushClicked(campaign);
     }
@@ -87,7 +87,7 @@ namespace MoEngage {
         PermissionResultData permissionResultData = MoEParser.GetPermissionResultData(payload);
         OnPushPermissionCallbackReceived(permissionResultData);
       } catch (Exception e) {
-        Debug.LogError("PermissionResult() : couldn't send callback due to exception." +
+        Debug.LogError(TAG + " PermissionResult() : couldn't send callback due to exception." +
           $"\n{e.Message}" +
           $"\n{e.StackTrace}");
       }
