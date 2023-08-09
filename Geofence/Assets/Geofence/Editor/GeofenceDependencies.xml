@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dependencies>
   <androidPackages>
-    <androidPackage spec="com.moengage:geofence:3.2.0">
+    <androidPackage spec="com.moengage:geofence:3.3.0">
     <androidPackage spec="com.moengage:unity-wrapper-geofence:2.0.0-SNAPSHOT"/>
     </androidPackage>
   </androidPackages>

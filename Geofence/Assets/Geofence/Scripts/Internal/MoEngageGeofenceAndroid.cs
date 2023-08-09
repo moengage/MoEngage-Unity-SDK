@@ -21,7 +21,7 @@ namespace MoEngage {
 
     public void StopGeofenceMonitoring(string payload) {
     #if !UNITY_EDITOR
-        moengageAndroid.Call("stopGeofenceMonitoring", payload)
+        moengageAndroid.Call("stopGeofenceMonitoring", payload);
     #endif
     }
 
