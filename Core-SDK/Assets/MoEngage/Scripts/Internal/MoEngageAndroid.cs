@@ -74,7 +74,7 @@ namespace MoEngage {
 
     public void Logout(string accountPayload) {
       #if!UNITY_EDITOR
-      moengageAndroid.Call("logout");
+      moengageAndroid.Call("logout", accountPayload);
       #endif
     }
 

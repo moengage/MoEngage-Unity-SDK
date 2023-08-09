@@ -2,7 +2,7 @@
 <dependencies>
   <androidPackages>
     <androidPackage spec="com.moengage:geofence:3.3.0"/>
-    <androidPackage spec="com.moengage:unity-wrapper-geofence:2.0.0-SNAPSHOT"/>
+    <androidPackage spec="com.moengage:unity-wrapper-geofence:2.0.1-SNAPSHOT"/>
   </androidPackages>
   <!-- iOS Cocoapod dependencies can be specified by each iosPod element. -->
   <iosPods>
