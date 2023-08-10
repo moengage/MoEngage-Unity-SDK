@@ -125,5 +125,11 @@ namespace MoEngage
         public const string KEY_ANDROID_ID = "isAndroidIdTrackingEnabled";
         public const string KEY_AD_ID = "isAdIdTrackingEnabled";
         public const string KEY_DEVICE_ID = "isDeviceIdTrackingEnabled";
+
+
+
+        /* ****************************** Init Config Keys ***************************************** */
+        public const string KEY_INIT_CONFIG = "initConfig";
+        public const string KEY_PUSH_CONFIG = "pushConfig";
     }
 }

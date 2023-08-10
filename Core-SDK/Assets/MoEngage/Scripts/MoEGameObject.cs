@@ -22,6 +22,9 @@ namespace MoEngage {
     [SerializeField]
     private string appId;
 
+    [SerializeField]
+    private string shouldDeliverCallbackOnForegroundClick;
+
     private
     const string TAG = "MoEGameObject";
 
@@ -36,7 +39,10 @@ namespace MoEngage {
 
     // Start is called before the first frame update
     void Start() {
-      MoEngageClient.Initialize(gameObject, appId);
+      MoEngageClient.Initialize(
+        gameObject,
+        appId, 
+        shouldDeliverCallbackOnForegroundClick);
     }
 
     public void PushToken(string payload) {

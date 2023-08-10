@@ -31,20 +31,17 @@ namespace MoEngage {
       return payloadDict;
     }
 
-    public static Dictionary < string, string > GetGameObjectPayload(string gameObjectName) {
-      var payloadDict = new Dictionary < string,
-        string > () {
+    public static string GetInitializePayload(string gameObjectName, string appId, string shouldDeliverCallbackOnForegroundClick) {
+      var dataPayload = new Dictionary < string,
+        object > () {
           {
             MoEConstants.PAYLOAD_GAME_OBJECT,
               gameObjectName
+          }, {
+            MoEConstants.KEY_INIT_CONFIG,
+            GetInitConfigPayload(shouldDeliverCallbackOnForegroundClick)
           }
         };
-
-      return payloadDict;
-    }
-
-    public static string GetInitializePayload(string gameObjectName, string appId) {
-
       var payloadDict = new Dictionary < string,
         object > {
           {
@@ -52,7 +49,7 @@ namespace MoEngage {
           },
           {
             MoEConstants.PAYLOAD_DATA,
-            GetGameObjectPayload(gameObjectName)
+            dataPayload
           }
         };
 
@@ -396,5 +393,22 @@ namespace MoEngage {
 
       return Json.Serialize(pushTokenPayload);
     }
+
+    private static Dictionary < string, object > GetInitConfigPayload(string shouldDeliverCallbackOnForegroundClick) {
+      var payloadDict = new Dictionary < string,
+        object > () {
+          {
+            MoEConstants.KEY_PUSH_CONFIG,
+            parseShouldDeliverCallbackOnForegroundClick(shouldDeliverCallbackOnForegroundClick)
+          }
+        };
+
+      return payloadDict;
+    }
+
+    private static bool parseShouldDeliverCallbackOnForegroundClick(string shouldDeliverCallbackOnForegroundClick) {
+       return shouldDeliverCallbackOnForegroundClick.ToLower() == "true";
+      }
+
   }
 }
