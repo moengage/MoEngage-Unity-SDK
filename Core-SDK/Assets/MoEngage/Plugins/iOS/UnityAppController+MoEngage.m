@@ -59,7 +59,7 @@
     // Uncomment the below line if you have conflicting implementations in the project for obtaining the Push callbacks.
     // [UNUserNotificationCenter currentNotificationCenter].delegate = [MoEPluginInitializer sharedInstance];
     NSLog(@"MoEngageSwizzledAppController application:didFinishLaunchingWithOptions: called");
-    [[MoEUnityInitializer sharedInstance] intializeSDKWithLaunchOptions:launchOptions];
+    [[MoEUnityInitializer sharedInstance] initializeSDKWithLaunchOptions:launchOptions];
     
     return [self moengage_swizzled_application:application didFinishLaunchingWithOptions:launchOptions];
 }

@@ -41,17 +41,22 @@
     return self;
 }
 
-- (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions {
+- (void)initializeSDKWithLaunchOptions:(NSDictionary*)launchOptions {
     MoEngageSDKConfig* sdkConfig = [self getSDKConfigFromFile];
-    [self intializeSDKWithConfig:sdkConfig andLaunchOptions:launchOptions];
+    [self initializeSDKWithConfig:sdkConfig andLaunchOptions:launchOptions];
 }
 
-- (void)intializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig andLaunchOptions:(NSDictionary*)launchOptions{
+- (void)initializeSDKWithLaunchOptions:(NSDictionary*)launchOptions withSDKState:(MoEngageSDKState)sdkState {
+    MoEngageSDKConfig* sdkConfig = [self getSDKConfigFromFile];
+    [self initializeSDKWithConfig:sdkConfig withSDKState:sdkState andLaunchOptions:launchOptions];
+}
+
+- (void)initializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig andLaunchOptions:(NSDictionary*)launchOptions{
     self.isSDKIntialized = YES;
     [self setupSDKWithConfig:sdkConfig andLaunchOptions:launchOptions];
 }
 
-- (void)intializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig withSDKState:(MoEngageSDKState)sdkState andLaunchOptions:(NSDictionary*)launchOptions{
+- (void)initializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig withSDKState:(MoEngageSDKState)sdkState andLaunchOptions:(NSDictionary*)launchOptions{
     self.isSDKIntialized = YES;
     [self setupSDKWithConfig:sdkConfig withSDKState:sdkState andLaunchOptions:launchOptions];
 }

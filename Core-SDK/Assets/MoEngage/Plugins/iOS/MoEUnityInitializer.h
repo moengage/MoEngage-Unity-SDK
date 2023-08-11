@@ -17,10 +17,10 @@
 
 +(instancetype)sharedInstance;
 
-- (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions;
-
-- (void)intializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig andLaunchOptions:(NSDictionary*)launchOptions;
-- (void)intializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig withSDKState:(MoEngageSDKState)isSDKEnabled andLaunchOptions:(NSDictionary*)launchOptions;
+- (void)initializeSDKWithLaunchOptions:(NSDictionary*)launchOptions;
+- (void)initializeSDKWithLaunchOptions:(NSDictionary*)launchOptions withSDKState:(MoEngageSDKState)sdkState;
+- (void)initializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig andLaunchOptions:(NSDictionary*)launchOptions;
+- (void)initializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig withSDKState:(MoEngageSDKState)isSDKEnabled andLaunchOptions:(NSDictionary*)launchOptions;
 
 - (void)setupSDKWithInitializePayload:(NSMutableDictionary*)payload;
 @end
