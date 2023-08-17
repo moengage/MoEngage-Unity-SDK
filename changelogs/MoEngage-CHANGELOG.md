@@ -1,6 +1,7 @@
 ### 3.0.0 (17-08-2023)
 
 - Support for Android SDK version `12.8.02`.
+- Support for iOS SDK version `9.10.0`.
 - Breaking Changes
   | Then | Now |
   |---------------------------|-----------------------|
@@ -32,6 +33,13 @@
     |-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
     | initialize(Context context, MoEngage.Builder builder) | initialiseDefaultInstance(Context context, MoEngage.Builder builder) |
     | initialize(Context context, MoEngage.Builder builder, boolean isSdkEnabled) | initialiseDefaultInstance(Context context, MoEngage.Builder builder, SdkState sdkState) |
+
+- iOS
+  - Removed and replaced APIs
+    | Then | Now |
+    |-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+    |- (void)intializeSDKWithLaunchOptions:(NSDictionary*)launchOptions andSDKState:(BOOL)isSDKEnabled; | - (void)initializeSDKWithLaunchOptions:(NSDictionary*)launchOptions withSDKState:(MoEngageSDKState)sdkState;|
+
 
 ### 2.3.0 (25-07-2022)
 
