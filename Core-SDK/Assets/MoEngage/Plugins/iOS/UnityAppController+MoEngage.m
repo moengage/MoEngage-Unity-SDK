@@ -9,8 +9,8 @@
 #import <objc/runtime.h>
 #import "UnityAppController.h"
 #import "MoEUnityInitializer.h"
+#import "MoEngageUnityUtils.h"
 #import <UserNotifications/UserNotifications.h>
-#import <MoEPluginBase/MoEPluginBase.h>
 
 @implementation UnityAppController (MoEngage)
 
@@ -19,7 +19,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        BOOL swizzleUnityAppController = [MoEUnityInitializer isUnityAppControllerSwizzlingEnabled];
+        BOOL swizzleUnityAppController = [MoEngageUnityUtils isUnityAppControllerSwizzlingEnabled];
         if(swizzleUnityAppController){
             Class class = [self class];
             
@@ -59,13 +59,10 @@
     // Uncomment the below line if you have conflicting implementations in the project for obtaining the Push callbacks.
     // [UNUserNotificationCenter currentNotificationCenter].delegate = [MoEPluginInitializer sharedInstance];
     NSLog(@"MoEngageSwizzledAppController application:didFinishLaunchingWithOptions: called");
-    [[MoEUnityInitializer sharedInstance] intializeSDKWithLaunchOptions:launchOptions];
+    [[MoEUnityInitializer sharedInstance] initializeSDKWithLaunchOptions:launchOptions];
     
     return [self moengage_swizzled_application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 
 @end
-
-
-

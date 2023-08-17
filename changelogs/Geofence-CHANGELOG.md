@@ -1,0 +1,15 @@
+# Geofence
+
+# 17-08-2023
+
+## 1.0.0
+
+- Support for Android Geofence SDK version `3.3.0`
+- Support for iOS MoEngageGeofence SDK version `5.10.0` and above.
+- Added support for `StopGeofenceMonitoring` API.
+
+- iOS
+  - Breaking Changes
+    | Then | Now |
+    |-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+    | MoEngageClient.StartGeofenceMonitoring(); | MoEngageGeofenceClient.StartGeofenceMonitoring(); |

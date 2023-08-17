@@ -12,6 +12,7 @@
 #import "UnityAppController.h"
 #import "AppDelegateListener.h"
 #import "MoEUnityInitializer.h"
+#import "MoEngageUnityUtils.h"
 
 @interface MoEUnityAppController : UnityAppController
 
@@ -29,11 +30,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [super application:application didFinishLaunchingWithOptions:launchOptions];
-    
-    BOOL swizzleUnityAppController = [MoEUnityInitializer isUnityAppControllerSwizzlingEnabled];
+
+    BOOL swizzleUnityAppController = [MoEngageUnityUtils isUnityAppControllerSwizzlingEnabled];
     if (!swizzleUnityAppController) {
         NSLog(@"MoEUnityAppController SubClass application:didFinishLaunchingWithOptions: called");
-        [[MoEUnityInitializer sharedInstance] intializeSDKWithLaunchOptions:launchOptions];
+        [[MoEUnityInitializer sharedInstance] initializeSDKWithLaunchOptions:launchOptions];
     }
     return YES;
 }

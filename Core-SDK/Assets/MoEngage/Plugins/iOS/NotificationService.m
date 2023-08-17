@@ -7,7 +7,8 @@
 //
 
 #import "NotificationService.h"
-#import <MORichNotification/MORichNotification.h>
+#import <UIKit/UIKit.h>
+#import <MoEngageRichNotification/MoEngageRichNotification-Swift.h>
 
 @interface NotificationService ()
 @property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
@@ -19,13 +20,13 @@
 - (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
     
     NSString* appGroupId = [self getAppGroupID];
-    [MORichNotification setAppGroupID:appGroupId];
+    [MoEngageSDKRichNotification setAppGroupID:appGroupId];
     
     self.contentHandler = contentHandler;
     self.bestAttemptContent = [request.content mutableCopy];
     
     // Handle Rich Notification
-    [MORichNotification handleRichNotificationRequest:request withContentHandler:contentHandler];
+    [MoEngageSDKRichNotification handleWithRichNotificationRequest:request withContentHandler:contentHandler];
     
 }
 

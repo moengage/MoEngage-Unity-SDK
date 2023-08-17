@@ -2,7 +2,7 @@
 <dependencies>
 
   <androidPackages>
-    <androidPackage spec="com.moengage:rich-notification:2.3.00">
+    <androidPackage spec="com.moengage:rich-notification:4.5.0">
     </androidPackage>
   </androidPackages>
 

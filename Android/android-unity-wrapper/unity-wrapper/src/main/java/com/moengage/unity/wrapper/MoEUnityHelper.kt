@@ -1,15 +1,15 @@
 package com.moengage.unity.wrapper
 
-import com.moengage.inapp.MoEInAppHelper;
 import com.moengage.core.internal.inapp.InAppManager
 import com.moengage.core.internal.logger.Logger
+import com.moengage.inapp.MoEInAppHelper
 
 /**
  * @author Arshiya Khanum
  */
 public class MoEUnityHelper {
 
-    private val tag = Constants.MODULE_TAG + "MoEUnityHelper"
+    private val tag = "${MODULE_TAG}MoEUnityHelper"
 
     public companion object {
 
@@ -26,8 +26,8 @@ public class MoEUnityHelper {
     }
 
     public fun onConfigurationChanged() {
-        if (!InAppManager.getInstance().hasModule()) {
-            Logger.v("$tag onConfigurationChanged() : InApp module not found.")
+        if (!InAppManager.hasModule()) {
+            Logger.print { "$tag onConfigurationChanged() : InApp module not found." }
             return
         }
         MoEInAppHelper.getInstance().onConfigurationChanged()

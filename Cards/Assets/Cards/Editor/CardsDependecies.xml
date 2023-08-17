@@ -2,12 +2,12 @@
 <dependencies>
 
   <androidPackages>
-    <androidPackage spec="com.moengage:cards:2.1.00">
+    <androidPackage spec="com.moengage:cards-core:1.4.1">
     </androidPackage>
   </androidPackages>
 
  <iosPods>
-    <iosPod name="MoEngageCards" version="~> 2.2.0" minTargetSdk="10.0">
+    <iosPod name="MoEngageCards" version="~> 4.10.0" minTargetSdk="11.0">
     </iosPod>
 </iosPods>
 
