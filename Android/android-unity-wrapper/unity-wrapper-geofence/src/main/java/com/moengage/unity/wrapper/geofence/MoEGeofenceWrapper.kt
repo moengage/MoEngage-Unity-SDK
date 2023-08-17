@@ -21,7 +21,7 @@ import com.moengage.unity.wrapper.MoEAndroidWrapper
 /**
  * Bridge between Unity and Android Native
  * @author Rishabh Harish
- * @since TODO
+ * @since 1.0.0
  */
 public class MoEGeofenceWrapper private constructor() {
 

@@ -46,7 +46,7 @@ public object MoEInitializer {
      *
      * @param context Context
      * @param builder Instance of [MoEngage.Builder]
-     * @since TODO
+     * @since 3.0.0
      */
     public fun initialiseDefaultInstance(context: Context, builder: MoEngage.Builder) {
         try {
@@ -69,7 +69,7 @@ public object MoEInitializer {
      * @param context Context
      * @param builder Instance of [MoEngage.Builder]
      * @param sdkState [SdkState.ENABLED]
-     * @since TODO
+     * @since 3.0.0
      */
     public fun initialiseDefaultInstance(
         context: Context,
