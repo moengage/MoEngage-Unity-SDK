@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<dependencies>
-
-  <androidPackages>
-    <androidPackage spec="com.moengage:push-amp-plus:6.4.0">
-    </androidPackage>
-  </androidPackages>
-
-</dependencies>
