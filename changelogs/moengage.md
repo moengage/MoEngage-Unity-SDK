@@ -1,11 +1,3 @@
-# MoEngage
-
-# Next Release
-
-## Next Version
-- Android
-  - MOEN-26544: Fix for incompatible rich-notification dependency
-
 # 17-08-2023
 
 ## 3.0.0
