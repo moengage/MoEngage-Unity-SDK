@@ -65,13 +65,6 @@ namespace MoEngage {
       #endif
     }
 
-    public void EnableSDKLogs() {
-      #if!UNITY_EDITOR
-      Debug.Log(TAG + ": EnableSDKLogs::");
-      moengageAndroid.Call("enableSDKLogs");
-      #endif
-    }
-
     public void Logout(string accountPayload) {
       #if!UNITY_EDITOR
       moengageAndroid.Call("logout", accountPayload);
@@ -195,6 +188,13 @@ namespace MoEngage {
       #if!UNITY_EDITOR
       Debug.Log(TAG + " UpdateDeviceIdentifierTrackingStatus:: payload: " + payload);
       moengageAndroid.Call("deviceIdentifierTrackingStatusUpdate", payload);
+      #endif
+    }
+
+    public static void DeleteUser(string accountPayload, UserDeletionResponseDelegate delegateFunc) {
+      #if!UNITY_EDITOR
+      Debug.Log(TAG + " DeleteUser:: accountPayload: " + accountPayload);
+      moengageAndroid.Call("deleteUser", new UserDeletionCallback(delegateFunc), accountPayload);
       #endif
     }
   }

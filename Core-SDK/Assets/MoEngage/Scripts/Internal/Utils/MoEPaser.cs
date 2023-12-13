@@ -58,5 +58,24 @@ namespace MoEngage {
         (PermissionType) Enum.Parse(typeof (PermissionType), payloadDictionary[MoEConstants.PARAM_IS_PERMISSION_TYPE] as string)
       );
     }
+
+     public static UserDeletionData GetUserDeletionData(string payload) {
+      Dictionary < string, object > payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary < string, object > ;
+      AccountMeta accountMeta = MoEParser.GetAccountMetaInstance(payloadDictionary);
+
+      var isSuccess = payloadDictionary[MoEConstants.PARAM_IS_SUCCESS] as bool?;
+
+      if (isSuccess == null) {
+         throw new Exception(
+          "Parsing error, " + MoEConstants.PARAM_IS_SUCCESS + " cannot be null"
+        );
+      }
+
+      return new UserDeletionData(
+        accountMeta,
+        isSuccess ?? false
+      );
+    }
+
   }
 }

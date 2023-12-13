@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dependencies>
     <androidPackages>
-        <androidPackage spec="com.moengage:cards-ui:1.4.0"/>
+        <androidPackage spec="com.moengage:cards-ui:1.6.1"/>
     </androidPackages>
     
     <iosPods>

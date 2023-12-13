@@ -1,3 +1,13 @@
+# MoEngage
+
+# Next Release
+
+## Next Version
+
+- Android
+  - Support for SDK version `12.10.02`.
+  - Google Policy - API `DeleteUser()` to delete User details.
+
 # 17-08-2023
 
 ## 3.0.0

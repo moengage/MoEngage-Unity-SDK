@@ -39,3 +39,5 @@ internal const val METHOD_NAME_IN_APP_CUSTOM_ACTION = "InAppCampaignCustomAction
 internal const val METHOD_NAME_IN_APP_SELF_HANDLED = "InAppCampaignSelfHandled"
 internal const val METHOD_NAME_PUSH_TOKEN = "PushToken"
 internal const val METHOD_NAME_PERMISSION_RESULT = "onPermissionResult"
+
+internal const val ARGUMENT_IS_SUCCESS = "isSuccess"

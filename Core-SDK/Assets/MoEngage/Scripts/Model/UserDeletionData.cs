@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2023 MoEngage Inc.
+ * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
  *
@@ -11,27 +11,26 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace MoEngage {
+  [System.Serializable]
+  /// <summary>
+  /// User Deletion Data model
+  /// </summary>
+  public class UserDeletionData {
+    /// <value> Account info </value>
+    public AccountMeta accountMeta;
+    
+    /// <value> True if User Deletion is Successful, else false.</value>
+    public bool isSuccess;
+
+    public UserDeletionData(AccountMeta accountMeta, bool isSuccess) {
+        this.accountMeta = accountMeta;
+        this.isSuccess = isSuccess;
     }
+  }
+
 }
-
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    versionCatalogs {
-        create("moengageInternal") {
-            from("com.moengage:android-dependency-catalog-internal:1.4.0")
-        }
-    }
-}
-
-include(":unity-wrapper", ":unity-library", ":unity-wrapper-geofence")
-rootProject.name = "android-unity-wrapper"
-
-includeBuild("publishing-plugin")
