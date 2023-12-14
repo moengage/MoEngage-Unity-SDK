@@ -5,7 +5,7 @@
     </androidPackages>
     
     <iosPods>
-        <iosPod name="MoEngageCards" version="~> 4.10.0" minTargetSdk="11.0">
+        <iosPod name="MoEngageCards" version="~> 4.13.0" minTargetSdk="11.0">
         </iosPod>
     </iosPods>
 </dependencies>
