@@ -7,6 +7,8 @@
 - Android
   - Support for SDK version `12.10.02`.
   - Google Policy - API `DeleteUser()` to delete User details.
+- iOS
+  - Updated the MoEngage-iOS-SDK dependency to `9.14.0` and above.
 
 # 17-08-2023
 

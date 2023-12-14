@@ -179,8 +179,8 @@ public static class BuildPostProcessor
     {
         using (StreamWriter sw = File.AppendText(buildPath + "/Podfile"))
         {
-             sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.9.0' \nend");
-             sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.9.0' \nend");
+             sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.13.0' \nend");
+             sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.13.0' \nend");
         }
     }
 
