@@ -1,5 +1,14 @@
 # Geofence
 
+# Next Release
+
+## Next Version
+
+- Android
+  - Support for native Geofence SDK version `3.4.0`
+- iOS
+  - Updated the MoEngageGeofence dependency to `5.13.0` and above.
+
 # 17-08-2023
 
 ## 1.0.0

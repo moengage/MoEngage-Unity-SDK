@@ -131,5 +131,10 @@ namespace MoEngage
         /* ****************************** Init Config Keys ***************************************** */
         public const string KEY_INIT_CONFIG = "initConfig";
         public const string KEY_PUSH_CONFIG = "pushConfig";
+
+
+
+        /* ****************************** User Delete Keys ***************************************** */
+        public const string PARAM_IS_SUCCESS = "isSuccess";
     }
 }

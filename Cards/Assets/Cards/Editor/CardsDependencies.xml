@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dependencies>
     <androidPackages>
-        <androidPackage spec="com.moengage:cards-ui:1.4.0"/>
+        <androidPackage spec="com.moengage:cards-ui:1.6.1"/>
     </androidPackages>
     
     <iosPods>
-        <iosPod name="MoEngageCards" version="~> 4.10.0" minTargetSdk="11.0">
+        <iosPod name="MoEngageCards" version="~> 4.13.0" minTargetSdk="11.0">
         </iosPod>
     </iosPods>
 </dependencies>

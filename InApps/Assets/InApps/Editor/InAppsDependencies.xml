@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dependencies>
+    <androidPackages>
+        <androidPackage spec="com.moengage:inapp:7.1.2"/>
+    </androidPackages>
+</dependencies>

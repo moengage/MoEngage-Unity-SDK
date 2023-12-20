@@ -1,6 +1,6 @@
 [libraries]
-appCompat = { group = "androidx.appcompat", name = "appcompat", version = "1.4.2" }
-core = { group = "com.moengage", name = "moe-android-sdk", version = "12.8.02" }
-inapp = { group = "com.moengage", name = "inapp", version = "6.7.1" }
-basePlugin = { group = "com.moengage", name = "plugin-base", version = "3.3.3" }
-basePluginGeofence = { group = "com.moengage", name = "plugin-base-geofence", version = "1.1.0" }
+appCompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
+core = { group = "com.moengage", name = "moe-android-sdk", version = "12.10.02" }
+inapp = { group = "com.moengage", name = "inapp", version = "7.1.1" }
+basePlugin = { group = "com.moengage", name = "plugin-base", version = "3.4.0" }
+basePluginGeofence = { group = "com.moengage", name = "plugin-base-geofence", version = "1.2.0" }

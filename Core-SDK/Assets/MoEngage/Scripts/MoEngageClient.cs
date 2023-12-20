@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoEngage {
+  public delegate void UserDeletionResponseDelegate(UserDeletionData data);
+
   public class MoEngageClient: MonoBehaviour {
     private
     const string TAG = "MoEngageAndroid";
@@ -735,6 +737,17 @@ namespace MoEngage {
       #if UNITY_ANDROID && !UNITY_EDITOR
       Debug.Log(TAG + " OnOrientationChanged::");
       MoEngageAndroid.OnOrientationChanged();
+      #endif
+    }
+
+    ///<summary>
+    /// Delete Current User Data From MoEngage Server
+    /// NOTE: This API is only for `Android`
+    ///</summary>
+    public static void DeleteUser(UserDeletionResponseDelegate delegateFunc) {
+      #if UNITY_ANDROID && !UNITY_EDITOR
+      Debug.Log(TAG + " DeleteUser::");
+      MoEngageAndroid.DeleteUser(MoEUtils.GetAccountPayload(appId), delegateFunc);
       #endif
     }
     #endregion

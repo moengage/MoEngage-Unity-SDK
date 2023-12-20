@@ -50,3 +50,9 @@ Build.log
 **UserSettings/
 
 Library/
+
+InApps/Library/
+InApps/Logs/
+InApps/*.unitypackage
+InApps/Packages/
+InApps/ProjectSettings/
