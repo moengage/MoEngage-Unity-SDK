@@ -1,6 +1,6 @@
 # Rich-Notification
 
-# Next Release
+# 20-12-2023
 
 - Android
   - Support for native rich-notification version `4.7.2`.

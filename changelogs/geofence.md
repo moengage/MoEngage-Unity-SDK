@@ -1,8 +1,6 @@
-# Geofence
+# 20-12-2023
 
-# Next Release
-
-## Next Version
+## 1.1.0
 
 - Android
   - Support for native Geofence SDK version `3.4.0`

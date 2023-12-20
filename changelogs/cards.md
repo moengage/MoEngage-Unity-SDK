@@ -1,6 +1,6 @@
 # Cards
 
-# Next Release
+# 20-12-2023
 
 - Android
   - Support for native cards-ui version `1.6.1`.

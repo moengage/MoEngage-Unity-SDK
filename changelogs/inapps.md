@@ -1,6 +1,6 @@
 # InApps
 
-# Next Release
+# 20-12-2023
 
 - Android
-  - Support for native inapp version `7.1.1`.
+  - Support for native inapp version `7.1.2`.

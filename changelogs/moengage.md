@@ -1,8 +1,8 @@
 # MoEngage
 
-# Next Release
+# 20-12-2023
 
-## Next Version
+## 3.1.0
 
 - Android
   - Support for SDK version `12.10.02`.
