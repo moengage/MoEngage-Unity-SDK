@@ -1,3 +1,10 @@
+# Next Release
+
+## Next version
+
+- iOS
+  - Updated the MoEngageGeofence dependency to `5.14.0` and above.
+  
 # 20-12-2023
 
 ## 1.1.0
