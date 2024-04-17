@@ -140,8 +140,21 @@ public static class BuildPostProcessor
         
         RemoveExtensionFilesFromMainTarget(path);
 
+        ExportPluginVersion(path);
     }
     
+    private static void ExportPluginVersion(string path) {
+
+        using (StreamWriter sw = File.AppendText(path + "/Libraries/MoEngage/Plugins/iOS/MoEUnityConstants.m"))
+        {
+             // Get the constant value from your C# file
+             string version = $"\"{MoEngage.MoEUnityConstants.PLUGIN_VERSION}\"";
+             string constantFileContent = $@"NSString* const kUnityPluginVersion = @{version};";
+             sw.WriteLine(constantFileContent);
+        }
+
+    }
+
     private static void RemoveExtensionFilesFromMainTarget(string path) {
         string projPath = PBXProject.GetPBXProjectPath(path);
         PBXProject project = new PBXProject();
@@ -179,8 +192,8 @@ public static class BuildPostProcessor
     {
         using (StreamWriter sw = File.AppendText(buildPath + "/Podfile"))
         {
-             sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.14.0' \nend");
-             sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.14.0' \nend");
+             sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.16.0' \nend");
+             sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.16.0' \nend");
         }
     }
 

@@ -5,7 +5,7 @@
 ## Next version
 
 - iOS
-  - Updated the MoEngage-iOS-SDK dependency to `9.15.0` and above.
+  - Updated the MoEngage-iOS-SDK dependency to `9.17.0` and above.
   
 # 20-12-2023
 

@@ -107,7 +107,7 @@
     
     sdkConfig.analyticsPeriodicFlushDuration = [MoEngageUnityUtils fetchPeriodicFlushDuration];
     sdkConfig.analyticsDisablePeriodicFlush = [MoEngageUnityUtils isPeriodicFlushDisabled];
-    sdkConfig.enableLogs = [MoEngageUnityUtils isLogsEnabled];
+    sdkConfig.consoleLogConfig = [[MoEngageConsoleLogConfig alloc] initWithIsLoggingEnabled: [MoEngageUnityUtils isLogsEnabled] loglevel: MoEngageLoggerTypeVerbose];
 
     sdkConfig.storageConfig = [[MoEngageStorageConfig alloc] initWithEncryptionConfig:[[MoEngageStorageEncryptionConfig alloc] initWithIsEncryptionEnabled:[MoEngageUnityUtils isStorageEncryptionEnabled]]];
     

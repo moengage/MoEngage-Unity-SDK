@@ -137,4 +137,9 @@ namespace MoEngage
         /* ****************************** User Delete Keys ***************************************** */
         public const string PARAM_IS_SUCCESS = "isSuccess";
     }
+
+    public static class MoEUnityConstants {
+        /* ****************************** Plugin Version ***************************************** */
+        public const string PLUGIN_VERSION = "3.0.0";
+    }
 }
