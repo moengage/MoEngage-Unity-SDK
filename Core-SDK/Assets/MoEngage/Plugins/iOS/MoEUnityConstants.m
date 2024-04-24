@@ -24,6 +24,3 @@ NSString* const kInAppClicked = @"MoEInAppCampaignClicked";
 NSString* const kInAppDismissed = @"MoEInAppCampaignDismissed";
 NSString* const kInAppSelfHandled = @"MoEInAppCampaignSelfHandled";
 NSString* const kInAppCustomAction = @"MoEInAppCampaignCustomAction";
-
-// Platform
-NSString* const kUnity = @"unity";

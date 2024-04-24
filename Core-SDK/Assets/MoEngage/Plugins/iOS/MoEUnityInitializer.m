@@ -96,7 +96,6 @@
 }
 
 -(void)commonSetUp:(MoEngagePlugin*)plugin andSDKConfig:(MoEngageSDKConfig*)config {
-    [plugin trackPluginInfo:kUnity version:kUnityPluginVersion];
     [[MoEngagePluginBridge sharedInstance] setPluginBridgeDelegate:self identifier:config.appId];
 }
 

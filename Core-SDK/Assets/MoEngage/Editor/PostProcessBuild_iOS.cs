@@ -139,20 +139,6 @@ public static class BuildPostProcessor
         File.WriteAllText(projectPath, project.WriteToString());
         
         RemoveExtensionFilesFromMainTarget(path);
-
-        ExportPluginVersion(path);
-    }
-    
-    private static void ExportPluginVersion(string path) {
-
-        using (StreamWriter sw = File.AppendText(path + "/Libraries/MoEngage/Plugins/iOS/MoEUnityConstants.m"))
-        {
-             // Get the constant value from your C# file
-             string version = $"\"{MoEngage.MoEUnityConstants.PLUGIN_VERSION}\"";
-             string constantFileContent = $@"NSString* const kUnityPluginVersion = @{version};";
-             sw.WriteLine(constantFileContent);
-        }
-
     }
 
     private static void RemoveExtensionFilesFromMainTarget(string path) {
