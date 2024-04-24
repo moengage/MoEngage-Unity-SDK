@@ -41,3 +41,5 @@ internal const val METHOD_NAME_PUSH_TOKEN = "PushToken"
 internal const val METHOD_NAME_PERMISSION_RESULT = "onPermissionResult"
 
 internal const val ARGUMENT_IS_SUCCESS = "isSuccess"
+
+internal const val ARGUMENT_VERSION = "version"

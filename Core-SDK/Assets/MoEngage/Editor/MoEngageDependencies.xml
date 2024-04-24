@@ -2,7 +2,7 @@
 <dependencies>
   <androidPackages>
     <androidPackage spec="com.moengage:moe-android-sdk:12.10.02"/>
-    <androidPackage spec="com.moengage:unity-wrapper:3.1.0"/>
+    <androidPackage spec="com.moengage:unity-wrapper:3.2.3-SNAPSHOT"/>
   </androidPackages>
     
   <!-- iOS Cocoapod dependencies can be specified by each iosPod element. -->

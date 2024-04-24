@@ -1,3 +1,5 @@
+import java.net.URI
+
 /*
  * Copyright (c) 2014-2023 MoEngage Inc.
  *
@@ -13,20 +15,24 @@
 
 pluginManagement {
     repositories {
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
         google()
         mavenCentral()
+        mavenLocal()
         gradlePluginPortal()
     }
 }
 
 dependencyResolutionManagement {
     repositories {
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
         google()
+        mavenLocal()
         mavenCentral()
     }
     versionCatalogs {
         create("moengageInternal") {
-            from("com.moengage:android-dependency-catalog-internal:1.4.0")
+            from("com.moengage:android-dependency-catalog-internal:2.0.0")
         }
     }
 }

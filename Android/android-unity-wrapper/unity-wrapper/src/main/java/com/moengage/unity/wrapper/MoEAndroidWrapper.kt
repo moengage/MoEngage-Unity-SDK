@@ -3,8 +3,11 @@ package com.moengage.unity.wrapper
 import android.content.Context
 import com.moengage.core.LogLevel
 import com.moengage.core.internal.logger.Logger
+import com.moengage.core.internal.model.IntegrationMeta
 import com.moengage.plugin.base.internal.ARGUMENT_DATA
 import com.moengage.plugin.base.internal.PluginHelper
+import com.moengage.plugin.base.internal.PluginInitializer
+import com.moengage.plugin.base.internal.instanceMetaFromJson
 import com.moengage.plugin.base.internal.setEventEmitter
 import com.moengage.unity.wrapper.internal.PayloadTransformer
 import com.moengage.unity.wrapper.internal.UserDeletionCallback
@@ -48,14 +51,18 @@ public class MoEAndroidWrapper private constructor() {
         try {
             Logger.print { "$tag initialize() : Initialization payload=$initializePayload" }
             val initializationJson = JSONObject(initializePayload)
-            val gameObjectName =
-                initializationJson.getJSONObject(ARGUMENT_DATA).getString(ARGUMENT_GAME_OBJECT)
+            val data = initializationJson.getJSONObject(ARGUMENT_DATA)
+            val gameObjectName = data.getString(ARGUMENT_GAME_OBJECT)
             if (gameObjectName.isEmpty()) {
                 Logger.print(
                     LogLevel.ERROR
                 ) { "$tag initialize() : Game object name is empty cannot pass callbacks" }
                 return
             }
+            PluginInitializer.addIntegrationMeta(
+                IntegrationMeta(INTEGRATION_TYPE, data.getString(ARGUMENT_VERSION)),
+                instanceMetaFromJson(initializationJson).appId
+            )
             setEventEmitter(EventEmitterImpl(gameObjectName))
             pluginHelper.initialise(initializationJson)
         } catch (t: Throwable) {

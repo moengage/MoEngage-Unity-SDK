@@ -29,7 +29,6 @@ import android.content.Context
 import com.moengage.core.LogLevel
 import com.moengage.core.MoEngage
 import com.moengage.core.internal.logger.Logger
-import com.moengage.core.internal.model.IntegrationMeta
 import com.moengage.core.model.SdkState
 import com.moengage.plugin.base.internal.PluginInitializer
 
@@ -51,12 +50,10 @@ public object MoEInitializer {
     public fun initialiseDefaultInstance(context: Context, builder: MoEngage.Builder) {
         try {
             Logger.print { "$tag initialiseDefaultInstance(): : Will try to initialise the sdk" }
+            Logger.print { "$tag initialiseDefaultInstance(): : unity wrapper version: ${BuildConfig.MOENGAGE_ANDROID_UNITY_WRAPPER}" }
             MoEAndroidWrapper.getInstance().setContext(context)
             PluginInitializer.initialize(
-                builder,
-                IntegrationMeta(
-                    INTEGRATION_TYPE, BuildConfig.MOENGAGE_ANDROID_UNITY_WRAPPER
-                )
+                builder
             )
         } catch (t: Throwable) {
             Logger.print(LogLevel.ERROR, t) { "$tag initialiseDefaultInstance(): " }
@@ -78,11 +75,12 @@ public object MoEInitializer {
     ) {
         try {
             Logger.print { "$tag initialiseDefaultInstance(): : Will try to initialise the sdk" }
+            Logger.print { "$tag initialiseDefaultInstance(): : unity wrapper version: ${BuildConfig.MOENGAGE_ANDROID_UNITY_WRAPPER}" }
             MoEAndroidWrapper.getInstance().setContext(context)
             PluginInitializer.initialize(
-                builder, IntegrationMeta(
-                    INTEGRATION_TYPE, BuildConfig.MOENGAGE_ANDROID_UNITY_WRAPPER
-                ), sdkState
+                builder = builder,
+                integrationMeta = null,
+                sdkState = sdkState
             )
         } catch (t: Throwable) {
             Logger.print(LogLevel.ERROR, t) { "$tag initialiseDefaultInstance(): " }

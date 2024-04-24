@@ -136,6 +136,9 @@ namespace MoEngage
 
         /* ****************************** User Delete Keys ***************************************** */
         public const string PARAM_IS_SUCCESS = "isSuccess";
+
+        /* ****************************** Core-SDK Version ***************************************** */
+        public const string PARAM_CORE_VERSION = "version";
     }
 
     public static class MoEUnityConstants {

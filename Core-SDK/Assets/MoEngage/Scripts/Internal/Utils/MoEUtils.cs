@@ -40,6 +40,10 @@ namespace MoEngage {
           }, {
             MoEConstants.KEY_INIT_CONFIG,
             GetInitConfigPayload(shouldDeliverCallbackOnForegroundClick)
+          },
+          {
+            MoEConstants.PARAM_CORE_VERSION,
+            MoEUnityConstants.PLUGIN_VERSION
           }
         };
       var payloadDict = new Dictionary < string,
