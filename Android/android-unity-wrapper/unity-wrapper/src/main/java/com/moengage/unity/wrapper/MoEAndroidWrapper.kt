@@ -59,10 +59,6 @@ public class MoEAndroidWrapper private constructor() {
                 ) { "$tag initialize() : Game object name is empty cannot pass callbacks" }
                 return
             }
-            PluginInitializer.addIntegrationMeta(
-                IntegrationMeta(INTEGRATION_TYPE, data.getString(ARGUMENT_VERSION)),
-                instanceMetaFromJson(initializationJson).appId
-            )
             setEventEmitter(EventEmitterImpl(gameObjectName))
             pluginHelper.initialise(initializationJson)
         } catch (t: Throwable) {
