@@ -7,7 +7,7 @@
     
   <!-- iOS Cocoapod dependencies can be specified by each iosPod element. -->
   <iosPods>
-    <iosPod name="MoEngagePluginBase" version="~> 4.8.0" minTargetSdk="11.0">
+    <iosPod name="MoEngagePluginBase" version="~> 4.8.2" minTargetSdk="11.0">
     </iosPod>
   </iosPods>
 </dependencies>
