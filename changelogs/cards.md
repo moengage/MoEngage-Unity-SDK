@@ -1,10 +1,10 @@
-# Cards
+# 26-04-2024
 
-# Next Release
+## 3.2.0
 
 - iOS
   - Updated the MoEngageCards dependency to `4.16.0` and above.
-  
+
 # 20-12-2023
 
 - Android

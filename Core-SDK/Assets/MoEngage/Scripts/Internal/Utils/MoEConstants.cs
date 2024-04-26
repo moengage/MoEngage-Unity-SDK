@@ -149,6 +149,6 @@ namespace MoEngage
 
     public static class MoEUnityConstants {
         /* ****************************** Plugin Version ***************************************** */
-        public const string PLUGIN_VERSION = "3.0.0";
+        public const string PLUGIN_VERSION = "3.2.0";
     }
 }
