@@ -15,7 +15,6 @@ import java.net.URI
 
 pluginManagement {
     repositories {
-        maven("https://oss.sonatype.org/content/repositories/snapshots/")
         google()
         mavenCentral()
         mavenLocal()
@@ -25,7 +24,6 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        maven("https://oss.sonatype.org/content/repositories/snapshots/")
         google()
         mavenLocal()
         mavenCentral()
