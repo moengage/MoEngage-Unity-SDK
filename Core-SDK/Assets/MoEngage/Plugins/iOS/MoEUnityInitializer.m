@@ -96,7 +96,6 @@
 }
 
 -(void)commonSetUp:(MoEngagePlugin*)plugin andSDKConfig:(MoEngageSDKConfig*)config {
-    [plugin trackPluginInfo:kUnity version:kUnityPluginVersion];
     [[MoEngagePluginBridge sharedInstance] setPluginBridgeDelegate:self identifier:config.appId];
 }
 
@@ -107,7 +106,7 @@
     
     sdkConfig.analyticsPeriodicFlushDuration = [MoEngageUnityUtils fetchPeriodicFlushDuration];
     sdkConfig.analyticsDisablePeriodicFlush = [MoEngageUnityUtils isPeriodicFlushDisabled];
-    sdkConfig.enableLogs = [MoEngageUnityUtils isLogsEnabled];
+    sdkConfig.consoleLogConfig = [[MoEngageConsoleLogConfig alloc] initWithIsLoggingEnabled: [MoEngageUnityUtils isLogsEnabled] loglevel: MoEngageLoggerTypeVerbose];
 
     sdkConfig.storageConfig = [[MoEngageStorageConfig alloc] initWithEncryptionConfig:[[MoEngageStorageEncryptionConfig alloc] initWithIsEncryptionEnabled:[MoEngageUnityUtils isStorageEncryptionEnabled]]];
     

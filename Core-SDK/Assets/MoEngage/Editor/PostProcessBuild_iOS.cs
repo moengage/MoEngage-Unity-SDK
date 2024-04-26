@@ -139,9 +139,8 @@ public static class BuildPostProcessor
         File.WriteAllText(projectPath, project.WriteToString());
         
         RemoveExtensionFilesFromMainTarget(path);
-
     }
-    
+
     private static void RemoveExtensionFilesFromMainTarget(string path) {
         string projPath = PBXProject.GetPBXProjectPath(path);
         PBXProject project = new PBXProject();
@@ -179,8 +178,8 @@ public static class BuildPostProcessor
     {
         using (StreamWriter sw = File.AppendText(buildPath + "/Podfile"))
         {
-             sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.14.0' \nend");
-             sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.14.0' \nend");
+             sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.16.0' \nend");
+             sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngageRichNotification', '~> 7.16.0' \nend");
         }
     }
 

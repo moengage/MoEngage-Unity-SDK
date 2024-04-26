@@ -136,5 +136,19 @@ namespace MoEngage
 
         /* ****************************** User Delete Keys ***************************************** */
         public const string PARAM_IS_SUCCESS = "isSuccess";
+
+        /* ****************************** Core-SDK Version ***************************************** */
+        public const string KEY_VERSION = "version";
+
+        /* ****************************** Integration Meta ***************************************** */
+        public const string KEY_INTEGRATION_META = "integrationMeta";
+
+        /* ****************************** Platform type ***************************************** */
+        public const string PARAM_PLATFORM_UNITY = "unity";
+    }
+
+    public static class MoEUnityConstants {
+        /* ****************************** Plugin Version ***************************************** */
+        public const string PLUGIN_VERSION = "3.0.0";
     }
 }

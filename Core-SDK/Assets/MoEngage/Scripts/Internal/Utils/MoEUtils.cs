@@ -42,6 +42,16 @@ namespace MoEngage {
             GetInitConfigPayload(shouldDeliverCallbackOnForegroundClick)
           }
         };
+
+        var integrationMetaPayload = new Dictionary<string, string> {
+          {
+            MoEConstants.ARGUMENT_TYPE, MoEConstants.PARAM_PLATFORM_UNITY
+          },
+          {
+            MoEConstants.KEY_VERSION, MoEUnityConstants.PLUGIN_VERSION
+          }
+        };
+
       var payloadDict = new Dictionary < string,
         object > {
           {
@@ -50,6 +60,10 @@ namespace MoEngage {
           {
             MoEConstants.PAYLOAD_DATA,
             dataPayload
+          },
+          {
+            MoEConstants.KEY_INTEGRATION_META,
+            integrationMetaPayload
           }
         };
 

@@ -7,8 +7,6 @@
 
 #import "MoEUnityConstants.h"
 
-NSString* const kUnityPluginVersion = @"3.0.0";
-
 // Callbacks Method Names
 NSString* const kUnityMethodNamePushTokenGenerated = @"PushToken";
 NSString* const kUnityMethodNamePushClicked = @"PushClicked";
@@ -26,6 +24,3 @@ NSString* const kInAppClicked = @"MoEInAppCampaignClicked";
 NSString* const kInAppDismissed = @"MoEInAppCampaignDismissed";
 NSString* const kInAppSelfHandled = @"MoEInAppCampaignSelfHandled";
 NSString* const kInAppCustomAction = @"MoEInAppCampaignCustomAction";
-
-// Platform
-NSString* const kUnity = @"unity";

@@ -30,7 +30,6 @@ package com.moengage.unity.wrapper
  * Date: 26/06/20
  */
 internal const val MODULE_TAG = "Unity_"
-internal const val INTEGRATION_TYPE = "unity"
 internal const val METHOD_NAME_PUSH_REDIRECTION = "PushClicked"
 internal const val METHOD_NAME_IN_APP_SHOWN = "InAppCampaignShown"
 internal const val METHOD_NAME_IN_APP_CLICKED = "InAppCampaignClicked"

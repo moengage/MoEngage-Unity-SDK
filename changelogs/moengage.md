@@ -4,9 +4,11 @@
 
 ## Next version
 
+- Android
+  - Plugin version export to native
 - iOS
-  - Updated the MoEngage-iOS-SDK dependency to `9.15.0` and above.
-  
+  - Updated the MoEngage-iOS-SDK dependency to `9.17.0` and above.Refer to [release notes](https://developers.moengage.com/hc/en-us/articles/4404198236564-Changelog#01HS8FGNBB50KZ0QAT847A34N3) for more details.
+
 # 20-12-2023
 
 ## 3.1.0
