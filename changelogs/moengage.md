@@ -6,6 +6,7 @@
 - Added boolean user attribute tracking customization in initialization API
 - iOS
   - Updated the MoEngage-iOS-SDK dependency to `9.18.0` and above.
+  - Added DC-06 support.
 
   
 # 26-04-2024
