@@ -1,5 +1,11 @@
 # MoEngage
 
+# Next Release Date
+
+## Next release version
+- iOS
+  - Updated the MoEngage-iOS-SDK dependency to `9.18.0` and above.
+  
 # 26-04-2024
 
 ## 3.2.0
