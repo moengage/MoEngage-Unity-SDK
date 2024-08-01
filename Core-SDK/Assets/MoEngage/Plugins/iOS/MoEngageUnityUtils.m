@@ -23,6 +23,8 @@
         return  MoEngageDataCenterData_center_04;
     } else if ([dataCenter isEqualToString:@"DATA_CENTER_05"]){
         return  MoEngageDataCenterData_center_05;
+    } else if ([dataCenter isEqualToString:@"DATA_CENTER_06"]){
+        return MoEngageDataCenterData_center_06;
     }
 #endif
     return MoEngageDataCenterData_center_01;
