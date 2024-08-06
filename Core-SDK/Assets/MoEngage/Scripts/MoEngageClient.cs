@@ -54,9 +54,9 @@ namespace MoEngage {
     /// </summary>
     /// <param name="gameObject">Instance of Game Object</param>
     /// <param name="appId">Account Identifier</param>
-    public static void Initialize(GameObject gameObject, string appId, string shouldDeliverCallbackOnForegroundClick = null, Boolean shoulTrackBooleanAsNumber = false) {
+    public static void Initialize(GameObject gameObject, string appId, string shouldDeliverCallbackOnForegroundClick = null, Boolean shouldTrackBooleanAsNumber = false) {
       MoEngageClient.appId = appId;
-      string gameObjPayload = MoEUtils.GetInitializePayload(gameObject ? gameObject.name : null, appId, shouldDeliverCallbackOnForegroundClick, shoulTrackBooleanAsNumber);
+      string gameObjPayload = MoEUtils.GetInitializePayload(gameObject ? gameObject.name : null, appId, shouldDeliverCallbackOnForegroundClick, shouldTrackBooleanAsNumber);
       Debug.Log(TAG + " : Initialize:: payload: " + gameObjPayload);
 
       #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR

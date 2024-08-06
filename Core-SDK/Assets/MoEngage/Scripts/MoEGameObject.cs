@@ -26,7 +26,7 @@ namespace MoEngage {
     private string shouldDeliverCallbackOnForegroundClick;
 
     [SerializeField]
-    private Boolean shoulTrackBooleanAsNumber = false;
+    private Boolean shouldTrackBooleanAsNumber = false;
 
     private
     const string TAG = "MoEGameObject";
@@ -46,7 +46,7 @@ namespace MoEngage {
         gameObject,
         appId, 
         shouldDeliverCallbackOnForegroundClick,
-        shoulTrackBooleanAsNumber);
+        shouldTrackBooleanAsNumber);
     }
 
     public void PushToken(string payload) {

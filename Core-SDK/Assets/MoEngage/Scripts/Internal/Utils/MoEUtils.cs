@@ -42,7 +42,7 @@ namespace MoEngage {
       return payloadDict;
     }
 
-    public static string GetInitializePayload(string gameObjectName, string appId, string shouldDeliverCallbackOnForegroundClick, Boolean shoulTrackBooleanAsNumber) {
+    public static string GetInitializePayload(string gameObjectName, string appId, string shouldDeliverCallbackOnForegroundClick, Boolean shouldTrackBooleanAsNumber) {
         var dataPayload = new Dictionary < string,
         object > () {
           {
@@ -65,7 +65,7 @@ namespace MoEngage {
 
         var initConfigPayload = new Dictionary<string, object> {
           {
-            MoEConstants.KEY_ANALYTICS_CONFIG, GetAnalyticsConfigPayload(shoulTrackBooleanAsNumber)
+            MoEConstants.KEY_ANALYTICS_CONFIG, GetAnalyticsConfigPayload(shouldTrackBooleanAsNumber)
           }
         };
 
