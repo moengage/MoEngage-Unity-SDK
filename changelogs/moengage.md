@@ -1,11 +1,19 @@
 # MoEngage
 
-# Next Release
+# Next Release Date
 
-## Next version
+## Next release version
+- Added boolean user attribute tracking customization in initialization API
+- iOS
+  - Updated the MoEngage-iOS-SDK dependency to `9.18.0` and above.
+  - Added DC-06 support.
 
-- Android
-  - Plugin version export to native
+  
+# 26-04-2024
+
+## 3.2.0
+
+- Plugin version export to native
 - iOS
   - Updated the MoEngage-iOS-SDK dependency to `9.17.0` and above.Refer to [release notes](https://developers.moengage.com/hc/en-us/articles/4404198236564-Changelog#01HS8FGNBB50KZ0QAT847A34N3) for more details.
 

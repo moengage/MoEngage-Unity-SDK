@@ -131,8 +131,10 @@ namespace MoEngage
         /* ****************************** Init Config Keys ***************************************** */
         public const string KEY_INIT_CONFIG = "initConfig";
         public const string KEY_PUSH_CONFIG = "pushConfig";
+        public const string KEY_ANALYTICS_CONFIG = "analyticsConfig";
 
-
+        /* ****************************** Analytics Config Keys ***************************************** */
+        public const string KEY_SHOULD_TRACK_BOOLEAN_AS_NUMBER = "shouldTrackUserAttributeBooleanAsNumber";
 
         /* ****************************** User Delete Keys ***************************************** */
         public const string PARAM_IS_SUCCESS = "isSuccess";
@@ -149,6 +151,6 @@ namespace MoEngage
 
     public static class MoEUnityConstants {
         /* ****************************** Plugin Version ***************************************** */
-        public const string PLUGIN_VERSION = "3.0.0";
+        public const string PLUGIN_VERSION = "3.2.0";
     }
 }
