@@ -11,6 +11,7 @@ using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
 using System.Text;
 using System.Collections.Generic;
+using UnityEditor.Build;
 
 #if UNITY_2017_2_OR_NEWER
 using UnityEditor.iOS.Xcode.Extensions;
@@ -243,10 +244,11 @@ public static class BuildPostProcessor
     private static void AddPushCapability(PBXProject project, string path, string targetGUID, string targetName)
     {
         var projectPath = PBXProject.GetPBXProjectPath(path);
-        project.AddCapability(targetGUID, PBXCapabilityType.PushNotifications);
-        project.AddCapability(targetGUID, PBXCapabilityType.BackgroundModes);
-
         var entitlementsPath = GetEntitlementsPath(path, project, targetGUID, targetName);
+
+        project.AddCapability(targetGUID, PBXCapabilityType.PushNotifications, entitlementsPath, false);
+        project.AddCapability(targetGUID, PBXCapabilityType.BackgroundModes, entitlementsPath, false);
+
         // NOTE: ProjectCapabilityManager's 4th constructor param requires Unity 2019.3+
         var projCapability = new ProjectCapabilityManager(projectPath, entitlementsPath, targetName);
         projCapability.AddBackgroundModes(BackgroundModesOptions.RemoteNotifications);
@@ -259,7 +261,7 @@ public static class BuildPostProcessor
         var projectPath = PBXProject.GetPBXProjectPath(path);
         var mainTargetGUID = GetPBXProjectTargetGUID(project);
         var extensionTargetName = NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME;
-
+        var extensionBundleIdentifier = GetExtensionBundleIdentifier(extensionTargetName);
         var exisitingPlistFile = CreateExtensionPlistFile(path, true);
         // If file exisits then the below has been completed before from another build
         // The below will not be updated on Append builds
@@ -271,7 +273,7 @@ public static class BuildPostProcessor
            project,
            mainTargetGUID,
            extensionTargetName,
-           PlayerSettings.GetApplicationIdentifier(BuildTargetGroup.iOS) + "." + extensionTargetName,
+           extensionBundleIdentifier,
            extensionTargetName + "/" + "Info.plist" // Unix path as it's used by Xcode
         );
 
@@ -383,7 +385,7 @@ public static class BuildPostProcessor
         var projectPath = PBXProject.GetPBXProjectPath(path);
         var mainTargetGUID = GetPBXProjectTargetGUID(project);
         var extensionTargetName = PUSH_TEMPLATES_EXTENSION_TARGET_NAME;
-
+        var extensionBundleIdentifier = GetExtensionBundleIdentifier(extensionTargetName);
         var exisitingPlistFile = CreateExtensionPlistFile(path,false);
         // If file exisits then the below has been completed before from another build
         // The below will not be updated on Append builds
@@ -395,7 +397,7 @@ public static class BuildPostProcessor
            project,
            mainTargetGUID,
            extensionTargetName,
-           PlayerSettings.GetApplicationIdentifier(BuildTargetGroup.iOS) + "." + extensionTargetName,
+           extensionBundleIdentifier,
            extensionTargetName + "/" + "Info.plist" // Unix path as it's used by Xcode
         );
 
@@ -449,6 +451,17 @@ public static class BuildPostProcessor
         string resourcesBuildPhase = project.GetResourcesBuildPhaseByTarget(extensionGUID);
         string resourcesFilesGuid = project.AddFile(destPath, nativeFileRelativeDestination, PBXSourceTree.Source);
         project.AddFileToBuildSection(extensionGUID, resourcesBuildPhase, resourcesFilesGuid);
+    }
+
+
+    // Returns the bundle identifier for the specified extension target
+    private static string GetExtensionBundleIdentifier(string extensionTargetName)
+    {
+#if UNITY_2021_2_OR_NEWER
+        return PlayerSettings.GetApplicationIdentifier(NamedBuildTarget.iOS) + "." + extensionTargetName;
+#else
+        return PlayerSettings.GetApplicationIdentifier(BuildTargetGroup.iOS) + "." + extensionTargetName;
+#endif
     }
 
 }
