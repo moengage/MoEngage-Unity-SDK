@@ -1,8 +1,8 @@
 # MoEngage
 
-# Release Date
+# 09-09-2025
 
-## Release Version
+## 5.0.0
 - Added support for Unity 6.1
   
 # 07-08-2024
