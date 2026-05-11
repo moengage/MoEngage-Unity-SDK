@@ -22,8 +22,8 @@ namespace MoEngage {
     private
     const string TAG = "MoEngageAndroid";
     private static string appId;
-    private static Action<Dictionary<string, string>> _userIdentitiesCallback;
-    private static Action<InAppSelfHandledCampaignsData> _selfHandledInAppsCallback;
+    private static readonly Queue<Action<Dictionary<string, string>>> _userIdentitiesCallbacks = new Queue<Action<Dictionary<string, string>>>();
+    private static readonly Queue<Action<InAppSelfHandledCampaignsData>> _selfHandledInAppsCallbacks = new Queue<Action<InAppSelfHandledCampaignsData>>();
 
     private static MoEngageUnityPlatform _moengageHandler;
     private static MoEngageUnityPlatform moengageHandler {
@@ -90,16 +90,15 @@ namespace MoEngage {
       if (!isPluginInitialized()) { callback?.Invoke(null); return; }
       string accountPayload = MoEUtils.GetAccountPayload(appId);
       Debug.Log(TAG + " : GetUserIdentities:: payload: " + accountPayload);
-      _userIdentitiesCallback = callback;
+      _userIdentitiesCallbacks.Enqueue(callback);
       #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.GetUserIdentities(accountPayload);
       #endif
     }
 
     internal static void CompleteGetUserIdentities(Dictionary<string, string> identities) {
-      var cb = _userIdentitiesCallback;
-      _userIdentitiesCallback = null;
-      cb?.Invoke(identities);
+      if (_userIdentitiesCallbacks.Count > 0)
+        _userIdentitiesCallbacks.Dequeue()?.Invoke(identities);
     }
 
     /// <summary>
@@ -566,16 +565,15 @@ namespace MoEngage {
       if (!isPluginInitialized()) { callback?.Invoke(null); return; }
       string accountPayload = MoEUtils.GetAccountPayload(appId);
       Debug.Log(TAG + " : GetSelfHandledInApps:: payload: " + accountPayload);
-      _selfHandledInAppsCallback = callback;
+      _selfHandledInAppsCallbacks.Enqueue(callback);
       #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.GetSelfHandledInApps(accountPayload);
       #endif
     }
 
     internal static void CompleteSelfHandledInApps(InAppSelfHandledCampaignsData data) {
-      var cb = _selfHandledInAppsCallback;
-      _selfHandledInAppsCallback = null;
-      cb?.Invoke(data);
+      if (_selfHandledInAppsCallbacks.Count > 0)
+        _selfHandledInAppsCallbacks.Dequeue()?.Invoke(data);
     }
 
     /// <summary>
