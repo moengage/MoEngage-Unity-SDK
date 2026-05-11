@@ -66,99 +66,62 @@ namespace MoEngage
 
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
 
-            EditorGUILayout.Space(6);
-            EditorGUILayout.LabelField("Common", EditorStyles.boldLabel);
-            EditorGUI.indentLevel++;
-            foreach (var name in new[] { "WorkspaceId", "ProjectId", "DataCenter", "TestEnvironment" })
+            DrawSection("Common", () =>
             {
-                var prop = _serializedSettings.FindProperty(name);
-                if (prop != null) EditorGUILayout.PropertyField(prop, true);
-            }
-            var isLoggingProp = _serializedSettings.FindProperty("IsLoggingEnabled");
-            if (isLoggingProp != null) EditorGUILayout.PropertyField(isLoggingProp, true);
-            if (_settings.IsLoggingEnabled)
-            {
-                var logLevelProp = _serializedSettings.FindProperty("LogLevel");
-                if (logLevelProp != null) EditorGUILayout.PropertyField(logLevelProp, true);
-            }
-            foreach (var name in new[] { "CustomBaseDomain", "IsJwtEnabled" })
-            {
-                var prop = _serializedSettings.FindProperty(name);
-                if (prop != null) EditorGUILayout.PropertyField(prop, true);
-            }
-            var isNetworkEncryptionProp = _serializedSettings.FindProperty("IsNetworkEncryptionEnabled");
-            if (isNetworkEncryptionProp != null) EditorGUILayout.PropertyField(isNetworkEncryptionProp, true);
-            if (_settings.IsNetworkEncryptionEnabled)
-            {
-                var liveProp = _serializedSettings.FindProperty("EncryptionEncodedLiveKey");
-                if (liveProp != null) EditorGUILayout.PropertyField(liveProp, true);
-                var testProp = _serializedSettings.FindProperty("EncryptionEncodedTestKey");
-                if (testProp != null) EditorGUILayout.PropertyField(testProp, true);
-            }
-            foreach (var name in new[] { "IsStorageEncryptionEnabled", "EnablePeriodicDataSync", "DataSyncInterval" })
-            {
-                var prop = _serializedSettings.FindProperty(name);
-                if (prop != null) EditorGUILayout.PropertyField(prop, true);
-            }
-            EditorGUI.indentLevel--;
+                DrawFields("WorkspaceId", "ProjectId", "DataCenter", "TestEnvironment");
+                DrawField("IsLoggingEnabled");
+                if (_settings.IsLoggingEnabled)
+                    DrawField("LogLevel");
+                DrawFields("CustomBaseDomain", "IsJwtEnabled");
+                DrawField("IsNetworkEncryptionEnabled");
+                if (_settings.IsNetworkEncryptionEnabled)
+                    DrawFields("EncryptionEncodedLiveKey", "EncryptionEncodedTestKey");
+                DrawFields("IsStorageEncryptionEnabled", "EnablePeriodicDataSync", "DataSyncInterval");
+            });
 
-            EditorGUILayout.Space(6);
-            EditorGUILayout.LabelField("iOS Only", EditorStyles.boldLabel);
-            EditorGUI.indentLevel++;
-            foreach (var name in new[] { "AppGroupName", "KeychainGroupName", "InAppDisplaySafeAreaInset",
-                "InAppShouldProvideDeeplinkCallback" })
+            DrawSection("iOS Only", () =>
             {
-                var prop = _serializedSettings.FindProperty(name);
-                if (prop != null) EditorGUILayout.PropertyField(prop, true);
-            }
-            foreach (var name in new[] { "IsUnityAppControllerSwizzlingEnabled", "IsSdkAutoInitialisationEnabled", "IsUserRegistrationEnabled" })
-            {
-                var prop = _serializedSettings.FindProperty(name);
-                if (prop != null) EditorGUILayout.PropertyField(prop, true);
-            }
-            EditorGUI.indentLevel--;
-
-            DrawSection("Android Only", new[]
-            {
-                "IntegrationPartner", "EnableCarrierTracking",
-                "PushSmallIcon", "PushLargeIcon", "PushNotificationColor",
-                "GroupMultipleNotifications", "EnablePushBackStackBuilding",
-                "EnableNotificationLargeIconDisplay", "EnableHeadsUpNotification",
-                "EncryptionEncodedDebugKey", "EncryptionEncodedReleaseKey"
+                DrawFields(
+                    "AppGroupName", "KeychainGroupName", "InAppDisplaySafeAreaInset",
+                    "InAppShouldProvideDeeplinkCallback", "IsUnityAppControllerSwizzlingEnabled",
+                    "IsSdkAutoInitialisationEnabled", "IsUserRegistrationEnabled"
+                );
             });
 
             EditorGUILayout.EndScrollView();
 
             EditorGUILayout.Space(8);
             if (GUILayout.Button("Save"))
-            {
                 Save();
-            }
             EditorGUILayout.Space(4);
 
             if (_serializedSettings.ApplyModifiedProperties())
-            {
                 Save();
-            }
         }
 
-        private void DrawSection(string title, string[] propertyNames)
+        private void DrawSection(string label, System.Action content)
         {
             EditorGUILayout.Space(6);
-            EditorGUILayout.LabelField(title, EditorStyles.boldLabel);
+            EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
             EditorGUI.indentLevel++;
-            foreach (var name in propertyNames)
-            {
-                var prop = _serializedSettings.FindProperty(name);
-                if (prop != null)
-                    EditorGUILayout.PropertyField(prop, true);
-            }
+            content();
             EditorGUI.indentLevel--;
+        }
+
+        private void DrawField(string name)
+        {
+            var prop = _serializedSettings.FindProperty(name);
+            if (prop != null) EditorGUILayout.PropertyField(prop, true);
+        }
+
+        private void DrawFields(params string[] names)
+        {
+            foreach (var name in names)
+                DrawField(name);
         }
 
         private void Save()
         {
-            _serializedSettings.ApplyModifiedProperties();
             EditorUtility.SetDirty(_settings);
             AssetDatabase.SaveAssets();
         }
