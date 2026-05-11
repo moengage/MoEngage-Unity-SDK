@@ -22,6 +22,8 @@ namespace MoEngage {
     private
     const string TAG = "MoEngageAndroid";
     private static string appId;
+    private static Action<Dictionary<string, string>> _userIdentitiesCallback;
+    private static Action<InAppSelfHandledCampaignsData> _selfHandledInAppsCallback;
 
     private static MoEngageUnityPlatform _moengageHandler;
     private static MoEngageUnityPlatform moengageHandler {
@@ -82,9 +84,55 @@ namespace MoEngage {
 
     #region UserAttribute Tracking Methods
     /// <summary>
+    /// Returns the identities set for the current user via callback.
+    /// </summary>
+    public static void GetUserIdentities(Action<Dictionary<string, string>> callback) {
+      if (!isPluginInitialized()) { callback?.Invoke(null); return; }
+      string accountPayload = MoEUtils.GetAccountPayload(appId);
+      Debug.Log(TAG + " : GetUserIdentities:: payload: " + accountPayload);
+      _userIdentitiesCallback = callback;
+      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+      moengageHandler.GetUserIdentities(accountPayload);
+      #endif
+    }
+
+    internal static void CompleteGetUserIdentities(Dictionary<string, string> identities) {
+      var cb = _userIdentitiesCallback;
+      _userIdentitiesCallback = null;
+      cb?.Invoke(identities);
+    }
+
+    /// <summary>
+    /// Identify the user with the given unique ID.
+    /// </summary>
+    /// <param name="uniqueId">Unique identifier for the user</param>
+    public static void IdentifyUser(string uniqueId) {
+      if (!isPluginInitialized()) return;
+      Debug.Log(TAG + " : IdentifyUser:: uniqueId: " + uniqueId);
+      string identifyPayload = MoEUtils.GetIdentifyUserPayload(uniqueId, appId);
+      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+      moengageHandler.IdentifyUser(identifyPayload);
+      #endif
+    }
+
+    /// <summary>
+    /// Identify the user with multiple identity attributes.
+    /// </summary>
+    /// <param name="identities">Dictionary of identity key-value pairs</param>
+    public static void IdentifyUser(Dictionary < string, string > identities) {
+      if (!isPluginInitialized()) return;
+      Debug.Log(TAG + " : IdentifyUser:: identities count: " + identities.Count);
+      string identifyPayload = MoEUtils.GetIdentifyUserPayload(identities, appId);
+      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+      moengageHandler.IdentifyUser(identifyPayload);
+      #endif
+    }
+
+    /// <summary>
     /// Updates the already set unique identifier, sets a unique identifier if not set already.
     /// </summary>
     /// <param name="alias">Value for alias</param>
+    [System.Obsolete("SetAlias is deprecated, use IdentifyUser instead.")]
     public static void SetAlias(string alias) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetAlias:: alias: " + alias);
@@ -98,6 +146,7 @@ namespace MoEngage {
     /// Tracks a unique identifier for the user.
     /// </summary>
     /// <param name="uniqueId">Unique ID value of type string</param>
+    [System.Obsolete("SetUniqueId is deprecated, use IdentifyUser instead.")]
     public static void SetUniqueId(string uniqueId) {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_UNIQUE_ID + " : attributeValue: " + uniqueId);
@@ -381,6 +430,21 @@ namespace MoEngage {
     }
 
     /// <summary>
+    /// Tracks a user date attribute using an ISO date string.
+    /// Equivalent to setUserAttributeISODateString in the React Native SDK.
+    /// </summary>
+    /// <param name="attributeName">Attribute name</param>
+    /// <param name="isoDateString">Date in ISO format: yyyy-MM-dd'T'HH:mm:ss'Z'</param>
+    public static void SetUserAttributeISODateString(string attributeName, string isoDateString) {
+      if (!isPluginInitialized()) return;
+      Debug.Log(TAG + " : SetUserAttributeISODateString:: attributeName: " + attributeName + " : isoDateString: " + isoDateString);
+      string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_TIMESTAMP, isoDateString, appId);
+      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+      moengageHandler.SetUserAttribute(userAttributesPayload);
+      #endif
+    }
+
+    /// <summary>
     /// Tracks a user location attribute.
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
@@ -431,6 +495,19 @@ namespace MoEngage {
 
     #region InApp Methods
     /// <summary>
+    /// Show a nudge at the given position.
+    /// </summary>
+    /// <param name="position">Position where the nudge should appear. Defaults to Any.</param>
+    public static void ShowNudge(NudgePosition position = NudgePosition.Any) {
+      if (!isPluginInitialized()) return;
+      string nudgePayload = MoEUtils.GetNudgePayload(position, appId);
+      Debug.Log(TAG + " : ShowNudge:: payload: " + nudgePayload);
+      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+      moengageHandler.ShowNudge(nudgePayload);
+      #endif
+    }
+
+    /// <summary>
     ///  Try to show an InApp Message.
     /// </summary>
     public static void ShowInApp() {
@@ -480,6 +557,25 @@ namespace MoEngage {
       #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.GetSelfHandledInApp(accountPayload);
       #endif
+    }
+
+    /// <summary>
+    /// Fetches all self-handled in-app campaigns via callback.
+    /// </summary>
+    public static void GetSelfHandledInApps(Action<InAppSelfHandledCampaignsData> callback) {
+      if (!isPluginInitialized()) { callback?.Invoke(null); return; }
+      string accountPayload = MoEUtils.GetAccountPayload(appId);
+      Debug.Log(TAG + " : GetSelfHandledInApps:: payload: " + accountPayload);
+      _selfHandledInAppsCallback = callback;
+      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+      moengageHandler.GetSelfHandledInApps(accountPayload);
+      #endif
+    }
+
+    internal static void CompleteSelfHandledInApps(InAppSelfHandledCampaignsData data) {
+      var cb = _selfHandledInAppsCallback;
+      _selfHandledInAppsCallback = null;
+      cb?.Invoke(data);
     }
 
     /// <summary>
@@ -580,6 +676,13 @@ namespace MoEngage {
       #endif
     }
 
+    public static void RegisterForProvisionalPush() {
+      if (!isPluginInitialized()) return;
+      Debug.Log(TAG + " Regiter for Provisional Push");
+      #if UNITY_IOS && !UNITY_EDITOR
+      MoEngageiOS.RegisterForProvisionalPush();
+      #endif
+    }
     #endregion
 
     #region Android Specific Methods

@@ -16,21 +16,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoEngage {
+    
   [System.Serializable]
   /// <summary>
-  /// SelfHandled Payload information
+  /// Display rules for self-handled in-app campaigns
   /// </summary>
-  public class SelfHandled {
-    /// <value> Self handled campaign payload. </value>
-    public string payload;
+  public class DisplayRules {
+    /// <value> Screen name where the campaign should be displayed. </value>
+    public string screenName;
 
-    /// <value>  Interval after which in-app should be dismissed, unit - Seconds </value>
-    public long dismissInterval;
+    /// <value> Contexts in which the campaign should be displayed. </value>
+    public List<string> contexts;
 
-    /// <value>Should the campaign be dismissed by pressing the back button or using the back gesture. if the value is true campaign should be dismissed on back press.  </value>
-    public bool isCancellable;
-    
-    /// <value> Display rules for the self-handled in-app campaign. </value>
-    public DisplayRules displayRules;
+    /// <value> Screen names where the campaign should be displayed. </value>
+    public List<string> screenNames;
   }
 }

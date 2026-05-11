@@ -1,5 +1,5 @@
 //
-//  MoEngageConfiguration.m
+//  UnityAppController+MoEngage.m
 //  MoEngage
 //
 //  Created by Chengappa on 11/01/21.

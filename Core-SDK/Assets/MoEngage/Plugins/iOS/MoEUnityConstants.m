@@ -15,6 +15,9 @@ NSString* const kUnityMethodNameInAppClicked = @"InAppCampaignClicked";
 NSString* const kUnityMethodNameInAppDismissed = @"InAppCampaignDismissed";
 NSString* const kUnityMethodNameInAppSelfHandled = @"InAppCampaignSelfHandled";
 NSString* const kUnityMethodNameInAppCustomAction = @"InAppCampaignCustomAction";
+NSString* const kUnityMethodNameInAppSelfHandledCampaigns = @"InAppSelfHandledCampaignsCallback";
+NSString* const kUnityMethodNameUserIdentities = @"UserIdentitiesCallback";
+NSString* const kUnityMethodNameLogoutComplete = @"LogoutComplete";
 
 // PluginBase Callbacks Method Names
 NSString* const kPushTokenGenerated = @"MoEPushTokenGenerated";
@@ -24,3 +27,4 @@ NSString* const kInAppClicked = @"MoEInAppCampaignClicked";
 NSString* const kInAppDismissed = @"MoEInAppCampaignDismissed";
 NSString* const kInAppSelfHandled = @"MoEInAppCampaignSelfHandled";
 NSString* const kInAppCustomAction = @"MoEInAppCampaignCustomAction";
+NSString* const kLogoutComplete = @"MoELogoutComplete";

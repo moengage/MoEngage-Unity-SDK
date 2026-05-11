@@ -54,4 +54,12 @@ namespace MoEngage
      public enum PermissionType {
         PUSH
      }
+
+     public enum NudgePosition {
+        Top,
+        Bottom,
+        BottomLeft,
+        BottomRight,
+        Any
+     }
 }

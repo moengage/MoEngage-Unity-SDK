@@ -32,7 +32,7 @@
     [super application:application didFinishLaunchingWithOptions:launchOptions];
 
     BOOL swizzleUnityAppController = [MoEngageUnityUtils isUnityAppControllerSwizzlingEnabled];
-    if (!swizzleUnityAppController) {
+    if (swizzleUnityAppController) {
         NSLog(@"MoEUnityAppController SubClass application:didFinishLaunchingWithOptions: called");
         [[MoEUnityInitializer sharedInstance] initializeSDKWithLaunchOptions:launchOptions];
     }

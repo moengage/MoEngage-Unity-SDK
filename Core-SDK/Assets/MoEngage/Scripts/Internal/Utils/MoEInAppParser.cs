@@ -191,7 +191,76 @@
          selfHandled.isCancellable = (bool) selfHandledDictionary[MoEConstants.PARAM_IS_CANCELLABLE];
        }
 
+       if (selfHandledDictionary.ContainsKey(MoEConstants.PARAM_DISPLAY_RULES)) {
+         selfHandled.displayRules = GetDisplayRules(selfHandledDictionary[MoEConstants.PARAM_DISPLAY_RULES] as Dictionary < string, object > );
+       }
+
        return selfHandled;
+     }
+
+     private static DisplayRules GetDisplayRules(Dictionary < string, object > dict) {
+       DisplayRules rules = new DisplayRules();
+       if (dict == null) return rules;
+
+       if (dict.ContainsKey(MoEConstants.PARAM_SCREEN_NAME)) {
+         rules.screenName = dict[MoEConstants.PARAM_SCREEN_NAME] as string;
+       }
+
+       if (dict.ContainsKey(MoEConstants.PARAM_SCREEN_NAMES)) {
+         rules.screenNames = ConvertToStringList(dict[MoEConstants.PARAM_SCREEN_NAMES] as List < object > );
+       }
+
+       if (dict.ContainsKey(MoEConstants.ARGUMENT_CONTEXTS)) {
+         rules.contexts = ConvertToStringList(dict[MoEConstants.ARGUMENT_CONTEXTS] as List < object > );
+       }
+
+       return rules;
+     }
+
+     private static List < string > ConvertToStringList(List < object > source) {
+       var result = new List < string > ();
+       if (source == null) return result;
+       foreach(var item in source) {
+         if (item is string s) result.Add(s);
+       }
+       return result;
+     }
+
+     public static InAppSelfHandledCampaignsData GetInAppSelfHandledCampaigns(string payload) {
+       Dictionary < string, object > payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary < string, object > ;
+
+       AccountMeta accountMeta = MoEParser.GetAccountMetaInstance(payloadDictionary);
+
+       var campaigns = new List < InAppSelfHandledCampaignData > ();
+
+       if (payloadDictionary != null && payloadDictionary.ContainsKey(MoEConstants.PARAM_CAMPAIGNS)) {
+         var campaignList = payloadDictionary[MoEConstants.PARAM_CAMPAIGNS] as List < object > ;
+         if (campaignList != null) {
+           foreach(var item in campaignList) {
+             var campaignWrapper = item as Dictionary < string, object > ;
+             if (campaignWrapper == null) continue;
+
+             var dataPayload = campaignWrapper.ContainsKey(MoEConstants.PAYLOAD_DATA)
+               ? campaignWrapper[MoEConstants.PAYLOAD_DATA] as Dictionary < string, object >
+               : null;
+
+             if (dataPayload == null || !isValidSelfHandledInAppPayload(dataPayload)) continue;
+
+             AccountMeta campaignAccountMeta = MoEParser.GetAccountMetaInstance(campaignWrapper);
+             SelfHandled selfHandled = GetSelfHandled(dataPayload[MoEConstants.PARAM_SELF_HANDLED] as Dictionary < string, object > );
+             InAppCampaignContext context = GetInAppCampaignContext(dataPayload[MoEConstants.PARAM_CAMPAIGN_CONTEXT] as Dictionary < string, object > );
+             InAppCampaign campaign = GetInAppCampaign(dataPayload[MoEConstants.PARAM_CAMPAIGN_ID] as string, dataPayload[MoEConstants.PARAM_CAMPAIGN_NAME] as string, context);
+             Platform platform = MoEParser.GetPlatform(dataPayload[MoEConstants.PARAM_PLATFORM] as string);
+
+             campaigns.Add(GetInAppSelfHandledData(campaignAccountMeta, campaign, platform, selfHandled));
+           }
+         }
+       }
+
+       return new InAppSelfHandledCampaignsData {
+         accountMeta = accountMeta,
+           selfHandledCampaigns = campaigns
+       };
      }
 
      /// InApp Validator

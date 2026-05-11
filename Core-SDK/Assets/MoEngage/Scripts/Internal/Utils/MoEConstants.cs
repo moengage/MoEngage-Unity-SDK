@@ -91,6 +91,15 @@ namespace MoEngage
         public const string PARAM_IS_DEFAULT_ACTION = "isDefaultAction";
         public const string PARAM_CLICKED_ACTION = "clickedAction";
 
+        public const string PARAM_SELF_HANDLED_CAMPAIGNS = "selfHandledCampaigns";
+        public const string PARAM_CAMPAIGNS = "campaigns";
+        public const string PARAM_DISPLAY_RULES = "displayRules";
+        public const string PARAM_SCREEN_NAME = "screenName";
+        public const string PARAM_SCREEN_NAMES = "screenNames";
+
+        /* ****************************** Nudge Keys ***************************************** */
+        public const string PARAM_NUDGE_POSITION = "position";
+
         public const string PARAM_PUSH_TOKEN = "token";
         public const string PARAM_PUSH_SERVICE = "pushService";
 
@@ -138,6 +147,10 @@ namespace MoEngage
 
         /* ****************************** User Delete Keys ***************************************** */
         public const string PARAM_IS_SUCCESS = "isSuccess";
+
+        /* ****************************** Identify User Keys ***************************************** */
+        public const string PARAM_USER_IDENTITY = "identity";
+        public const string PARAM_USER_UNIQUE_IDENTITY = "uid";
 
         /* ****************************** Core-SDK Version ***************************************** */
         public const string KEY_VERSION = "version";

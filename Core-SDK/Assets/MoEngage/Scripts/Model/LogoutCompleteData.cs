@@ -11,26 +11,16 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace MoEngage {
   [System.Serializable]
   /// <summary>
-  /// SelfHandled Payload information
+  /// Payload delivered when logout completes on the native side.
   /// </summary>
-  public class SelfHandled {
-    /// <value> Self handled campaign payload. </value>
-    public string payload;
+  public class LogoutCompleteData {
+    /// <value> Account info </value>
+    public AccountMeta accountMeta;
 
-    /// <value>  Interval after which in-app should be dismissed, unit - Seconds </value>
-    public long dismissInterval;
-
-    /// <value>Should the campaign be dismissed by pressing the back button or using the back gesture. if the value is true campaign should be dismissed on back press.  </value>
-    public bool isCancellable;
-    
-    /// <value> Display rules for the self-handled in-app campaign. </value>
-    public DisplayRules displayRules;
+    /// <value> Native platform that triggered the callback. </value>
+    public Platform platform;
   }
 }

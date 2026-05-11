@@ -12,6 +12,7 @@ using UnityEditor.iOS.Xcode;
 using System.Text;
 using System.Collections.Generic;
 using UnityEditor.Build;
+using MoEngage;
 
 #if UNITY_2017_2_OR_NEWER
 using UnityEditor.iOS.Xcode.Extensions;
@@ -29,6 +30,7 @@ public static class BuildPostProcessor
     private static readonly char DIR_CHAR = Path.DirectorySeparatorChar;
     public static readonly string MOE_IOS_LOCATION = "Assets" + DIR_CHAR + "MoEngage" + DIR_CHAR + "Plugins" + DIR_CHAR + "iOS";
     public static readonly string MOE_IOS_PUSH_TEMP_LOCATION = MOE_IOS_LOCATION + DIR_CHAR + "PushTemplates";
+    public static readonly string MOE_INFO_PLIST_SOURCE = "Assets" + DIR_CHAR + "MoEngage" + DIR_CHAR + "MoEngage-Infos.plist";
 
     private static readonly string[] FRAMEWORKS_TO_ADD = {
          "Foundation.framework",
@@ -45,7 +47,8 @@ public static class BuildPostProcessor
     private enum EntitlementOptions
     {
         ApsEnv,
-        AppGroups
+        AppGroups,
+        KeychainSharing
     }
 
     // Unity 2019.3 made large changes to the Xcode build system / API.
@@ -100,11 +103,15 @@ public static class BuildPostProcessor
         var mainTargetGUID = GetPBXProjectTargetGUID(project);
         var unityFrameworkGUID = GetPBXProjectUnityFrameworkGUID(project);
 
+        var settings = AssetDatabase.LoadAssetAtPath<MoEngage.MoEngageSettings>(
+            MoEngage.MoEngageSettings.SettingsAssetPath);
+        var keychainGroup = settings != null ? settings.KeychainGroupName : null;
+
         foreach (var framework in FRAMEWORKS_TO_ADD)
         {
             project.AddFrameworkToProject(unityFrameworkGUID, framework, false);
         }
-        
+
         // Weak link AppTrackingTransparency framework
         project.AddFrameworkToProject(unityFrameworkGUID,"AppTrackingTransparency.framework", true);
 
@@ -112,18 +119,16 @@ public static class BuildPostProcessor
         project.SetBuildProperty(unityFrameworkGUID, "ENABLE_BITCODE", "NO"); // Disabled to run on Xcode 14+
         project.SetBuildProperty(mainTargetGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
 
-        AddOrUpdateEntitlements(
-           path,
-           project,
-           mainTargetGUID,
-           mainTargetName,
-           new HashSet<EntitlementOptions> {
-               EntitlementOptions.ApsEnv, EntitlementOptions.AppGroups
-           }
-        );
+        var mainEntitlementOptions = new HashSet<EntitlementOptions> {
+            EntitlementOptions.ApsEnv, EntitlementOptions.AppGroups
+        };
+        if (!string.IsNullOrEmpty(keychainGroup))
+            mainEntitlementOptions.Add(EntitlementOptions.KeychainSharing);
+
+        AddOrUpdateEntitlements(path, project, mainTargetGUID, mainTargetName, mainEntitlementOptions, keychainGroup);
 
         // Add the NSE target to the Xcode project
-        AddNotificationServiceExtension(project, path);
+        AddNotificationServiceExtension(project, path, keychainGroup);
 
 #if ADD_PUSH_TEMPLATES
         AddPushTemplateExtension(project, path);
@@ -138,7 +143,9 @@ public static class BuildPostProcessor
         AddPushCapability(project, path, mainTargetGUID, mainTargetName);
 
         File.WriteAllText(projectPath, project.WriteToString());
-        
+
+        MergeMoEngageInfoPlist(path);
+
         RemoveExtensionFilesFromMainTarget(path);
     }
 
@@ -179,8 +186,8 @@ public static class BuildPostProcessor
     {
         using (StreamWriter sw = File.AppendText(buildPath + "/Podfile"))
         {
-             sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngage-iOS-SDK/RichNotification','9.18.1' \nend");
-             sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngage-iOS-SDK/RichNotification','9.18.1' \nend");
+             sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngage-iOS-SDK/RichNotification' \nend");
+             sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngage-iOS-SDK/RichNotification' \nend");
         }
     }
 
@@ -204,7 +211,7 @@ public static class BuildPostProcessor
         return path + DIR_CHAR + targetName + DIR_CHAR + targetName + ".entitlements";
     }
 
-    private static void AddOrUpdateEntitlements(string path, PBXProject project, string targetGUI, string targetName, HashSet<EntitlementOptions> options)
+    private static void AddOrUpdateEntitlements(string path, PBXProject project, string targetGUI, string targetName, HashSet<EntitlementOptions> options, string keychainGroup = null)
     {
         string entitlementPath = GetEntitlementsPath(path, project, targetGUI, targetName);
         var entitlements = new PlistDocument();
@@ -229,6 +236,14 @@ public static class BuildPostProcessor
             groups.AddString("group." + PlayerSettings.applicationIdentifier + ".moengage");
         }
 #endif
+
+        if (options.Contains(EntitlementOptions.KeychainSharing) && !string.IsNullOrEmpty(keychainGroup))
+        {
+            var existing = entitlements.root["keychain-access-groups"] as PlistElementArray;
+            if (existing == null)
+                existing = entitlements.root.CreateArray("keychain-access-groups");
+            existing.AddString(keychainGroup);
+        }
 
         entitlements.WriteToFile(entitlementPath);
 
@@ -255,7 +270,7 @@ public static class BuildPostProcessor
         projCapability.WriteToFile();
     }
 
-    private static void AddNotificationServiceExtension(PBXProject project, string path)
+    private static void AddNotificationServiceExtension(PBXProject project, string path, string keychainGroup = null)
     {
 #if UNITY_2017_2_OR_NEWER && !UNITY_CLOUD_BUILD
         var projectPath = PBXProject.GetPBXProjectPath(path);
@@ -292,6 +307,7 @@ public static class BuildPostProcessor
         project.SetBuildProperty(extensionGUID, "DEVELOPMENT_TEAM", PlayerSettings.iOS.appleDeveloperTeamID);
         project.SetBuildProperty(extensionGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
         project.SetBuildProperty(extensionGUID, "ENABLE_BITCODE", "NO");
+        project.SetBuildProperty(extensionGUID, "CLANG_ENABLE_MODULES", "YES");
 
         project.WriteToFile(projectPath);
 
@@ -300,15 +316,13 @@ public static class BuildPostProcessor
         // After this method finishes, we must write the contents string to disk
         //File.WriteAllText(projectPath, contents);
 
-        AddOrUpdateEntitlements(
-           path,
-           project,
-           extensionGUID,
-           extensionTargetName,
-           new HashSet<EntitlementOptions> {
-               EntitlementOptions.ApsEnv, EntitlementOptions.AppGroups
-           }
-        );
+        var nseEntitlementOptions = new HashSet<EntitlementOptions> {
+            EntitlementOptions.ApsEnv, EntitlementOptions.AppGroups
+        };
+        if (!string.IsNullOrEmpty(keychainGroup))
+            nseEntitlementOptions.Add(EntitlementOptions.KeychainSharing);
+
+        AddOrUpdateEntitlements(path, project, extensionGUID, extensionTargetName, nseEntitlementOptions, keychainGroup);
 #endif
     }
 
@@ -417,7 +431,8 @@ public static class BuildPostProcessor
         project.SetBuildProperty(extensionGUID, "DEVELOPMENT_TEAM", PlayerSettings.iOS.appleDeveloperTeamID);
         project.SetBuildProperty(extensionGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
         project.SetBuildProperty(extensionGUID, "ENABLE_BITCODE", "NO");
-        
+        project.SetBuildProperty(extensionGUID, "CLANG_ENABLE_MODULES", "YES");
+
         project.WriteToFile(projectPath);
 
         //var contents = File.ReadAllText(projectPath);
@@ -453,6 +468,65 @@ public static class BuildPostProcessor
         project.AddFileToBuildSection(extensionGUID, resourcesBuildPhase, resourcesFilesGuid);
     }
 
+
+    private static void MergeMoEngageInfoPlist(string buildPath)
+    {
+        string mainInfoPlistPath = buildPath + DIR_CHAR + "Info.plist";
+        if (!File.Exists(mainInfoPlistPath))
+        {
+            Debug.LogWarning("MoEngage: Main Info.plist not found at " + mainInfoPlistPath);
+            return;
+        }
+
+        var settings = UnityEditor.AssetDatabase.LoadAssetAtPath<MoEngage.MoEngageSettings>(
+            MoEngage.MoEngageSettings.SettingsAssetPath);
+
+        if (settings == null)
+        {
+            Debug.LogWarning("MoEngage: MoEngageSettings asset not found at " +
+                MoEngage.MoEngageSettings.SettingsAssetPath +
+                ". Create it via Assets > MoEngage Settings.");
+            return;
+        }
+
+        var mainPlist = new PlistDocument();
+        mainPlist.ReadFromFile(mainInfoPlistPath);
+
+        PlistElementDict moeDict = mainPlist.root.CreateDict("MoEngage");
+
+        // Common
+        moeDict.SetString("WorkspaceId", settings.WorkspaceId);
+        moeDict.SetString("ProjectId", settings.ProjectId);
+        moeDict.SetInteger("DataCenter", (int)settings.DataCenter);
+        moeDict.SetInteger("LogLevel", (int)settings.LogLevel);
+        moeDict.SetString("CustomBaseDomain", settings.CustomBaseDomain);
+        moeDict.SetBoolean("IsJwtEnabled", settings.IsJwtEnabled);
+        moeDict.SetBoolean("IsNetworkEncryptionEnabled", settings.IsNetworkEncryptionEnabled);
+        moeDict.SetBoolean("IsStorageEncryptionEnabled", settings.IsStorageEncryptionEnabled);
+        moeDict.SetBoolean("AnalyticsEnablePeriodicFlush", settings.EnablePeriodicDataSync);
+        moeDict.SetInteger("AnalyticsPeriodicFlushDuration", settings.DataSyncInterval);
+        moeDict.SetBoolean("IsLoggingEnabled", settings.IsLoggingEnabled);
+
+        // iOS Only
+        moeDict.SetString("AppGroupName", settings.AppGroupName);
+        moeDict.SetString("KeychainGroupName", settings.KeychainGroupName);
+        moeDict.SetReal("InAppDisplaySafeAreaInset", settings.InAppDisplaySafeAreaInset);
+        moeDict.SetBoolean("InAppShouldProvideDeeplinkCallback", settings.InAppShouldProvideDeeplinkCallback);
+        moeDict.SetString("EncryptionEncodedLiveKey", settings.EncryptionEncodedLiveKey);
+        moeDict.SetString("EncryptionEncodedTestKey", settings.EncryptionEncodedTestKey);
+        moeDict.SetBoolean("IsUnityAppControllerSwizzlingEnabled", settings.IsUnityAppControllerSwizzlingEnabled);
+        moeDict.SetBoolean("IsSdkAutoInitialisationEnabled", settings.IsSdkAutoInitialisationEnabled);
+        moeDict.SetBoolean("IsUserRegistrationEnabled", settings.IsUserRegistrationEnabled);
+        if (settings.TestEnvironment == MoETestEnvironment.Test)
+            moeDict.SetBoolean("IsTestEnvironment", true);
+        else if (settings.TestEnvironment == MoETestEnvironment.Live)
+            moeDict.SetBoolean("IsTestEnvironment", false);
+        else
+            moeDict.SetString("IsTestEnvironment", "$(SWIFT_ACTIVE_COMPILATION_CONDITIONS)|$(GCC_PREPROCESSOR_DEFINITIONS)");
+
+        mainPlist.WriteToFile(mainInfoPlistPath);
+        Debug.Log("MoEngage: wrote settings into Info.plist under 'MoEngage' key.");
+    }
 
     // Returns the bundle identifier for the specified extension target
     private static string GetExtensionBundleIdentifier(string extensionTargetName)

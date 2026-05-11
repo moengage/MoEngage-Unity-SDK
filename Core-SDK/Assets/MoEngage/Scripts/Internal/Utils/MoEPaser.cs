@@ -59,6 +59,16 @@ namespace MoEngage {
       );
     }
 
+    public static LogoutCompleteData GetLogoutCompleteData(string payload) {
+      Dictionary < string, object > payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary < string, object > ;
+      AccountMeta accountMeta = GetAccountMetaInstance(payloadDictionary);
+      Platform platform = GetPlatform(payloadDictionary[MoEConstants.PARAM_PLATFORM] as string);
+      return new LogoutCompleteData {
+        accountMeta = accountMeta,
+        platform = platform
+      };
+    }
+
      public static UserDeletionData GetUserDeletionData(string payload) {
       Dictionary < string, object > payloadDictionary = MoEMiniJSON.Json.Deserialize(payload) as Dictionary < string, object > ;
       AccountMeta accountMeta = MoEParser.GetAccountMetaInstance(payloadDictionary);
