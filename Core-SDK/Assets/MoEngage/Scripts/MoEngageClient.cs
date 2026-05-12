@@ -429,15 +429,14 @@ namespace MoEngage {
     }
 
     /// <summary>
-    /// Tracks a user date attribute using an ISO date string.
-    /// Equivalent to setUserAttributeISODateString in the React Native SDK.
+    /// Tracks a user date attribute using epoch time in milliseconds.
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
-    /// <param name="isoDateString">Date in ISO format: yyyy-MM-dd'T'HH:mm:ss'Z'</param>
-    public static void SetUserAttributeISODateString(string attributeName, string isoDateString) {
+    /// <param name="epochTime">Date as epoch time in milliseconds</param>
+    public static void SetUserAttributeEpochTime(string attributeName, long epochTime) {
       if (!isPluginInitialized()) return;
-      Debug.Log(TAG + " : SetUserAttributeISODateString:: attributeName: " + attributeName + " : isoDateString: " + isoDateString);
-      string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_TIMESTAMP, isoDateString, appId);
+      Debug.Log(TAG + " : SetUserAttributeEpochTime:: attributeName: " + attributeName + " : epochTime: " + epochTime);
+      string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_TIMESTAMP, epochTime, appId);
       #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
       #endif
