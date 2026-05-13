@@ -6,13 +6,13 @@
   </androidPackages>
   <!-- iOS Cocoapod dependencies can be specified by each iosPod element. -->
   <iosPods>
-    <iosPod name="MoEngagePluginGeofence" version="4.8.2" minTargetSdk="13.0">
+    <iosPod name="MoEngagePluginGeofence" version="4.9.0" minTargetSdk="13.0">
     </iosPod>
   </iosPods>
 
   <!-- SPM: replaces MoEngagePluginGeofence pod when SPM mode is active. -->
   <remoteSwiftPackage url="https://github.com/moengage/apple-plugin-geofence.git"
-                      version="4.8.2">
+                      version="4.9.0">
     <swiftPackage name="MoEngagePluginGeofence" replacesPod="MoEngagePluginGeofence"/>
   </remoteSwiftPackage>
 </dependencies>

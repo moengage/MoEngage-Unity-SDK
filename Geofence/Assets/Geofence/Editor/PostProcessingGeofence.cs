@@ -62,7 +62,7 @@ public static class GeofenceBuildPostProcessor
 
             // MoEngageGeofence is a dynamic xcframework — link to main target so Xcode
             // embeds it into MoEngage.app/Frameworks/ for @rpath resolution at runtime.
-            var appleSDKRefGUID = project.AddRemotePackageReferenceAtVersion("https://github.com/moengage/apple-sdk.git", "10.10.2");
+            var appleSDKRefGUID = project.AddRemotePackageReferenceAtVersion("https://github.com/moengage/apple-sdk.git", "10.12.0");
             project.AddRemotePackageFrameworkToProject(mainTargetGUID, "MoEngageGeofence", appleSDKRefGUID, false);
 
             File.WriteAllText(projectPath, project.WriteToString());

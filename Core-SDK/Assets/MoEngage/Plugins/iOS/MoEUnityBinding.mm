@@ -30,7 +30,6 @@ static NSDictionary* getDictionaryFromJSON(const char* jsonString) {
 
 void initialize(const char* gameObjPayload) {
     [MoEUnityBridgeHelper initialize:getDictionaryFromJSON(gameObjPayload)];
-  //  [[MoEUnityInitializer sharedInstance] setupSDKWithInitializePayload:gameObjDict];
 }
 
 #pragma mark - INSTALL/UPDATE Tracking

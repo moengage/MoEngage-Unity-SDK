@@ -31,7 +31,6 @@ public static class BuildPostProcessor
     private static readonly char DIR_CHAR = Path.DirectorySeparatorChar;
     public static readonly string MOE_IOS_LOCATION = "Assets" + DIR_CHAR + "MoEngage" + DIR_CHAR + "Plugins" + DIR_CHAR + "iOS";
     public static readonly string MOE_IOS_PUSH_TEMP_LOCATION = MOE_IOS_LOCATION + DIR_CHAR + "PushTemplates";
-    public static readonly string MOE_INFO_PLIST_SOURCE = "Assets" + DIR_CHAR + "MoEngage" + DIR_CHAR + "MoEngage-Infos.plist";
 
     private static readonly string[] FRAMEWORKS_TO_ADD = {
          "Foundation.framework",
@@ -221,7 +220,7 @@ public static class BuildPostProcessor
             var nseGUID = project.TargetGuidByName(NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME);
             var pushTemplateGUID = project.TargetGuidByName(PUSH_TEMPLATES_EXTENSION_TARGET_NAME);
 
-            var appleSDKRefGUID = project.AddRemotePackageReferenceAtVersion("https://github.com/moengage/apple-sdk.git", "10.10.2");
+            var appleSDKRefGUID = project.AddRemotePackageReferenceAtVersion("https://github.com/moengage/apple-sdk.git", "10.12.0");
             if (nseGUID != null)
                 project.AddRemotePackageFrameworkToProject(nseGUID, "MoEngageRichNotification", appleSDKRefGUID, false);
             if (pushTemplateGUID != null)
