@@ -8,4 +8,9 @@
         <iosPod name="MoEngage-iOS-SDK/Cards" minTargetSdk="13.0">
         </iosPod>
     </iosPods>
+
+    <remoteSwiftPackage url="https://github.com/moengage/apple-sdk.git"
+                      version="10.10.2">
+    <swiftPackage name="MoEngageCards" replacesPod="MoEngage-iOS-SDK/Cards"/>
+  </remoteSwiftPackage>
 </dependencies>

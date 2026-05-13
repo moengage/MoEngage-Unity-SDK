@@ -82,7 +82,7 @@ namespace MoEngage
             DrawSection("iOS Only", () =>
             {
                 DrawFields(
-                    "AppGroupName", "KeychainGroupName", "InAppDisplaySafeAreaInset",
+                    "KeychainGroupName", "InAppDisplaySafeAreaInset",
                     "InAppShouldProvideDeeplinkCallback", "IsUnityAppControllerSwizzlingEnabled",
                     "IsSdkAutoInitialisationEnabled", "IsUserRegistrationEnabled"
                 );

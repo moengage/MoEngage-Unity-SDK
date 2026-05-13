@@ -92,9 +92,6 @@ namespace MoEngage
 
         // ─── iOS Only ─────────────────────────────────────────────────────────────
         [Header("iOS Only")]
-        [Tooltip("App Group identifier shared with Notification Service Extension (e.g. group.com.example.app.moengage).")]
-        public string AppGroupName = "";
-
         [Tooltip("Keychain access group for secure storage sharing across targets.")]
         public string KeychainGroupName = "";
 

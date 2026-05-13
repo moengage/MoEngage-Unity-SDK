@@ -16,6 +16,7 @@
   - Updated MoEngage-iOS-SDK to 10.10.2
   - Added support for Provisional Push.
   - Removed support MoEngageConfiguration.h file.
+  - Updated the iOS deployment target to 13.
 
 # 09-09-2025
 

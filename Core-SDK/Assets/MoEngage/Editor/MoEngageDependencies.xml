@@ -10,4 +10,9 @@
     <iosPod name="MoEngagePluginBase" version="6.8.2" minTargetSdk="13.0">
     </iosPod>
   </iosPods>
+
+  <remoteSwiftPackage url="https://github.com/moengage/iOS-PluginBase.git"
+                      version="6.8.2">
+    <swiftPackage name="MoEngagePluginBase" replacesPod="MoEngagePluginBase"/>
+  </remoteSwiftPackage>
 </dependencies>

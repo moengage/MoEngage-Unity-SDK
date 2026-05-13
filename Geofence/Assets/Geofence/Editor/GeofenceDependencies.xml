@@ -9,4 +9,10 @@
     <iosPod name="MoEngagePluginGeofence" version="4.8.2" minTargetSdk="13.0">
     </iosPod>
   </iosPods>
+
+  <!-- SPM: replaces MoEngagePluginGeofence pod when SPM mode is active. -->
+  <remoteSwiftPackage url="https://github.com/moengage/apple-plugin-geofence.git"
+                      version="4.8.2">
+    <swiftPackage name="MoEngagePluginGeofence" replacesPod="MoEngagePluginGeofence"/>
+  </remoteSwiftPackage>
 </dependencies>
