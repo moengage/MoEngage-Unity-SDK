@@ -12,7 +12,6 @@
  */
 
 plugins {
-    kotlin("jvm") version "1.5.10"
     `kotlin-dsl`
 }
 
@@ -23,4 +22,18 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+}
+
+// Pin the JVM target explicitly. Without this, the `kotlin-dsl` plugin derives the
+// target from the JDK running Gradle (e.g. JDK 21), which the bundled Kotlin compiler
+// does not recognise ("Unknown Kotlin JVM target: 21").
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }

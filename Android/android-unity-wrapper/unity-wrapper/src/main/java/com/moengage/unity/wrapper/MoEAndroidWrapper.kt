@@ -3,14 +3,13 @@ package com.moengage.unity.wrapper
 import android.content.Context
 import com.moengage.core.LogLevel
 import com.moengage.core.internal.logger.Logger
-import com.moengage.core.internal.model.IntegrationMeta
 import com.moengage.plugin.base.internal.ARGUMENT_DATA
 import com.moengage.plugin.base.internal.PluginHelper
-import com.moengage.plugin.base.internal.PluginInitializer
-import com.moengage.plugin.base.internal.instanceMetaFromJson
+import com.moengage.plugin.base.internal.selfHandledInAppsToJson
 import com.moengage.plugin.base.internal.setEventEmitter
 import com.moengage.unity.wrapper.internal.PayloadTransformer
 import com.moengage.unity.wrapper.internal.UserDeletionCallback
+import com.unity3d.player.UnityPlayer
 import org.json.JSONObject
 
 /**
@@ -28,6 +27,7 @@ public class MoEAndroidWrapper private constructor() {
 
     private val tag = "${MODULE_TAG}MoEAndroidWrapper"
     private var context: Context? = null
+    private var gameObjectName: String? = null
 
     public companion object {
 
@@ -59,6 +59,7 @@ public class MoEAndroidWrapper private constructor() {
                 ) { "$tag initialize() : Game object name is empty cannot pass callbacks" }
                 return
             }
+            this.gameObjectName = gameObjectName
             setEventEmitter(EventEmitterImpl(gameObjectName))
             pluginHelper.initialise(initializationJson)
         } catch (t: Throwable) {
@@ -283,4 +284,76 @@ public class MoEAndroidWrapper private constructor() {
             Logger.print(LogLevel.ERROR, t) { "$tag deleteUser(): " }
         }
     }
+
+    public fun showNudge(nudgePayload: String) {
+        try {
+            Logger.print { "$tag showNudge() : Will try to show nudge, payload: $nudgePayload" }
+            pluginHelper.showNudge(getContext(), nudgePayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag showNudge() : " }
+        }
+    }
+
+    public fun getSelfHandledInApps(accountPayload: String) {
+        try {
+            Logger.print { "$tag getSelfHandledInApps() : Will try to fetch self-handled in-apps" }
+            pluginHelper.getSelfHandledInApps(getContext(), accountPayload) { data ->
+                sendCallback(
+                    METHOD_NAME_SELF_HANDLED_INAPPS,
+                    selfHandledInAppsToJson(data).toString()
+                )
+            }
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag getSelfHandledInApps() : " }
+        }
+    }
+
+    public fun identifyUser(identifyPayload: String) {
+        try {
+            Logger.print { "$tag identifyUser() : Identify Payload: $identifyPayload" }
+            pluginHelper.identifyUser(getContext(), identifyPayload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag identifyUser() : " }
+        }
+    }
+
+    public fun getUserIdentities(accountPayload: String) {
+        try {
+            Logger.print { "$tag getUserIdentities() : Account Payload: $accountPayload" }
+            pluginHelper.getUserIdentities(getContext(), accountPayload) { identities ->
+                val payload = if (identities == null) {
+                    JSONObject()
+                } else {
+                    JSONObject(identities)
+                }
+                sendCallback(METHOD_NAME_USER_IDENTITIES, payload.toString())
+            }
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag getUserIdentities() : " }
+        }
+    }
+
+
+    /**
+     * Forwards an asynchronous result to the Unity layer via [UnityPlayer.UnitySendMessage].
+     *
+     * @param methodName the receiving method on the Unity game object.
+     * @param payload JSON string payload.
+     */
+    private fun sendCallback(methodName: String, payload: String) {
+        try {
+            val gameObject = gameObjectName
+            if (gameObject.isNullOrEmpty()) {
+                Logger.print(LogLevel.ERROR) {
+                    "$tag sendCallback() : Game object name is empty, cannot send $methodName"
+                }
+                return
+            }
+            Logger.print { "$tag sendCallback() : methodName=$methodName, payload=$payload" }
+            UnityPlayer.UnitySendMessage(gameObject, methodName, payload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag sendCallback() : " }
+        }
+    }
+
 }

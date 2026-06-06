@@ -34,7 +34,10 @@ android {
 }
 
 dependencies {
-    compileOnly(libs.core)
-    api(libs.basePluginGeofence)
+    compileOnly(moengageInternal.kotlinStdLib)
+    implementation(platform(libs.moengageAndroidBom))
+    compileOnly(libs.geofence)
+    implementation(platform(libs.moengagePluginBaseBom))
+    implementation(libs.moengagePluginBaseGeofence)
     compileOnly(project(":unity-wrapper"))
 }
