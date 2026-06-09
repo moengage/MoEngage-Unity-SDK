@@ -38,9 +38,16 @@ android {
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(moengageInternal.kotlinStdLib)
-    compileOnly(libs.appCompat)
-    compileOnly(libs.core)
-    compileOnly(libs.inapp)
-    api(libs.basePlugin)
+
+    api(libs.androidXCompact)
+    api(libs.androidXCore)
+    api(libs.androidXLifecycle)
+
+    implementation(platform(libs.moengageAndroidBom))
+    compileOnly(libs.moengageInapp)
+
+    implementation(platform(libs.moengagePluginBaseBom))
+    implementation(libs.moengagePluginBase)
+
     compileOnly(project(":unity-library"))
 }

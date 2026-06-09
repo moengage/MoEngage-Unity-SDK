@@ -11,6 +11,8 @@
 - Added support for displaying non-intrusive nudge campaigns
 - Added support for fetching multiple self-handled In-App messages simultaneously using the `GetSelfHandledInApps()` method.
 - Added support for session-triggered InApps and support multiple screen names in DisplayRules.
+- Android
+  - Migrated Android native dependencies to MoEngage BOMs (`android-bom` 2.2.3)
 - iOS
   - Added suport for Swift Package manager. 
   - Updated MoEngage-iOS-SDK to 10.12.0

@@ -30,8 +30,10 @@ import com.moengage.core.internal.logger.Logger
 import com.moengage.plugin.base.internal.EventEmitter
 import com.moengage.plugin.base.internal.clickDataToJson
 import com.moengage.plugin.base.internal.inAppDataToJson
+import com.moengage.plugin.base.internal.logoutCompleteEventToJson
 import com.moengage.plugin.base.internal.model.events.Event
 import com.moengage.plugin.base.internal.model.events.EventType
+import com.moengage.plugin.base.internal.model.events.LogoutCompleteEvent
 import com.moengage.plugin.base.internal.model.events.inapp.InAppActionEvent
 import com.moengage.plugin.base.internal.model.events.inapp.InAppLifecycleEvent
 import com.moengage.plugin.base.internal.model.events.inapp.InAppSelfHandledEvent
@@ -65,6 +67,7 @@ internal class EventEmitterImpl(private val gameObjectName: String) : EventEmitt
         eventMap[EventType.INAPP_SELF_HANDLED_AVAILABLE] = METHOD_NAME_IN_APP_SELF_HANDLED
         eventMap[EventType.PUSH_TOKEN_GENERATED] = METHOD_NAME_PUSH_TOKEN
         eventMap[EventType.PERMISSION] = METHOD_NAME_PERMISSION_RESULT
+        eventMap[EventType.LOGOUT_COMPLETE] = METHOD_NAME_LOGOUT_COMPLETE
     }
 
     override fun emit(event: Event) {
@@ -77,6 +80,7 @@ internal class EventEmitterImpl(private val gameObjectName: String) : EventEmitt
                 is InAppLifecycleEvent -> emitInAppLifecycleEvent(event)
                 is InAppSelfHandledEvent -> emitInAppSelfHandledEvent(event)
                 is PermissionEvent -> emitPermissionEvent(event)
+                is LogoutCompleteEvent -> emitLogoutCompleteEvent(event)
 
             }
         } catch (t: Throwable) {
@@ -134,7 +138,8 @@ internal class EventEmitterImpl(private val gameObjectName: String) : EventEmitt
         try {
             Logger.print { "$tag emitInAppSelfHandledEvent(): inAppSelfHandledEvent=${inAppSelfHandledEvent.eventType}, selfHandledData=${inAppSelfHandledEvent.data}" }
             val methodName = eventMap[inAppSelfHandledEvent.eventType] ?: return
-            val inAppSelfHandledEventPayload = selfHandledDataToJson(inAppSelfHandledEvent.data)
+            val inAppSelfHandledEventPayload =
+                selfHandledDataToJson(inAppSelfHandledEvent.accountMeta, inAppSelfHandledEvent.data)
             emit(methodName, inAppSelfHandledEventPayload)
         } catch (t: Throwable) {
             Logger.print(LogLevel.ERROR, t) { "$tag emitInAppSelfHandledEvent() : " }
@@ -149,6 +154,17 @@ internal class EventEmitterImpl(private val gameObjectName: String) : EventEmitt
             emit(methodName, permissionPayload)
         } catch (t: Throwable) {
             Logger.print(LogLevel.ERROR, t) { "$tag emitPermissionEvent() : " }
+        }
+    }
+
+    private fun emitLogoutCompleteEvent(logoutCompleteEvent: LogoutCompleteEvent) {
+        try {
+            Logger.print { "$tag emitLogoutCompleteEvent(): logoutCompleteEvent=$logoutCompleteEvent" }
+            val methodName = eventMap[logoutCompleteEvent.eventType] ?: return
+            val payload = logoutCompleteEventToJson(logoutCompleteEvent)
+            emit(methodName, payload)
+        } catch (t: Throwable) {
+            Logger.print(LogLevel.ERROR, t) { "$tag emitLogoutCompleteEvent() : " }
         }
     }
 

@@ -38,5 +38,10 @@ internal const val METHOD_NAME_IN_APP_CUSTOM_ACTION = "InAppCampaignCustomAction
 internal const val METHOD_NAME_IN_APP_SELF_HANDLED = "InAppCampaignSelfHandled"
 internal const val METHOD_NAME_PUSH_TOKEN = "PushToken"
 internal const val METHOD_NAME_PERMISSION_RESULT = "onPermissionResult"
+internal const val METHOD_NAME_USER_IDENTITIES = "UserIdentitiesCallback"
+internal const val METHOD_NAME_SELF_HANDLED_INAPPS = "InAppSelfHandledCampaignsCallback"
+internal const val METHOD_NAME_LOGOUT_COMPLETE = "LogoutComplete"
 
 internal const val ARGUMENT_IS_SUCCESS = "isSuccess"
+
+internal const val INTEGRATION_TYPE = "unity"
