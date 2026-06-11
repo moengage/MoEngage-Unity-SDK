@@ -11,6 +11,6 @@
 
 @interface MoEngageUnityUtils : NSObject
 
-+(BOOL)isUnityAppControllerSwizzlingEnabled;
++(NSDictionary* _Nullable)fetchInfoPlistConfig;
 +(NSString* _Nullable)dictToJson:(NSDictionary *_Nullable)dict;
 @end

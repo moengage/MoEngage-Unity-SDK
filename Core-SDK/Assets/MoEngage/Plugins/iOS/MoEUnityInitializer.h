@@ -19,6 +19,7 @@ typedef NS_ENUM(NSInteger, MoEngageSDKState);
 
 +(instancetype)sharedInstance;
 
+- (void)setupBridgeForAutoInit;
 - (void)initializeSDKWithLaunchOptions:(NSDictionary*)launchOptions;
 - (void)initializeSDKWithLaunchOptions:(NSDictionary*)launchOptions withSDKState:(MoEngageSDKState)sdkState;
 - (void)initializeSDKWithConfig:(MoEngageSDKConfig*)sdkConfig andLaunchOptions:(NSDictionary*)launchOptions;

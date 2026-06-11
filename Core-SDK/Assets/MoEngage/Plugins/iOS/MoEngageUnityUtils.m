@@ -10,15 +10,6 @@
 
 @implementation MoEngageUnityUtils
 
-+(BOOL)isUnityAppControllerSwizzlingEnabled{
-    NSDictionary *moeConfig = [self fetchInfoPlistConfig];
-    NSNumber *value = [moeConfig objectForKey:@"IsUnityAppControllerSwizzlingEnabled"];
-    if (value != nil) {
-        return [value boolValue];
-    }
-    return YES;
-}
-
 +(NSString *)dictToJson:(NSDictionary *)dict {
     NSError *err;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&err];

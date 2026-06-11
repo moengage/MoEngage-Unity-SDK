@@ -106,7 +106,7 @@ public static class BuildPostProcessor
         var settings = AssetDatabase.LoadAssetAtPath<MoEngage.MoEngageSettings>(
             MoEngage.MoEngageSettings.SettingsAssetPath);
         var keychainGroup = settings != null ? settings.KeychainGroupName : null;
-        var appGroup = "group." + PlayerSettings.applicationIdentifier + ".moengage";
+        var appGroup = GetAppGroupId();
 
         foreach (var framework in FRAMEWORKS_TO_ADD)
         {
@@ -334,7 +334,7 @@ public static class BuildPostProcessor
         var mainTargetGUID = GetPBXProjectTargetGUID(project);
         var extensionTargetName = NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME;
         var extensionBundleIdentifier = GetExtensionBundleIdentifier(extensionTargetName);
-        var exisitingPlistFile = CreateExtensionPlistFile(path, true);
+        var exisitingPlistFile = CreateExtensionPlistFile(path, true, appGroup);
         // If file exisits then the below has been completed before from another build
         // The below will not be updated on Append builds
         // Changes would most likely need to be made to support Append builds
@@ -416,7 +416,7 @@ public static class BuildPostProcessor
 
     // Create a .plist file for the NSE
     // NOTE: File in Xcode project is replaced everytime, never appends
-    private static bool CreateExtensionPlistFile(string path, bool forServiceExtension)
+    private static bool CreateExtensionPlistFile(string path, bool forServiceExtension, string appGroup)
     {
 #if UNITY_2017_2_OR_NEWER
         var pathToExtension = path + DIR_CHAR;
@@ -442,6 +442,8 @@ public static class BuildPostProcessor
 
         plistFile.root.SetString("CFBundleShortVersionString", PlayerSettings.bundleVersion);
         plistFile.root.SetString("CFBundleVersion", PlayerSettings.iOS.buildNumber.ToString());
+        var moeDict = plistFile.root.CreateDict("MoEngage");
+        moeDict.SetString("AppGroupName", appGroup);
         plistFile.WriteToFile(extensionPlistPath);
         return exisiting;
 #else
@@ -457,7 +459,7 @@ public static class BuildPostProcessor
         var mainTargetGUID = GetPBXProjectTargetGUID(project);
         var extensionTargetName = PUSH_TEMPLATES_EXTENSION_TARGET_NAME;
         var extensionBundleIdentifier = GetExtensionBundleIdentifier(extensionTargetName);
-        var exisitingPlistFile = CreateExtensionPlistFile(path, false);
+        var exisitingPlistFile = CreateExtensionPlistFile(path, false, appGroup);
         // If file exisits then the below has been completed before from another build
         // The below will not be updated on Append builds
         // Changes would most likely need to be made to support Append builds
@@ -527,6 +529,20 @@ public static class BuildPostProcessor
     }
 
 
+    private static string GetAppGroupId()
+    {
+        string moeInfoPlistPath = Path.Combine(Application.dataPath, "MoEngage-Info.plist");
+        if (File.Exists(moeInfoPlistPath))
+        {
+            var moePlist = new PlistDocument();
+            moePlist.ReadFromFile(moeInfoPlistPath);
+            var appGroupElement = moePlist.root["AppGroupName"] as PlistElementString;
+            if (appGroupElement != null && !string.IsNullOrEmpty(appGroupElement.value))
+                return appGroupElement.value;
+        }
+        return "group." + PlayerSettings.applicationIdentifier + ".moengage";
+    }
+
     private static void MergeMoEngageInfoPlist(string buildPath)
     {
         string mainInfoPlistPath = buildPath + DIR_CHAR + "Info.plist";
@@ -536,54 +552,27 @@ public static class BuildPostProcessor
             return;
         }
 
-        var settings = UnityEditor.AssetDatabase.LoadAssetAtPath<MoEngage.MoEngageSettings>(
-            MoEngage.MoEngageSettings.SettingsAssetPath);
-
-        if (settings == null)
+        string moeInfoPlistPath = Path.Combine(Application.dataPath, "MoEngage-Info.plist");
+        if (!File.Exists(moeInfoPlistPath))
         {
-            Debug.LogWarning("MoEngage: MoEngageSettings asset not found at " +
-                MoEngage.MoEngageSettings.SettingsAssetPath +
-                ". Create it via Assets > MoEngage Settings.");
+            Debug.LogWarning("MoEngage: MoEngage-Info.plist not found at " + moeInfoPlistPath);
             return;
         }
 
         var mainPlist = new PlistDocument();
         mainPlist.ReadFromFile(mainInfoPlistPath);
 
+        var moePlist = new PlistDocument();
+        moePlist.ReadFromFile(moeInfoPlistPath);
+
         PlistElementDict moeDict = mainPlist.root.CreateDict("MoEngage");
-
-        // Common
-        moeDict.SetString("WorkspaceId", settings.WorkspaceId);
-        moeDict.SetString("ProjectId", settings.ProjectId);
-        moeDict.SetInteger("DataCenter", (int)settings.DataCenter);
-        moeDict.SetInteger("LogLevel", (int)settings.LogLevel);
-        moeDict.SetString("CustomBaseDomain", settings.CustomBaseDomain);
-        moeDict.SetBoolean("IsJwtEnabled", settings.IsJwtEnabled);
-        moeDict.SetBoolean("IsNetworkEncryptionEnabled", settings.IsNetworkEncryptionEnabled);
-        moeDict.SetBoolean("IsStorageEncryptionEnabled", settings.IsStorageEncryptionEnabled);
-        moeDict.SetBoolean("AnalyticsEnablePeriodicFlush", settings.EnablePeriodicDataSync);
-        moeDict.SetInteger("AnalyticsPeriodicFlushDuration", settings.DataSyncInterval);
-        moeDict.SetBoolean("IsLoggingEnabled", settings.IsLoggingEnabled);
-
-        // iOS Only
-        moeDict.SetString("AppGroupName", "group." + PlayerSettings.applicationIdentifier + ".moengage");
-        moeDict.SetString("KeychainGroupName", settings.KeychainGroupName);
-        moeDict.SetReal("InAppDisplaySafeAreaInset", settings.InAppDisplaySafeAreaInset);
-        moeDict.SetBoolean("InAppShouldProvideDeeplinkCallback", settings.InAppShouldProvideDeeplinkCallback);
-        moeDict.SetString("EncryptionEncodedLiveKey", settings.EncryptionEncodedLiveKey);
-        moeDict.SetString("EncryptionEncodedTestKey", settings.EncryptionEncodedTestKey);
-        moeDict.SetBoolean("IsUnityAppControllerSwizzlingEnabled", settings.IsUnityAppControllerSwizzlingEnabled);
-        moeDict.SetBoolean("IsSdkAutoInitialisationEnabled", settings.IsSdkAutoInitialisationEnabled);
-        moeDict.SetBoolean("IsUserRegistrationEnabled", settings.IsUserRegistrationEnabled);
-        if (settings.TestEnvironment == MoETestEnvironment.Test)
-            moeDict.SetBoolean("IsTestEnvironment", true);
-        else if (settings.TestEnvironment == MoETestEnvironment.Live)
-            moeDict.SetBoolean("IsTestEnvironment", false);
-        else
-            moeDict.SetString("IsTestEnvironment", "$(SWIFT_ACTIVE_COMPILATION_CONDITIONS)|$(GCC_PREPROCESSOR_DEFINITIONS)");
+        foreach (var kvp in moePlist.root.values)
+        {
+            moeDict.values[kvp.Key] = kvp.Value;
+        }
 
         mainPlist.WriteToFile(mainInfoPlistPath);
-        Debug.Log("MoEngage: wrote settings into Info.plist under 'MoEngage' key.");
+        Debug.Log("MoEngage: merged MoEngage-Info.plist into Info.plist under 'MoEngage' key.");
     }
     
     public static bool IsSPMEnabled()

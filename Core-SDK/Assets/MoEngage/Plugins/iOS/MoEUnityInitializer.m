@@ -41,6 +41,17 @@
     return self;
 }
 
+// Called when IsSdkAutoInitialisationEnabled=true — the SDK has already auto-initialized
+// from Info.plist. We still call initializeDefaultInstanceWithAdditionalConfig: (via
+// setupSDKFromInfoPlistWithLaunchOptions:) because MoEngagePlugin.process(.init) is what
+// registers the InApp/Messaging/Auth delegate handlers with the SDK. Without it those
+// handlers are never wired up and MoEngagePluginBridge's delegate is never reached.
+// The SDK itself is idempotent and will not reinitialize if already initialized.
+- (void)setupBridgeForAutoInit {
+    self.isSDKIntialized = YES;
+    [self setupSDKFromInfoPlistWithLaunchOptions:nil sdkState:nil];
+}
+
 - (void)initializeSDKWithLaunchOptions:(NSDictionary*)launchOptions {
     self.isSDKIntialized = YES;
     [self setupSDKFromInfoPlistWithLaunchOptions:launchOptions sdkState:nil];
@@ -65,7 +76,9 @@
     NSString* gameObjectName = payload[@"data"][@"gameObjectName"];
     self.moeGameObjectName = gameObjectName;
     if (!self.isSDKIntialized) {
-        // fallback if AppDelegate swizzling didn't run
+        // Fallback: client did not call initializeSDK* before Unity scene loaded.
+        // Attempt file-based init; this will be a no-op if IsSdkAutoInitialisationEnabled=true
+        // because the SDK already initialized itself, but commonSetUp still won't have run.
         [self setupSDKFromInfoPlistWithLaunchOptions:nil sdkState:nil];
     }
     [[MoEngagePluginBridge sharedInstance] pluginInitialized:payload];
