@@ -13,8 +13,6 @@ using UnityEditor.iOS.Xcode;
 using System.Text;
 using System.Collections.Generic;
 using UnityEditor.Build;
-using MoEngage;
-
 #if UNITY_2017_2_OR_NEWER
 using UnityEditor.iOS.Xcode.Extensions;
 #endif
@@ -103,9 +101,7 @@ public static class BuildPostProcessor
         var mainTargetGUID = GetPBXProjectTargetGUID(project);
         var unityFrameworkGUID = GetPBXProjectUnityFrameworkGUID(project);
 
-        var settings = AssetDatabase.LoadAssetAtPath<MoEngage.MoEngageSettings>(
-            MoEngage.MoEngageSettings.SettingsAssetPath);
-        var keychainGroup = settings != null ? settings.KeychainGroupName : null;
+        var keychainGroup = GetKeychainGroupName();
         var appGroup = GetAppGroupId();
 
         foreach (var framework in FRAMEWORKS_TO_ADD)
@@ -541,6 +537,20 @@ public static class BuildPostProcessor
                 return appGroupElement.value;
         }
         return "group." + PlayerSettings.applicationIdentifier + ".moengage";
+    }
+
+    private static string GetKeychainGroupName()
+    {
+        string moeInfoPlistPath = Path.Combine(Application.dataPath, "MoEngage-Info.plist");
+        if (File.Exists(moeInfoPlistPath))
+        {
+            var moePlist = new PlistDocument();
+            moePlist.ReadFromFile(moeInfoPlistPath);
+            var keychainElement = moePlist.root["KeychainGroupName"] as PlistElementString;
+            if (keychainElement != null && !string.IsNullOrEmpty(keychainElement.value))
+                return keychainElement.value;
+        }
+        return null;
     }
 
     private static void MergeMoEngageInfoPlist(string buildPath)
