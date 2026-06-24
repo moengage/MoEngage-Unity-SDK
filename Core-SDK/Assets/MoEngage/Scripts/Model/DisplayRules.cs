@@ -1,7 +1,5 @@
-import java.net.URI
-
 /*
- * Copyright (c) 2014-2023 MoEngage Inc.
+ * Copyright (c) 2014-2020 MoEngage Inc.
  *
  * All rights reserved.
  *
@@ -13,29 +11,24 @@ import java.net.URI
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        mavenLocal()
-        gradlePluginPortal()
-    }
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace MoEngage {
+    
+  [System.Serializable]
+  /// <summary>
+  /// Display rules for self-handled in-app campaigns
+  /// </summary>
+  public class DisplayRules {
+    /// <value> Screen name where the campaign should be displayed. </value>
+    public string screenName;
+
+    /// <value> Contexts in which the campaign should be displayed. </value>
+    public List<string> contexts;
+
+    /// <value> Screen names where the campaign should be displayed. </value>
+    public List<string> screenNames;
+  }
 }
-
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-    }
-    versionCatalogs {
-        create("moengageInternal") {
-            from("com.moengage:android-dependency-catalog-internal:3.1.0")
-        }
-    }
-}
-
-include(":unity-wrapper", ":unity-library", ":unity-wrapper-geofence")
-rootProject.name = "android-unity-wrapper"
-
-includeBuild("publishing-plugin")

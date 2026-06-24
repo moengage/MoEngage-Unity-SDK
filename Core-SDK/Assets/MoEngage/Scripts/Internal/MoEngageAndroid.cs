@@ -17,9 +17,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using MoEMiniJSON;
 
-namespace MoEngage {
+namespace MoEngage
+{
 
-  #if UNITY_ANDROID
+#if UNITY_ANDROID
   public class MoEngageAndroid: MoEngageUnityPlatform {
     
     private const string TAG = "MoEngageAndroid";
@@ -31,27 +32,27 @@ namespace MoEngage {
     /// </summary>
     /// <param name="gameObject"></param>
     public void Initialize(string gameObjectPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("initialize", gameObjectPayload);
-      #endif
+#endif
     }
 
     public void SetAppStatus(string appStatusPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("setAppStatus", appStatusPayload);
-      #endif
+#endif
     }
 
     public void SetAlias(string aliasPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("setAlias", aliasPayload);
-      #endif
+#endif
     }
 
     public void SetUserAttribute(string userAttributesPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("setUserAttribute", userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -60,144 +61,170 @@ namespace MoEngage {
     /// <param name="eventName"></param>
     /// <param name="attributes"></param>
     public void TrackEvent(string eventPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("trackEvent", eventPayload);
-      #endif
+#endif
     }
 
     public void Logout(string accountPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("logout", accountPayload);
-      #endif
+#endif
     }
 
     public void GetSelfHandledInApp(string accountPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + ": GetSelfHandledInApp::");
       moengageAndroid.Call("getSelfHandledInApp", accountPayload);
-      #endif
+#endif
     }
 
     public void ShowInApp(string accountPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + ": ShowInApp::");
       moengageAndroid.Call("showInApp", accountPayload);
-      #endif
+#endif
     }
 
     public static void PassFcmPushPayload(string pushPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + ": PassFcmPushPayload:: pushPayload: " + pushPayload);
       moengageAndroid.Call("passPushPayload", pushPayload);
-      #endif
+#endif
     }
 
     public static void PassFcmPushToken(string pushTokenPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + ": PassFcmPushToken:: pushToken: " + pushTokenPayload);
       moengageAndroid.Call("passPushToken", pushTokenPayload);
-      #endif
+#endif
     }
 
     public void SelfHandledShown(string selfHandledPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("selfHandledCallback", selfHandledPayload);
-      #endif
+#endif
     }
 
     public void SelfHandledClicked(string selfHandledPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("selfHandledCallback", selfHandledPayload);
-      #endif
+#endif
     }
 
     public void SelfHandledDismissed(string selfHandledPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("selfHandledCallback", selfHandledPayload);
-      #endif
+#endif
     }
 
     public void SetInAppContexts(string contextPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("setAppContext", contextPayload);
-      #endif
+#endif
     }
 
     public void ResetInAppContexts(string accountPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + " resetInAppContexts:: ");
       moengageAndroid.Call("resetContext", accountPayload);
-      #endif
+#endif
     }
 
     public void optOutDataTracking(string optOutPayload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("optOutTracking", optOutPayload);
-      #endif
+#endif
     }
 
     public void UpdateSdkState(string payload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       moengageAndroid.Call("updateSdkState", payload);
-      #endif
+#endif
     }
 
     public static void OnOrientationChanged() {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + " OnOrientationChanged::");
       moengageAndroid.Call("onOrientationChanged");
-      #endif
+#endif
     }
 
     public static void SetupNotificationChannelsAndroid() {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + " SetupNotificationChannelsAndroid::");
       moengageAndroid.Call("setUpNotificationChannels");
-      #endif
+#endif
     }
 
     public static void PushPermissionResponseAndroid(string payload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + " PushPermissionResponseAndroid:: payload: " + payload);
       moengageAndroid.Call("permissionResponse", payload);
-      #endif
+#endif
     }
 
     public static void NavigateToSettingsAndroid() {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + " NavigateToSettingsAndroid:: ");
       moengageAndroid.Call("navigateToSettings");
-      #endif
+#endif
     }
 
     public static void RequestPushPermissionAndroid() {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + " RequestPushPermissionAndroid:: ");
       moengageAndroid.Call("requestPushPermission");
-      #endif
+#endif
     }
 
     public static void UpdatePushPermissionRequestCountAndroid(string payload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + " UpdatePushPermissionRequestCountAndroid:: payload: " + payload);
       moengageAndroid.Call("updatePushPermissionRequestCount", payload);
-      #endif
+#endif
     }
 
     public static void UpdateDeviceIdentifierTrackingStatus(string payload) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + " UpdateDeviceIdentifierTrackingStatus:: payload: " + payload);
       moengageAndroid.Call("deviceIdentifierTrackingStatusUpdate", payload);
-      #endif
+#endif
     }
 
     public static void DeleteUser(string accountPayload, UserDeletionResponseDelegate delegateFunc) {
-      #if!UNITY_EDITOR
+#if !UNITY_EDITOR
       Debug.Log(TAG + " DeleteUser:: accountPayload: " + accountPayload);
       moengageAndroid.Call("deleteUser", new UserDeletionCallback(delegateFunc), accountPayload);
-      #endif
+#endif
+    }
+
+    public void IdentifyUser(string identifyPayload) {
+#if !UNITY_EDITOR
+      moengageAndroid.Call("identifyUser", identifyPayload);
+#endif
+    }
+
+    public void GetUserIdentities(string accountPayload) {
+#if !UNITY_EDITOR
+      moengageAndroid.Call("getUserIdentities", accountPayload);
+#endif
+    }
+
+    public void ShowNudge(string nudgePayload) {
+#if !UNITY_EDITOR
+      Debug.Log(TAG + ": ShowNudge::");
+      moengageAndroid.Call("showNudge", nudgePayload);
+#endif
+    }
+
+    public void GetSelfHandledInApps(string accountPayload) {
+#if !UNITY_EDITOR
+      Debug.Log(TAG + ": GetSelfHandledInApps::");
+      moengageAndroid.Call("getSelfHandledInApps", accountPayload);
+#endif
     }
   }
 
-  #endif
+#endif
 }

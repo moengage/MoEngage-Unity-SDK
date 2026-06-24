@@ -31,10 +31,13 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [super application:application didFinishLaunchingWithOptions:launchOptions];
 
-    BOOL swizzleUnityAppController = [MoEngageUnityUtils isUnityAppControllerSwizzlingEnabled];
-    if (!swizzleUnityAppController) {
-        NSLog(@"MoEUnityAppController SubClass application:didFinishLaunchingWithOptions: called");
-        [[MoEUnityInitializer sharedInstance] initializeSDKWithLaunchOptions:launchOptions];
+    NSDictionary *moeConfig = [MoEngageUnityUtils fetchInfoPlistConfig];
+    if (moeConfig != nil) {
+        NSNumber *autoInitVal = moeConfig[@"IsSdkAutoInitialisationEnabled"];
+        BOOL isSdkAutoInitEnabled = (autoInitVal == nil) ? YES : [autoInitVal boolValue];
+        if (isSdkAutoInitEnabled) {
+            [[MoEUnityInitializer sharedInstance] setupBridgeForAutoInit];
+        }
     }
     return YES;
 }

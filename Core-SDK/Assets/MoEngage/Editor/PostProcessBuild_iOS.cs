@@ -5,6 +5,7 @@
 
 using System.IO;
 using System;
+using System.Xml;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -12,7 +13,6 @@ using UnityEditor.iOS.Xcode;
 using System.Text;
 using System.Collections.Generic;
 using UnityEditor.Build;
-
 #if UNITY_2017_2_OR_NEWER
 using UnityEditor.iOS.Xcode.Extensions;
 #endif
@@ -45,7 +45,8 @@ public static class BuildPostProcessor
     private enum EntitlementOptions
     {
         ApsEnv,
-        AppGroups
+        AppGroups,
+        KeychainSharing
     }
 
     // Unity 2019.3 made large changes to the Xcode build system / API.
@@ -100,33 +101,42 @@ public static class BuildPostProcessor
         var mainTargetGUID = GetPBXProjectTargetGUID(project);
         var unityFrameworkGUID = GetPBXProjectUnityFrameworkGUID(project);
 
+        var keychainGroup = GetKeychainGroupName();
+        var appGroup = GetAppGroupId();
+
         foreach (var framework in FRAMEWORKS_TO_ADD)
         {
             project.AddFrameworkToProject(unityFrameworkGUID, framework, false);
         }
-        
+
         // Weak link AppTrackingTransparency framework
         project.AddFrameworkToProject(unityFrameworkGUID,"AppTrackingTransparency.framework", true);
 
         project.SetBuildProperty(project.GetUnityMainTargetGuid(), "ENABLE_BITCODE", "NO");
         project.SetBuildProperty(unityFrameworkGUID, "ENABLE_BITCODE", "NO"); // Disabled to run on Xcode 14+
         project.SetBuildProperty(mainTargetGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
+        // @import requires modules to be enabled; UnityFramework hosts the ObjC bridge files, main target needs it too for SPM
+        project.SetBuildProperty(unityFrameworkGUID, "CLANG_ENABLE_MODULES", "YES");
+        project.SetBuildProperty(mainTargetGUID, "CLANG_ENABLE_MODULES", "YES");
+        project.SetBuildProperty(mainTargetGUID, "IPHONEOS_DEPLOYMENT_TARGET", "13.0");
+        // SPM Swift packages linked into UnityFramework require Swift stdlib embedded in the main app bundle
+        // project.SetBuildProperty(mainTargetGUID, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "YES");
+        project.AddBuildProperty(mainTargetGUID, "LD_RUNPATH_SEARCH_PATHS", "@executable_path/Frameworks");
+        project.AddBuildProperty(unityFrameworkGUID, "LD_RUNPATH_SEARCH_PATHS", "@executable_path/Frameworks");
 
-        AddOrUpdateEntitlements(
-           path,
-           project,
-           mainTargetGUID,
-           mainTargetName,
-           new HashSet<EntitlementOptions> {
-               EntitlementOptions.ApsEnv, EntitlementOptions.AppGroups
-           }
-        );
+        var mainEntitlementOptions = new HashSet<EntitlementOptions> {
+            EntitlementOptions.ApsEnv, EntitlementOptions.AppGroups
+        };
+        if (!string.IsNullOrEmpty(keychainGroup))
+            mainEntitlementOptions.Add(EntitlementOptions.KeychainSharing);
+
+        AddOrUpdateEntitlements(path, project, mainTargetGUID, mainTargetName, mainEntitlementOptions, appGroup, keychainGroup);
 
         // Add the NSE target to the Xcode project
-        AddNotificationServiceExtension(project, path);
+        AddNotificationServiceExtension(project, path, appGroup, keychainGroup);
 
 #if ADD_PUSH_TEMPLATES
-        AddPushTemplateExtension(project, path);
+        AddPushTemplateExtension(project, path, appGroup);
 #endif
 
         // Reload file after changes from AddNotificationServiceExtension
@@ -138,7 +148,9 @@ public static class BuildPostProcessor
         AddPushCapability(project, path, mainTargetGUID, mainTargetName);
 
         File.WriteAllText(projectPath, project.WriteToString());
-        
+
+        MergeMoEngageInfoPlist(path);
+
         RemoveExtensionFilesFromMainTarget(path);
     }
 
@@ -173,15 +185,63 @@ public static class BuildPostProcessor
   }
   
     
-    // * TO DO: Try to embed frameworks with PostProcessBuildAttribute
-    [PostProcessBuildAttribute(47)]//must be between 40 and 50 to ensure that it's not overriden by Podfile generation (40) and that it's added before "pod install" (50)
-    public static void PostProcessBuild_iOS(BuildTarget target, string buildPath)
+    // Runs between Podfile generation (40) and pod install (50) — CocoaPods path only.
+    [PostProcessBuildAttribute(47)]
+    public static void PostProcessBuild_iOS_Pods(BuildTarget target, string buildPath)
     {
-        using (StreamWriter sw = File.AppendText(buildPath + "/Podfile"))
+#if UNITY_EDITOR
+        if (!IsSPMEnabled())
         {
-             sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngage-iOS-SDK/RichNotification','9.18.1' \nend");
-             sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngage-iOS-SDK/RichNotification','9.18.1' \nend");
+            using (StreamWriter sw = File.AppendText(buildPath + "/Podfile"))
+            {
+                sw.WriteLine("\ntarget '" + NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngage-iOS-SDK/RichNotification' \nend");
+                sw.WriteLine("\ntarget '" + PUSH_TEMPLATES_EXTENSION_TARGET_NAME + "' do\n  pod 'MoEngage-iOS-SDK/RichNotification' \nend");
+            }
         }
+#endif
+    }
+
+    // Runs after EDM4U SPM resolution (~75) so AddRemotePackageReferenceAtVersion calls are not overwritten.
+    [PostProcessBuildAttribute(77)]
+    public static void PostProcessBuild_iOS_SPM(BuildTarget target, string buildPath)
+    {
+#if UNITY_EDITOR
+        if (IsSPMEnabled())
+        {
+            var projectPath = PBXProject.GetPBXProjectPath(buildPath);
+            var project = new PBXProject();
+            project.ReadFromString(File.ReadAllText(projectPath));
+
+            var mainTargetGUID = project.GetUnityMainTargetGuid();
+            var nseGUID = project.TargetGuidByName(NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME);
+            var pushTemplateGUID = project.TargetGuidByName(PUSH_TEMPLATES_EXTENSION_TARGET_NAME);
+
+            var appleSDKRefGUID = project.AddRemotePackageReferenceAtVersion("https://github.com/moengage/apple-sdk.git", "10.12.0");
+            if (nseGUID != null)
+                project.AddRemotePackageFrameworkToProject(nseGUID, "MoEngageRichNotification", appleSDKRefGUID, false);
+            if (pushTemplateGUID != null)
+                project.AddRemotePackageFrameworkToProject(pushTemplateGUID, "MoEngageRichNotification", appleSDKRefGUID, false);
+
+            // Dynamic xcframeworks from apple-sdk are transitive dependencies of the static
+            // MoEngagePluginBase linked into UnityFramework. They must be linked to the main
+            // target so Xcode embeds them into MoEngage.app/Frameworks/ for @rpath resolution.
+            // Only exposed products can be referenced; MoEngageCampaignsCore is an internal
+            // binary target, not a product — it is embedded transitively via MoEngage-iOS-SDK.
+            foreach (var framework in new[] {
+                "MoEngage-iOS-SDK", "MoEngageInApps", "MoEngageTriggerEvaluator", "MoEngageRichNotification"
+            })
+            {
+                project.AddRemotePackageFrameworkToProject(mainTargetGUID, framework, appleSDKRefGUID, false);
+            }
+
+            var cardsXml = Path.Combine(Application.dataPath, "Cards", "Editor", "CardsDependencies.xml");
+            if (File.Exists(cardsXml))
+                project.AddRemotePackageFrameworkToProject(mainTargetGUID, "MoEngageCards", appleSDKRefGUID, false);
+
+
+            File.WriteAllText(projectPath, project.WriteToString());
+        }
+#endif
     }
 
     // Returns exisiting file if found, otherwises provides a default name to use
@@ -204,7 +264,7 @@ public static class BuildPostProcessor
         return path + DIR_CHAR + targetName + DIR_CHAR + targetName + ".entitlements";
     }
 
-    private static void AddOrUpdateEntitlements(string path, PBXProject project, string targetGUI, string targetName, HashSet<EntitlementOptions> options)
+    private static void AddOrUpdateEntitlements(string path, PBXProject project, string targetGUI, string targetName, HashSet<EntitlementOptions> options, string appGroup, string keychainGroup = null)
     {
         string entitlementPath = GetEntitlementsPath(path, project, targetGUI, targetName);
         var entitlements = new PlistDocument();
@@ -226,9 +286,17 @@ public static class BuildPostProcessor
         if (options.Contains(EntitlementOptions.AppGroups) && entitlements.root["com.apple.security.application-groups"] == null)
         {
             var groups = entitlements.root.CreateArray("com.apple.security.application-groups");
-            groups.AddString("group." + PlayerSettings.applicationIdentifier + ".moengage");
+            groups.AddString(appGroup);
         }
 #endif
+
+        if (options.Contains(EntitlementOptions.KeychainSharing) && !string.IsNullOrEmpty(keychainGroup))
+        {
+            var existing = entitlements.root["keychain-access-groups"] as PlistElementArray;
+            if (existing == null)
+                existing = entitlements.root.CreateArray("keychain-access-groups");
+            existing.AddString(keychainGroup);
+        }
 
         entitlements.WriteToFile(entitlementPath);
 
@@ -255,14 +323,14 @@ public static class BuildPostProcessor
         projCapability.WriteToFile();
     }
 
-    private static void AddNotificationServiceExtension(PBXProject project, string path)
+    private static void AddNotificationServiceExtension(PBXProject project, string path, string appGroup, string keychainGroup = null)
     {
 #if UNITY_2017_2_OR_NEWER && !UNITY_CLOUD_BUILD
         var projectPath = PBXProject.GetPBXProjectPath(path);
         var mainTargetGUID = GetPBXProjectTargetGUID(project);
         var extensionTargetName = NOTIFICATION_SERVICE_EXTENSION_TARGET_NAME;
         var extensionBundleIdentifier = GetExtensionBundleIdentifier(extensionTargetName);
-        var exisitingPlistFile = CreateExtensionPlistFile(path, true);
+        var exisitingPlistFile = CreateExtensionPlistFile(path, true, appGroup);
         // If file exisits then the below has been completed before from another build
         // The below will not be updated on Append builds
         // Changes would most likely need to be made to support Append builds
@@ -286,12 +354,13 @@ public static class BuildPostProcessor
 
         // Makes it so that the extension target is Universal (not just iPhone) and has an iOS 10 deployment target
         project.SetBuildProperty(extensionGUID, "TARGETED_DEVICE_FAMILY", "1,2");
-        project.SetBuildProperty(extensionGUID, "IPHONEOS_DEPLOYMENT_TARGET", "11.0");
+        project.SetBuildProperty(extensionGUID, "IPHONEOS_DEPLOYMENT_TARGET", "13.0");
 
         project.SetBuildProperty(extensionGUID, "ARCHS", "$(ARCHS_STANDARD)");
         project.SetBuildProperty(extensionGUID, "DEVELOPMENT_TEAM", PlayerSettings.iOS.appleDeveloperTeamID);
         project.SetBuildProperty(extensionGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
         project.SetBuildProperty(extensionGUID, "ENABLE_BITCODE", "NO");
+        project.SetBuildProperty(extensionGUID, "CLANG_ENABLE_MODULES", "YES");
 
         project.WriteToFile(projectPath);
 
@@ -300,15 +369,13 @@ public static class BuildPostProcessor
         // After this method finishes, we must write the contents string to disk
         //File.WriteAllText(projectPath, contents);
 
-        AddOrUpdateEntitlements(
-           path,
-           project,
-           extensionGUID,
-           extensionTargetName,
-           new HashSet<EntitlementOptions> {
-               EntitlementOptions.ApsEnv, EntitlementOptions.AppGroups
-           }
-        );
+        var nseEntitlementOptions = new HashSet<EntitlementOptions> {
+            EntitlementOptions.ApsEnv, EntitlementOptions.AppGroups
+        };
+        if (!string.IsNullOrEmpty(keychainGroup))
+            nseEntitlementOptions.Add(EntitlementOptions.KeychainSharing);
+
+        AddOrUpdateEntitlements(path, project, extensionGUID, extensionTargetName, nseEntitlementOptions, appGroup, keychainGroup);
 #endif
     }
 
@@ -345,7 +412,7 @@ public static class BuildPostProcessor
 
     // Create a .plist file for the NSE
     // NOTE: File in Xcode project is replaced everytime, never appends
-    private static bool CreateExtensionPlistFile(string path, bool forServiceExtension)
+    private static bool CreateExtensionPlistFile(string path, bool forServiceExtension, string appGroup)
     {
 #if UNITY_2017_2_OR_NEWER
         var pathToExtension = path + DIR_CHAR;
@@ -368,9 +435,11 @@ public static class BuildPostProcessor
         else{
             plistFile.ReadFromFile(MOE_IOS_PUSH_TEMP_LOCATION + DIR_CHAR + "Info.plist");
         }
-        
+
         plistFile.root.SetString("CFBundleShortVersionString", PlayerSettings.bundleVersion);
         plistFile.root.SetString("CFBundleVersion", PlayerSettings.iOS.buildNumber.ToString());
+        var moeDict = plistFile.root.CreateDict("MoEngage");
+        moeDict.SetString("AppGroupName", appGroup);
         plistFile.WriteToFile(extensionPlistPath);
         return exisiting;
 #else
@@ -379,14 +448,14 @@ public static class BuildPostProcessor
     }
 
 
-        private static void AddPushTemplateExtension(PBXProject project, string path)
+        private static void AddPushTemplateExtension(PBXProject project, string path, string appGroup)
     {
 #if UNITY_2017_2_OR_NEWER && !UNITY_CLOUD_BUILD
         var projectPath = PBXProject.GetPBXProjectPath(path);
         var mainTargetGUID = GetPBXProjectTargetGUID(project);
         var extensionTargetName = PUSH_TEMPLATES_EXTENSION_TARGET_NAME;
         var extensionBundleIdentifier = GetExtensionBundleIdentifier(extensionTargetName);
-        var exisitingPlistFile = CreateExtensionPlistFile(path,false);
+        var exisitingPlistFile = CreateExtensionPlistFile(path, false, appGroup);
         // If file exisits then the below has been completed before from another build
         // The below will not be updated on Append builds
         // Changes would most likely need to be made to support Append builds
@@ -411,13 +480,14 @@ public static class BuildPostProcessor
 
         // Makes it so that the extension target is Universal (not just iPhone) and has an iOS 10 deployment target
         project.SetBuildProperty(extensionGUID, "TARGETED_DEVICE_FAMILY", "1,2");
-        project.SetBuildProperty(extensionGUID, "IPHONEOS_DEPLOYMENT_TARGET", "11.0");
+        project.SetBuildProperty(extensionGUID, "IPHONEOS_DEPLOYMENT_TARGET", "13.0");
 
         project.SetBuildProperty(extensionGUID, "ARCHS", "$(ARCHS_STANDARD)");
         project.SetBuildProperty(extensionGUID, "DEVELOPMENT_TEAM", PlayerSettings.iOS.appleDeveloperTeamID);
         project.SetBuildProperty(extensionGUID, "GCC_ENABLE_OBJC_EXCEPTIONS", "Yes");
         project.SetBuildProperty(extensionGUID, "ENABLE_BITCODE", "NO");
-        
+        project.SetBuildProperty(extensionGUID, "CLANG_ENABLE_MODULES", "YES");
+
         project.WriteToFile(projectPath);
 
         //var contents = File.ReadAllText(projectPath);
@@ -432,7 +502,8 @@ public static class BuildPostProcessor
            extensionTargetName,
            new HashSet<EntitlementOptions> {
                EntitlementOptions.ApsEnv, EntitlementOptions.AppGroups
-           }
+           },
+           appGroup
         );
 #endif
     }
@@ -453,6 +524,81 @@ public static class BuildPostProcessor
         project.AddFileToBuildSection(extensionGUID, resourcesBuildPhase, resourcesFilesGuid);
     }
 
+
+    private static string GetAppGroupId()
+    {
+        string moeInfoPlistPath = Path.Combine(Application.dataPath, "MoEngage-Info.plist");
+        if (File.Exists(moeInfoPlistPath))
+        {
+            var moePlist = new PlistDocument();
+            moePlist.ReadFromFile(moeInfoPlistPath);
+            var appGroupElement = moePlist.root["AppGroupName"] as PlistElementString;
+            if (appGroupElement != null && !string.IsNullOrEmpty(appGroupElement.value))
+                return appGroupElement.value;
+        }
+        return "group." + PlayerSettings.applicationIdentifier + ".moengage";
+    }
+
+    private static string GetKeychainGroupName()
+    {
+        string moeInfoPlistPath = Path.Combine(Application.dataPath, "MoEngage-Info.plist");
+        if (File.Exists(moeInfoPlistPath))
+        {
+            var moePlist = new PlistDocument();
+            moePlist.ReadFromFile(moeInfoPlistPath);
+            var keychainElement = moePlist.root["KeychainGroupName"] as PlistElementString;
+            if (keychainElement != null && !string.IsNullOrEmpty(keychainElement.value))
+                return keychainElement.value;
+        }
+        return null;
+    }
+
+    private static void MergeMoEngageInfoPlist(string buildPath)
+    {
+        string mainInfoPlistPath = buildPath + DIR_CHAR + "Info.plist";
+        if (!File.Exists(mainInfoPlistPath))
+        {
+            Debug.LogWarning("MoEngage: Main Info.plist not found at " + mainInfoPlistPath);
+            return;
+        }
+
+        string moeInfoPlistPath = Path.Combine(Application.dataPath, "MoEngage-Info.plist");
+        if (!File.Exists(moeInfoPlistPath))
+        {
+            Debug.LogWarning("MoEngage: MoEngage-Info.plist not found at " + moeInfoPlistPath);
+            return;
+        }
+
+        var mainPlist = new PlistDocument();
+        mainPlist.ReadFromFile(mainInfoPlistPath);
+
+        var moePlist = new PlistDocument();
+        moePlist.ReadFromFile(moeInfoPlistPath);
+
+        PlistElementDict moeDict = mainPlist.root.CreateDict("MoEngage");
+        foreach (var kvp in moePlist.root.values)
+        {
+            moeDict.values[kvp.Key] = kvp.Value;
+        }
+
+        mainPlist.WriteToFile(mainInfoPlistPath);
+        Debug.Log("MoEngage: merged MoEngage-Info.plist into Info.plist under 'MoEngage' key.");
+    }
+    
+    public static bool IsSPMEnabled()
+    {
+        var settingsPath = Path.Combine("ProjectSettings", "GvhProjectSettings.xml");
+        if (!File.Exists(settingsPath))
+            return false;
+        var doc = new XmlDocument();
+        doc.Load(settingsPath);
+        foreach (XmlNode node in doc.SelectNodes("//projectSetting"))
+        {
+            if (node.Attributes["name"]?.Value == "Google.IOSResolver.SwiftPackageManagerEnabled")
+                return node.Attributes["value"]?.Value == "True";
+        }
+        return false;
+    }
 
     // Returns the bundle identifier for the specified extension target
     private static string GetExtensionBundleIdentifier(string extensionTargetName)

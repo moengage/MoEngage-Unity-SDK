@@ -32,10 +32,8 @@
 }
 
 -(NSString*)getAppGroupID{
-    NSString *extbundleIdentifier = [[NSBundle bundleForClass:[self class]] bundleIdentifier];
-    NSString *parentBundleIdentifier = [extbundleIdentifier stringByReplacingOccurrencesOfString:@".MoEPushTemplateExtension" withString:@""];
-    NSString *appGroupID = [NSString stringWithFormat:@"group.%@.moengage",parentBundleIdentifier];
-    return appGroupID;
+    NSDictionary *moeConfig = [[NSBundle mainBundle].infoDictionary objectForKey:@"MoEngage"];
+    return [moeConfig objectForKey:@"AppGroupName"];
 }
 
 

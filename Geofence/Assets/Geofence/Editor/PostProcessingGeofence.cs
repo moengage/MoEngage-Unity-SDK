@@ -4,6 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
+using UnityEngine;
 
 public static class GeofenceBuildPostProcessor
 {
@@ -45,7 +46,28 @@ public static class GeofenceBuildPostProcessor
             project.AddFrameworkToProject(unityFrameworkGUID, framework, false);
         }
         File.WriteAllText(projectPath, project.WriteToString());
+    }
 
+    [PostProcessBuildAttribute(78)]
+    public static void PostProcessBuild_Geofence_SPM(BuildTarget target, string buildPath)
+    {
+#if UNITY_EDITOR
+        if (BuildPostProcessor.IsSPMEnabled())
+        {
+            var projectPath = PBXProject.GetPBXProjectPath(buildPath);
+            var project = new PBXProject();
+            project.ReadFromString(File.ReadAllText(projectPath));
+
+            var mainTargetGUID = project.GetUnityMainTargetGuid();
+
+            // MoEngageGeofence is a dynamic xcframework — link to main target so Xcode
+            // embeds it into MoEngage.app/Frameworks/ for @rpath resolution at runtime.
+            var appleSDKRefGUID = project.AddRemotePackageReferenceAtVersion("https://github.com/moengage/apple-sdk.git", "10.12.0");
+            project.AddRemotePackageFrameworkToProject(mainTargetGUID, "MoEngageGeofence", appleSDKRefGUID, false);
+
+            File.WriteAllText(projectPath, project.WriteToString());
+        }
+#endif
     }
 
 }

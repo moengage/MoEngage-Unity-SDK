@@ -1,3 +1,11 @@
+# Release Date
+
+## [major] Release Version 
+
+- iOS
+  - Added suport for Swift Package manager.
+  - Updated the MoEngageGeofence dependency to `6.00.7`
+
 # 07-08-2024
 ## 2.0.0
 

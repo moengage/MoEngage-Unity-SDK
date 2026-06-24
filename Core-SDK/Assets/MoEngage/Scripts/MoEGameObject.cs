@@ -39,6 +39,7 @@ namespace MoEngage {
     public static event EventHandler < InAppClickData > InAppCustomAction;
     public static event EventHandler < InAppSelfHandledCampaignData > InAppSelfHandled;
     public static event EventHandler < PermissionResultData > PermissionResultCallback;
+    public static event EventHandler < LogoutCompleteData > LogoutCompleteCallback;
 
     // Start is called before the first frame update
     void Start() {
@@ -90,6 +91,17 @@ namespace MoEngage {
       InAppSelfHandledCampaignData inAppData = MoEInAppParser.GetInAppSelfHandledData(payload);
       OnInAppSelfHandled(inAppData);
     }
+    public void LogoutComplete(string payload) {
+      try {
+        Debug.Log(TAG + " LogoutComplete() Callback from Native: " + payload);
+        LogoutCompleteData data = MoEParser.GetLogoutCompleteData(payload);
+        OnLogoutComplete(data);
+      } catch (Exception e) {
+        Debug.LogError(TAG + " LogoutComplete() : couldn't send callback due to exception." +
+          $"\n{e.Message}" +
+          $"\n{e.StackTrace}");
+      }
+    }
 
     public void PermissionResult(string payload) {
       try {
@@ -98,6 +110,36 @@ namespace MoEngage {
         OnPushPermissionCallbackReceived(permissionResultData);
       } catch (Exception e) {
         Debug.LogError(TAG + " PermissionResult() : couldn't send callback due to exception." +
+          $"\n{e.Message}" +
+          $"\n{e.StackTrace}");
+      }
+    }
+
+     public void UserIdentitiesCallback(string payload) {
+      try {
+        Debug.Log(TAG + " UserIdentitiesCallback() Callback from Native: " + payload);
+        var raw = MoEMiniJSON.Json.Deserialize(payload) as System.Collections.Generic.Dictionary<string, object>;
+        var identities = new System.Collections.Generic.Dictionary<string, string>();
+        if (raw != null) {
+          foreach (var kv in raw) {
+            identities[kv.Key] = kv.Value as string;
+          }
+        }
+        MoEngageClient.CompleteGetUserIdentities(identities);
+      } catch (Exception e) {
+        Debug.LogError(TAG + " UserIdentitiesCallback() : couldn't send callback due to exception." +
+          $"\n{e.Message}" +
+          $"\n{e.StackTrace}");
+      }
+    }
+
+    public void InAppSelfHandledCampaignsCallback(string payload) {
+      try {
+        Debug.Log(TAG + " InAppSelfHandledCampaignsCallback() Callback from Native: " + payload);
+        InAppSelfHandledCampaignsData campaignsData = MoEInAppParser.GetInAppSelfHandledCampaigns(payload);
+        MoEngageClient.CompleteSelfHandledInApps(campaignsData);
+      } catch (Exception e) {
+        Debug.LogError(TAG + " InAppSelfHandledCampaignsCallback() : couldn't send callback due to exception." +
           $"\n{e.Message}" +
           $"\n{e.StackTrace}");
       }
@@ -133,6 +175,10 @@ namespace MoEngage {
 
     protected virtual void OnPushPermissionCallbackReceived(PermissionResultData permissionResultData) {
       PermissionResultCallback?.Invoke(this, permissionResultData);
+    }
+
+    protected virtual void OnLogoutComplete(LogoutCompleteData data) {
+      LogoutCompleteCallback?.Invoke(this, data);
     }
   }
 }

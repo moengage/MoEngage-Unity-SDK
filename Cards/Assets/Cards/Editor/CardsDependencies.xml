@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dependencies>
     <androidPackages>
-        <androidPackage spec="com.moengage:cards-ui:1.6.1"/>
+        <androidPackage spec="com.moengage:cards-core:3.5.1"/>
     </androidPackages>
     
     <iosPods>
-        <iosPod name="MoEngage-iOS-SDK/Cards" version="9.18.1" minTargetSdk="11.0">
+        <iosPod name="MoEngage-iOS-SDK/Cards" minTargetSdk="13.0">
         </iosPod>
     </iosPods>
+
+    <remoteSwiftPackage url="https://github.com/moengage/apple-sdk.git"
+                      version="10.12.0">
+    <swiftPackage name="MoEngageCards" replacesPod="MoEngage-iOS-SDK/Cards"/>
+  </remoteSwiftPackage>
 </dependencies>

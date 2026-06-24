@@ -1,3 +1,12 @@
+# Release Date
+
+## [major] Release Version 
+
+ iOS
+  - Added suport for Swift Package manager.
+  - Updated the MoEngageCards dependency to `5.01.11` 
+ 
+
 # 07-08-2024
 
 - iOS

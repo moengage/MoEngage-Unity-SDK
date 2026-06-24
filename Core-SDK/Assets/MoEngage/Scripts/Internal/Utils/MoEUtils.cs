@@ -277,8 +277,14 @@ namespace MoEngage {
     public static string GetSelfHandledPayload(InAppSelfHandledCampaignData inAppData, string type) {
       var accountMetaDictionary = GetAppIdPayload(inAppData.accountMeta.appId);
 
-      var selfHandledDictionary = new Dictionary < string,
-        object > () {
+      var rules = inAppData.selfHandled.displayRules;
+      var displayRulesDictionary = new Dictionary < string, object > () {
+        { MoEConstants.PARAM_SCREEN_NAME,  rules.screenName },
+        { MoEConstants.PARAM_SCREEN_NAMES, rules.screenNames },
+        { MoEConstants.ARGUMENT_CONTEXTS,  rules.contexts }
+      };
+
+      var selfHandledDictionary = new Dictionary < string, object > () {
           {
             MoEConstants.ARGUMENT_PAYLOAD, inAppData.selfHandled.payload
           }, {
@@ -287,6 +293,9 @@ namespace MoEngage {
           }, {
             MoEConstants.ARGUMENT_IS_CANCELLABLE,
             inAppData.selfHandled.isCancellable
+          }, {
+            MoEConstants.PARAM_DISPLAY_RULES,
+            displayRulesDictionary
           }
         };
 
@@ -443,7 +452,70 @@ namespace MoEngage {
 
     private static bool parseShouldDeliverCallbackOnForegroundClick(string shouldDeliverCallbackOnForegroundClick) {
        return shouldDeliverCallbackOnForegroundClick.ToLower() == "true";
-      }
+    }
 
+
+  public static string GetIdentifyUserPayload(string uniqueId, string appId) {
+      var identityDict = new Dictionary < string, object > () {
+        {
+          MoEConstants.PARAM_USER_UNIQUE_IDENTITY, uniqueId
+        }
+      };
+      return GetIdentifyUserPayloadWithIdentityDict(identityDict, appId);
+    }
+
+    public static string GetIdentifyUserPayload(Dictionary < string, string > identities, string appId) {
+      var identityDict = new Dictionary < string, object >();
+      foreach (var kv in identities) identityDict[kv.Key] = kv.Value;
+      return GetIdentifyUserPayloadWithIdentityDict(identityDict, appId);
+    }
+
+    private static string GetIdentifyUserPayloadWithIdentityDict(Dictionary < string, object > identityDict, string appId) {
+      var dataPayload = new Dictionary < string, object > () {
+        {
+          MoEConstants.PARAM_USER_IDENTITY, identityDict
+        }
+      };
+
+      var payloadDict = new Dictionary < string, object > () {
+        {
+          MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+        }, {
+          MoEConstants.PAYLOAD_DATA,
+          dataPayload
+        }
+      };
+
+      return Json.Serialize(payloadDict);
+    }
+
+    public static string GetNudgePayload(NudgePosition position, string appId) {
+      var dataPayload = new Dictionary < string, object > () {
+        {
+          MoEConstants.PARAM_NUDGE_POSITION, NudgePositionToString(position)
+        }
+      };
+
+      var payloadDict = new Dictionary < string, object > () {
+        {
+          MoEConstants.PAYLOAD_ACCOUNT_META, GetAppIdPayload(appId)
+        }, {
+          MoEConstants.PAYLOAD_DATA,
+          dataPayload
+        }
+      };
+
+      return Json.Serialize(payloadDict);
+    }
+
+    private static string NudgePositionToString(NudgePosition position) {
+      switch (position) {
+        case NudgePosition.Top: return "top";
+        case NudgePosition.Bottom: return "bottom";
+        case NudgePosition.BottomLeft: return "bottomLeft";
+        case NudgePosition.BottomRight: return "bottomRight";
+        default: return "any";
+      }
+    }
   }
 }

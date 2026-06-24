@@ -36,6 +36,12 @@ namespace MoEngage
         private static extern void setAlias(string aliasPayload);
 
         [DllImport("__Internal")]
+        private static extern void identifyUser(string identifyPayload);
+
+        [DllImport("__Internal")]
+        private static extern void getUserIdentities(string accountPayload);
+
+        [DllImport("__Internal")]
         private static extern void setUserAttribute(string userAttrPayload);
 
         [DllImport("__Internal")]
@@ -48,7 +54,13 @@ namespace MoEngage
         private static extern void registerForPush();
 
         [DllImport("__Internal")]
+        private static extern void registerForProvisionalPush();
+
+        [DllImport("__Internal")]
         private static extern void showInApp(string accountPayload);
+
+        [DllImport("__Internal")]
+        private static extern void showNudge(string nudgePayload);
 
         [DllImport("__Internal")]
         private static extern void setInAppContexts(string contextsPayload);
@@ -58,6 +70,9 @@ namespace MoEngage
 
         [DllImport("__Internal")]
         private static extern void getSelfHandledInApp(string accountPayload);
+
+        [DllImport("__Internal")]
+        private static extern void getSelfHandledInApps(string accountPayload);
 
         [DllImport("__Internal")]
         private static extern void updateSelfHandledInAppStatusWithPayload(string selfHandledPayload);
@@ -99,6 +114,19 @@ namespace MoEngage
 #endif
         }
 
+        public void IdentifyUser(string identifyPayload)
+        {
+#if !UNITY_EDITOR
+			identifyUser(identifyPayload);
+#endif
+        }
+
+        public void GetUserIdentities(string accountPayload)
+        {
+#if !UNITY_EDITOR
+			getUserIdentities(accountPayload);
+#endif
+        }
 
         public void SetUserAttribute(string userAttributesPayload)
         {
@@ -129,6 +157,14 @@ namespace MoEngage
 #endif
         }
 
+        public static void RegisterForProvisionalPush()
+        {
+#if !UNITY_EDITOR
+			registerForProvisionalPush();
+#endif
+        }
+
+
         #endregion
 
         #region InApp Methods
@@ -137,6 +173,13 @@ namespace MoEngage
         {
 #if !UNITY_EDITOR
 			showInApp(accountPayload);
+#endif
+        }
+
+        public void ShowNudge(string nudgePayload)
+        {
+#if !UNITY_EDITOR
+			showNudge(nudgePayload);
 #endif
         }
 
@@ -158,6 +201,13 @@ namespace MoEngage
         {
 #if !UNITY_EDITOR
 			getSelfHandledInApp(accountPayload);
+#endif
+        }
+
+        public void GetSelfHandledInApps(string accountPayload)
+        {
+#if !UNITY_EDITOR
+			getSelfHandledInApps(accountPayload);
 #endif
         }
 

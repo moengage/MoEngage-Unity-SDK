@@ -29,5 +29,8 @@ namespace MoEngage {
 
     /// <value>Should the campaign be dismissed by pressing the back button or using the back gesture. if the value is true campaign should be dismissed on back press.  </value>
     public bool isCancellable;
+    
+    /// <value> Display rules for the self-handled in-app campaign. </value>
+    public DisplayRules displayRules;
   }
 }

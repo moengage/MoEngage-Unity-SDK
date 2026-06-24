@@ -1,5 +1,25 @@
 # MoEngage
 
+# Release Date
+
+## [major] Release Version 
+
+- Added support for Multi-User Identities
+- Added support for track epoch date attribute via `SetUserAttributeEpochTime`
+- Added support for a logout complete callback to notify the application once the user session has been successfully cleared.
+- Added support for File based initialization via Unity Assets.
+- Added support for displaying non-intrusive nudge campaigns
+- Added support for fetching multiple self-handled In-App messages simultaneously using the `GetSelfHandledInApps()` method.
+- Added support for session-triggered InApps and support multiple screen names in DisplayRules.
+- Android
+  - Migrated Android native dependencies to MoEngage BOMs (`android-bom` 2.2.3)
+- iOS
+  - Added suport for Swift Package manager. 
+  - Updated MoEngage-iOS-SDK to 10.12.0
+  - Added support for Provisional Push.
+  - Removed support MoEngageConfiguration.h file.
+  - Updated the iOS deployment target to 13.
+
 # 09-09-2025
 
 ## 5.0.0

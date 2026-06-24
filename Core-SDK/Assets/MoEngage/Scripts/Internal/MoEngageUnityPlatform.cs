@@ -23,13 +23,17 @@ namespace MoEngage {
     void Initialize(string gameObjectPayload);
     void SetAppStatus(string appStatusPayload);
     void SetAlias(string aliasPayload);
+    void IdentifyUser(string identifyPayload);
+    void GetUserIdentities(string accountPayload);
     void SetUserAttribute(string userAttributesPayload);
     void TrackEvent(string eventPayload);
     void Logout(string accountPayload);
     void ShowInApp(string accountPayload);
+    void ShowNudge(string nudgePayload);
     void SetInAppContexts(string contextPayload);
     void ResetInAppContexts(string accountPayload);
     void GetSelfHandledInApp(string accountPayload);
+    void GetSelfHandledInApps(string accountPayload);
     void optOutDataTracking(string optOutPayload);
     void SelfHandledShown(string selfHandledPayload);
     void SelfHandledClicked(string selfHandledPayload);

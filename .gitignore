@@ -39,6 +39,7 @@ Geofence/Library
 Geofence/ProjectSettings
 Geofence/Packages
 Geofence/Logs
+Geofence/*.unitypackage
 
 v2.2.0.zip
 
@@ -56,3 +57,5 @@ InApps/Logs/
 InApps/*.unitypackage
 InApps/Packages/
 InApps/ProjectSettings/
+
+**/local.properties
