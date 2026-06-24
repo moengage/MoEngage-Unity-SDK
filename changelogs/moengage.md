@@ -1,9 +1,10 @@
 # MoEngage
 
-# Release Date
+# 24-06-2026
 
-## [major] Release Version 
+## 6.0.0
 
+- Added support for Unity 6.4
 - Added support for Multi-User Identities
 - Added support for track epoch date attribute via `SetUserAttributeEpochTime`
 - Added support for a logout complete callback to notify the application once the user session has been successfully cleared.
@@ -12,9 +13,9 @@
 - Added support for fetching multiple self-handled In-App messages simultaneously using the `GetSelfHandledInApps()` method.
 - Added support for session-triggered InApps and support multiple screen names in DisplayRules.
 - Android
-  - Migrated Android native dependencies to MoEngage BOMs (`android-bom` 2.2.3)
+  - Support for `moe-android-sdk` version `14.10.00`
 - iOS
-  - Added suport for Swift Package manager. 
+  - Added suport for Swift Package manager.
   - Updated MoEngage-iOS-SDK to 10.12.0
   - Added support for Provisional Push.
   - Removed support MoEngageConfiguration.h file.
@@ -23,17 +24,18 @@
 # 09-09-2025
 
 ## 5.0.0
+
 - Added support for Unity 6.1
-  
+
 # 07-08-2024
 
 ## 4.0.0
+
 - Added boolean user attribute tracking customization in initialization API
 - iOS
   - Updated the MoEngage-iOS-SDK dependency to `9.18.1` and above.
   - Added DC-06 support.
 
-  
 # 26-04-2024
 
 ## 3.2.0
@@ -75,7 +77,6 @@
   | StartGeofenceMonitoring() |
 
 - Android
-
   - Support for Android 13 notification permission.
   - Android Gradle Plugin version updated to 7.3.1
   - Gradle version updated to 7.4

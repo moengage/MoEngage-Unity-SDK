@@ -1,17 +1,16 @@
-# Release Date
+# 24-06-2026
 
-## [major] Release Version 
-
- iOS
+- Android
+  - Support for native cards-ui version `3.5.1`.
+- iOS
   - Added suport for Swift Package manager.
-  - Updated the MoEngageCards dependency to `5.01.11` 
- 
+  - Updated the MoEngageCards dependency to `5.01.11`
 
 # 07-08-2024
 
 - iOS
-  - Updated the MoEngageCards dependency to `4.17.1` 
-  
+  - Updated the MoEngageCards dependency to `4.17.1`
+
 # 26-04-2024
 
 - iOS

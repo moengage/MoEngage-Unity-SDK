@@ -1,17 +1,19 @@
-# Release Date
+# 24-06-2026
 
-## [major] Release Version 
+- Android
+  - Support for native Geofence SDK version `5.4.0`
 
 - iOS
   - Added suport for Swift Package manager.
   - Updated the MoEngageGeofence dependency to `6.00.7`
 
 # 07-08-2024
+
 ## 2.0.0
 
 - iOS
   - Updated the MoEngageGeofence dependency to `5.17.1` and above.
-  
+
 # 26-04-2024
 
 ## 1.2.0

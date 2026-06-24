@@ -1,5 +1,10 @@
 # Rich-Notification
 
+# 24-06-2026
+
+- Android
+  - Support for native rich-notification version `6.6.1`.
+
 # 20-12-2023
 
 - Android

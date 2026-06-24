@@ -162,8 +162,9 @@ namespace MoEngage
         public const string PARAM_PLATFORM_UNITY = "unity";
     }
 
-    public static class MoEUnityConstants {
+    public static class MoEUnityConstants
+    {
         /* ****************************** Plugin Version ***************************************** */
-        public const string PLUGIN_VERSION = "5.0.0";
+        public const string PLUGIN_VERSION = "6.0.0";
     }
 }

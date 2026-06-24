@@ -37,5 +37,3 @@ dependencyResolutionManagement {
 
 include(":unity-wrapper", ":unity-library", ":unity-wrapper-geofence")
 rootProject.name = "android-unity-wrapper"
-
-includeBuild("publishing-plugin")

@@ -13,7 +13,7 @@
 plugins {
     alias(moengageInternal.plugins.plugin.android.lib)
     alias(moengageInternal.plugins.plugin.kotlin.android)
-    id("mvn-publish")
+    id("com.moengage.plugin.maven.publish").version("1.1.0")
 }
 
 val libVersionName = project.findProperty("VERSION_NAME") as String
