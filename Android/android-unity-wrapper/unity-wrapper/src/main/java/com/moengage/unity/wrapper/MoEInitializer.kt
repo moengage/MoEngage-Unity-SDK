@@ -53,8 +53,8 @@ public object MoEInitializer {
         try {
             MoEAndroidWrapper.getInstance().setContext(context)
             PluginInitializer.initialize(
-                builder,
-                IntegrationMeta(INTEGRATION_TYPE, BuildConfig.MOENGAGE_ANDROID_UNITY_WRAPPER)
+                 builder = builder,
+                integrationMeta = null,
             )
             Logger.print { "$tag initialiseDefaultInstance(): initialised the sdk" }
             Logger.print { "$tag initialiseDefaultInstance(): unity wrapper version: ${BuildConfig.MOENGAGE_ANDROID_UNITY_WRAPPER}" }
@@ -80,7 +80,7 @@ public object MoEInitializer {
             MoEAndroidWrapper.getInstance().setContext(context)
             PluginInitializer.initialize(
                 builder = builder,
-                integrationMeta = IntegrationMeta(INTEGRATION_TYPE, BuildConfig.MOENGAGE_ANDROID_UNITY_WRAPPER),
+                integrationMeta = null,
                 sdkState = sdkState
             )
             Logger.print { "$tag initialiseDefaultInstance(): initialised the sdk" }
@@ -104,10 +104,7 @@ public object MoEInitializer {
             MoEAndroidWrapper.getInstance().setContext(application.applicationContext)
             PluginInitializer.initialize(
                 application = application,
-                integrationMeta = IntegrationMeta(
-                    INTEGRATION_TYPE,
-                    BuildConfig.MOENGAGE_ANDROID_UNITY_WRAPPER
-                ),
+                integrationMeta = null,
                 sdkState = sdkState
             )
             Logger.print { "$tag initialize(): initialised the sdk via file" }

@@ -15,39 +15,46 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoEngage {
+namespace MoEngage
+{
   public delegate void UserDeletionResponseDelegate(UserDeletionData data);
 
-  public class MoEngageClient: MonoBehaviour {
+  public class MoEngageClient : MonoBehaviour
+  {
     private
-    const string TAG = "MoEngageAndroid";
+    const string TAG = "MoEngageClient";
     private static string appId;
     private static readonly Queue<Action<Dictionary<string, string>>> _userIdentitiesCallbacks = new Queue<Action<Dictionary<string, string>>>();
     private static readonly Queue<Action<InAppSelfHandledCampaignsData>> _selfHandledInAppsCallbacks = new Queue<Action<InAppSelfHandledCampaignsData>>();
 
     private static MoEngageUnityPlatform _moengageHandler;
-    private static MoEngageUnityPlatform moengageHandler {
-      get {
-        if (_moengageHandler != null) {
+    private static MoEngageUnityPlatform moengageHandler
+    {
+      get
+      {
+        if (_moengageHandler != null)
+        {
           return _moengageHandler;
         }
-        #if UNITY_ANDROID
+#if UNITY_ANDROID
         _moengageHandler = new MoEngageAndroid();
-        #elif UNITY_IOS
+#elif UNITY_IOS
         _moengageHandler = new MoEngageiOS();
-        #endif
+#endif
         return _moengageHandler;
       }
     }
 
-    private static Boolean isPluginInitialized() {
+    private static Boolean isPluginInitialized()
+    {
       return _moengageHandler != null;
     }
 
-    void Awake() {
-      #if(UNITY_IPHONE || UNITY_ANDROID)
+    void Awake()
+    {
+#if (UNITY_IPHONE || UNITY_ANDROID)
       DontDestroyOnLoad(gameObject);
-      #endif
+#endif
     }
 
     #region Initialize
@@ -56,14 +63,15 @@ namespace MoEngage {
     /// </summary>
     /// <param name="gameObject">Instance of Game Object</param>
     /// <param name="appId">Account Identifier</param>
-    public static void Initialize(GameObject gameObject, string appId, string shouldDeliverCallbackOnForegroundClick = null, Boolean shouldTrackBooleanAsNumber = false) {
+    public static void Initialize(GameObject gameObject, string appId, string shouldDeliverCallbackOnForegroundClick = null, Boolean shouldTrackBooleanAsNumber = false)
+    {
       MoEngageClient.appId = appId;
       string gameObjPayload = MoEUtils.GetInitializePayload(gameObject ? gameObject.name : null, appId, shouldDeliverCallbackOnForegroundClick, shouldTrackBooleanAsNumber);
       Debug.Log(TAG + " : Initialize:: payload: " + gameObjPayload);
 
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.Initialize(gameObjPayload);
-      #endif
+#endif
     }
     #endregion
 
@@ -72,13 +80,14 @@ namespace MoEngage {
     /// Sets App status
     /// </summary>
     /// <param name="appStatus">Instance of MoEAppStatus</param>
-    public static void SetAppStatus(MoEAppStatus appStatus) {
+    public static void SetAppStatus(MoEAppStatus appStatus)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetAppStatus:: appStatus: " + appStatus);
       string appStatusPayload = MoEUtils.GetAppStatusPayload(appStatus, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetAppStatus(appStatusPayload);
-      #endif
+#endif
     }
     #endregion
 
@@ -86,17 +95,19 @@ namespace MoEngage {
     /// <summary>
     /// Returns the identities set for the current user via callback.
     /// </summary>
-    public static void GetUserIdentities(Action<Dictionary<string, string>> callback) {
+    public static void GetUserIdentities(Action<Dictionary<string, string>> callback)
+    {
       if (!isPluginInitialized()) { callback?.Invoke(null); return; }
       string accountPayload = MoEUtils.GetAccountPayload(appId);
       Debug.Log(TAG + " : GetUserIdentities:: payload: " + accountPayload);
       _userIdentitiesCallbacks.Enqueue(callback);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.GetUserIdentities(accountPayload);
-      #endif
+#endif
     }
 
-    internal static void CompleteGetUserIdentities(Dictionary<string, string> identities) {
+    internal static void CompleteGetUserIdentities(Dictionary<string, string> identities)
+    {
       if (_userIdentitiesCallbacks.Count > 0)
         _userIdentitiesCallbacks.Dequeue()?.Invoke(identities);
     }
@@ -105,26 +116,28 @@ namespace MoEngage {
     /// Identify the user with the given unique ID.
     /// </summary>
     /// <param name="uniqueId">Unique identifier for the user</param>
-    public static void IdentifyUser(string uniqueId) {
+    public static void IdentifyUser(string uniqueId)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : IdentifyUser:: uniqueId: " + uniqueId);
       string identifyPayload = MoEUtils.GetIdentifyUserPayload(uniqueId, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.IdentifyUser(identifyPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Identify the user with multiple identity attributes.
     /// </summary>
     /// <param name="identities">Dictionary of identity key-value pairs</param>
-    public static void IdentifyUser(Dictionary < string, string > identities) {
+    public static void IdentifyUser(Dictionary<string, string> identities)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : IdentifyUser:: identities count: " + identities.Count);
       string identifyPayload = MoEUtils.GetIdentifyUserPayload(identities, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.IdentifyUser(identifyPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -132,13 +145,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="alias">Value for alias</param>
     [System.Obsolete("SetAlias is deprecated, use IdentifyUser instead.")]
-    public static void SetAlias(string alias) {
+    public static void SetAlias(string alias)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetAlias:: alias: " + alias);
       string aliasPayload = MoEUtils.GetAliasPayload(alias, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetAlias(aliasPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -146,118 +160,126 @@ namespace MoEngage {
     /// </summary>
     /// <param name="uniqueId">Unique ID value of type string</param>
     [System.Obsolete("SetUniqueId is deprecated, use IdentifyUser instead.")]
-    public static void SetUniqueId(string uniqueId) {
+    public static void SetUniqueId(string uniqueId)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_UNIQUE_ID + " : attributeValue: " + uniqueId);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(MoEConstants.USER_ATTRIBUTE_UNIQUE_ID, MoEConstants.ATTRIBUTE_TYPE_GENERAL, uniqueId, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Track user's first name.
     /// </summary>
     /// <param name="firstName">Value for First Name</param>
-    public static void SetFirstName(string firstName) {
+    public static void SetFirstName(string firstName)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_USER_FIRST_NAME + " : attributeValue: " + firstName);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(MoEConstants.USER_ATTRIBUTE_USER_FIRST_NAME, MoEConstants.ATTRIBUTE_TYPE_GENERAL, firstName, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Track user's last name.
     /// </summary>
     /// <param name="lastName">Value for Last Name</param>
-    public static void SetLastName(string lastName) {
+    public static void SetLastName(string lastName)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_USER_LAST_NAME + " : attributeValue: " + lastName);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(MoEConstants.USER_ATTRIBUTE_USER_LAST_NAME, MoEConstants.ATTRIBUTE_TYPE_GENERAL, lastName, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Track user's email-id.
     /// </summary>
     /// <param name="emailId">Value for Email Id</param>
-    public static void SetEmail(string emailId) {
+    public static void SetEmail(string emailId)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_USER_EMAIL + " : attributeValue: " + emailId);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(MoEConstants.USER_ATTRIBUTE_USER_EMAIL, MoEConstants.ATTRIBUTE_TYPE_GENERAL, emailId, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Track user's phone number.
     /// </summary>
     /// <param name="phoneNumber">Value for Phone number</param>
-    public static void SetPhoneNumber(string phoneNumber) {
+    public static void SetPhoneNumber(string phoneNumber)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_USER_MOBILE + " : attributeValue: " + phoneNumber);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(MoEConstants.USER_ATTRIBUTE_USER_MOBILE, MoEConstants.ATTRIBUTE_TYPE_GENERAL, phoneNumber, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Track user's gender.
     /// </summary>
     /// <param name="gender">Instance of MoEUserGender</param>
-    public static void SetGender(MoEUserGender gender) {
+    public static void SetGender(MoEUserGender gender)
+    {
       if (!isPluginInitialized()) return;
 
       string genderVal = gender.ToString().ToLower();
 
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + MoEConstants.USER_ATTRIBUTE_USER_GENDER + " : attributeValue: " + genderVal);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(MoEConstants.USER_ATTRIBUTE_USER_GENDER, MoEConstants.ATTRIBUTE_TYPE_GENERAL, genderVal, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Tracks birthdate as user attribute.
     /// </summary>
     /// <param name="time" - Supported format - [yyyy-MM-dd|yyyyMMdd][T(hh:mm[:ss[.sss]]|hhmm[ss[.sss]])]?[Z|[+-]hh:mm]]></param>
-    public static void SetBirthdate(string time) {
+    public static void SetBirthdate(string time)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttributeISODate:: attributeName: " + MoEConstants.USER_ATTRIBUTE_USER_BDAY + " : isoDate: " + time);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(MoEConstants.USER_ATTRIBUTE_USER_BDAY, MoEConstants.ATTRIBUTE_TYPE_TIMESTAMP, time, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Tracks user's location as attribute.
     /// </summary>
     /// <param name="location">Instance of GeoLocation</param>
-    public static void SetUserLocation(GeoLocation location) {
+    public static void SetUserLocation(GeoLocation location)
+    {
       if (!isPluginInitialized()) return;
-      Dictionary < string, double > locationDict = location.ToDictionary();
+      Dictionary<string, double> locationDict = location.ToDictionary();
 
       string attributeName =
         default;
 
-      #if UNITY_ANDROID
+#if UNITY_ANDROID
       attributeName = MoEConstants.USER_ATTRIBUTE_USER_LOCATION_ANDROID;
-      #elif UNITY_IOS
+#elif UNITY_IOS
       attributeName = MoEConstants.USER_ATTRIBUTE_USER_LOCATION_IOS;
-      #endif
+#endif
 
       Debug.Log(TAG + " : SetUserAttributeLocation:: attributeName: " + attributeName + " : locationDict: " + locationDict);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_LOCATION, locationDict, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -265,13 +287,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Attribute value type of int</param>
-    public static void SetUserAttribute(string attributeName, int attributeValue) {
+    public static void SetUserAttribute(string attributeName, int attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -279,13 +302,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Array of attribute values of type int</param>
-    public static void SetUserAttribute(string attributeName, int[] attributeValue) {
+    public static void SetUserAttribute(string attributeName, int[] attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -293,13 +317,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Attribute value of type double.</param>
-    public static void SetUserAttribute(string attributeName, double attributeValue) {
+    public static void SetUserAttribute(string attributeName, double attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -307,13 +332,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Array of attribute values of type double</param>
-    public static void SetUserAttribute(string attributeName, double[] attributeValue) {
+    public static void SetUserAttribute(string attributeName, double[] attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -321,13 +347,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Attribute value of type float</param>
-    public static void SetUserAttribute(string attributeName, float attributeValue) {
+    public static void SetUserAttribute(string attributeName, float attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -335,13 +362,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Array of attribute values of type float</param>
-    public static void SetUserAttribute(string attributeName, float[] attributeValue) {
+    public static void SetUserAttribute(string attributeName, float[] attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -349,13 +377,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Attribute value of type bool</param>
-    public static void SetUserAttribute(string attributeName, bool attributeValue) {
+    public static void SetUserAttribute(string attributeName, bool attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -363,13 +392,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Attribute value of type long</param>
-    public static void SetUserAttribute(string attributeName, long attributeValue) {
+    public static void SetUserAttribute(string attributeName, long attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -377,13 +407,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Array of attribute values of type long</param>
-    public static void SetUserAttribute(string attributeName, long[] attributeValue) {
+    public static void SetUserAttribute(string attributeName, long[] attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -391,13 +422,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Attribute value of type string</param>
-    public static void SetUserAttribute(string attributeName, string attributeValue) {
+    public static void SetUserAttribute(string attributeName, string attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -405,13 +437,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="attributeValue">Array of attribute values of type string</param>
-    public static void SetUserAttribute(string attributeName, string[] attributeValue) {
+    public static void SetUserAttribute(string attributeName, string[] attributeValue)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttribute:: attributeName: " + attributeName + " : attributeValue: " + attributeValue);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_GENERAL, attributeValue, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -419,13 +452,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="isoDate" - Supported format - [yyyy-MM-dd|yyyyMMdd][T(hh:mm[:ss[.sss]]|hhmm[ss[.sss]])]?[Z|[+-]hh:mm]]></param>
-    public static void SetUserAttributeISODate(string attributeName, string isoDate) {
+    public static void SetUserAttributeISODate(string attributeName, string isoDate)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttributeISODate:: attributeName: " + attributeName + " : isoDate: " + isoDate);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_TIMESTAMP, isoDate, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -433,13 +467,14 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="epochTime">Date as epoch time in milliseconds</param>
-    public static void SetUserAttributeEpochTime(string attributeName, long epochTime) {
+    public static void SetUserAttributeEpochTime(string attributeName, long epochTime)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : SetUserAttributeEpochTime:: attributeName: " + attributeName + " : epochTime: " + epochTime);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_TIMESTAMP, epochTime, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
 
     /// <summary>
@@ -447,14 +482,15 @@ namespace MoEngage {
     /// </summary>
     /// <param name="attributeName">Attribute name</param>
     /// <param name="location">Instance of GeoLocation</param>
-    public static void SetUserAttributeLocation(string attributeName, GeoLocation location) {
+    public static void SetUserAttributeLocation(string attributeName, GeoLocation location)
+    {
       if (!isPluginInitialized()) return;
-      Dictionary < string, double > locationDict = location.ToDictionary();
+      Dictionary<string, double> locationDict = location.ToDictionary();
       Debug.Log(TAG + " : SetUserAttributeLocation:: attributeName: " + attributeName + ": locationDict: " + locationDict);
       string userAttributesPayload = MoEUtils.GetUserAttributePayload(attributeName, MoEConstants.ATTRIBUTE_TYPE_LOCATION, locationDict, appId);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetUserAttribute(userAttributesPayload);
-      #endif
+#endif
     }
     #endregion
 
@@ -463,13 +499,14 @@ namespace MoEngage {
     /// <summary>
     /// Invalidates the existing user and session. A new user and session is created.
     /// </summary>
-    public static void Logout() {
+    public static void Logout()
+    {
       if (!isPluginInitialized()) return;
       string accountPayload = MoEUtils.GetAccountPayload(appId);
       Debug.Log(TAG + " : LogOut:: payload: " + accountPayload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.Logout(accountPayload);
-      #endif
+#endif
     }
     #endregion
 
@@ -479,14 +516,15 @@ namespace MoEngage {
     /// </summary>
     /// <param name="eventName">Event name.</param>
     /// <param name="properties">Event Attributes.</param>
-    public static void TrackEvent(string eventName, Properties properties) {
+    public static void TrackEvent(string eventName, Properties properties)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " : TrackEvent:: eventName: " + eventName + "\n properties: " + properties);
       string eventPayload = MoEUtils.GetEventPayload(eventName, properties, appId);
       Debug.Log(TAG + " : TrackEvent:: eventPayload: " + eventPayload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.TrackEvent(eventPayload);
-      #endif
+#endif
     }
 
     #endregion
@@ -496,81 +534,88 @@ namespace MoEngage {
     /// Show a nudge at the given position.
     /// </summary>
     /// <param name="position">Position where the nudge should appear. Defaults to Any.</param>
-    public static void ShowNudge(NudgePosition position = NudgePosition.Any) {
+    public static void ShowNudge(NudgePosition position = NudgePosition.Any)
+    {
       if (!isPluginInitialized()) return;
       string nudgePayload = MoEUtils.GetNudgePayload(position, appId);
       Debug.Log(TAG + " : ShowNudge:: payload: " + nudgePayload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.ShowNudge(nudgePayload);
-      #endif
+#endif
     }
 
     /// <summary>
     ///  Try to show an InApp Message.
     /// </summary>
-    public static void ShowInApp() {
+    public static void ShowInApp()
+    {
       if (!isPluginInitialized()) return;
       string accountPayload = MoEUtils.GetAccountPayload(appId);
       Debug.Log(TAG + " : ShowInApp:: payload: " + accountPayload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.ShowInApp(accountPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     ///  Set the user context in which In-App should be shown 
     /// </summary>
     /// <param name="contexts">List of User Contexts</param>
-    public static void SetInAppContexts(string[] contexts) {
+    public static void SetInAppContexts(string[] contexts)
+    {
       if (!isPluginInitialized()) return;
       string contextPayload = MoEUtils.GetContextsPayload(contexts, appId);
       Debug.Log(TAG + " :SetInAppContexts:: payload: " + contextPayload);
 
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SetInAppContexts(contextPayload);
-      #endif
+#endif
 
     }
 
     /// <summary>
     ///  Resets the user context for In-App.
     /// </summary>
-    public static void ResetInAppContexts() {
+    public static void ResetInAppContexts()
+    {
       if (!isPluginInitialized()) return;
       string accountPayload = MoEUtils.GetAccountPayload(appId);
       Debug.Log(TAG + " : Reset InAppContext:: payload: " + accountPayload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.ResetInAppContexts(accountPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     ///  Try to return a self handled in-app to the callback listener.
     /// Ensure self handled in-app listener is set before you call this.
     /// </summary>
-    public static void GetSelfHandledInApp() {
+    public static void GetSelfHandledInApp()
+    {
       if (!isPluginInitialized()) return;
       string accountPayload = MoEUtils.GetAccountPayload(appId);
       Debug.Log(TAG + " : SelfHanledInApp:: payload: " + accountPayload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.GetSelfHandledInApp(accountPayload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Fetches all self-handled in-app campaigns via callback.
     /// </summary>
-    public static void GetSelfHandledInApps(Action<InAppSelfHandledCampaignsData> callback) {
+    public static void GetSelfHandledInApps(Action<InAppSelfHandledCampaignsData> callback)
+    {
       if (!isPluginInitialized()) { callback?.Invoke(null); return; }
       string accountPayload = MoEUtils.GetAccountPayload(appId);
       Debug.Log(TAG + " : GetSelfHandledInApps:: payload: " + accountPayload);
       _selfHandledInAppsCallbacks.Enqueue(callback);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.GetSelfHandledInApps(accountPayload);
-      #endif
+#endif
     }
 
-    internal static void CompleteSelfHandledInApps(InAppSelfHandledCampaignsData data) {
+    internal static void CompleteSelfHandledInApps(InAppSelfHandledCampaignsData data)
+    {
       if (_selfHandledInAppsCallbacks.Count > 0)
         _selfHandledInAppsCallbacks.Dequeue()?.Invoke(data);
     }
@@ -579,42 +624,45 @@ namespace MoEngage {
     /// Track Shown impression for SelfHandled campaign.
     /// </summary>
     /// <param name="inAppData">Instance of InAppSelfHandledCampaignData</param>
-    public static void SelfHandledShown(InAppSelfHandledCampaignData inAppData) {
+    public static void SelfHandledShown(InAppSelfHandledCampaignData inAppData)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + "  SelfHandledShown:: ");
       string payload = MoEUtils.GetSelfHandledPayload(inAppData, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_IMPRESSION);
       Debug.Log(TAG + "  SelfHandledShown() payload: " + payload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SelfHandledShown(payload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Track Clicked impression for SelfHandled campaign
     /// </summary>
     /// <param name="inAppData">Instance of InAppSelfHandledCampaignData</param>
-    public static void SelfHandledClicked(InAppSelfHandledCampaignData inAppData) {
+    public static void SelfHandledClicked(InAppSelfHandledCampaignData inAppData)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + "  SelfHandledClicked:: ");
       string payload = MoEUtils.GetSelfHandledPayload(inAppData, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_CLICK);
       Debug.Log(TAG + "  SelfHandledClicked:: payload: " + payload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SelfHandledClicked(payload);
-      #endif
+#endif
     }
 
     /// <summary>
     /// Track Dismissed impression for SelfHandled campaign
     /// </summary>
     /// <param name="inAppData">Instance of InAppSelfHandledCampaignData</param>
-    public static void SelfHandledDismissed(InAppSelfHandledCampaignData inAppData) {
+    public static void SelfHandledDismissed(InAppSelfHandledCampaignData inAppData)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + "  SelfHandledDismissed::");
       string payload = MoEUtils.GetSelfHandledPayload(inAppData, MoEConstants.ATTRIBUTE_TYPE_SELF_HANDLED_DISMISSED);
       Debug.Log(TAG + "  SelfHandledDismissed:: payload: " + payload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.SelfHandledDismissed(payload);
-      #endif
+#endif
     }
     #endregion
 
@@ -623,14 +671,15 @@ namespace MoEngage {
     /// Track Dismissed impression for SelfHandled campaign
     /// </summary>
     /// <param name="inAppData">Instance of InAppSelfHandledCampaignData</param>
-    public static void optOutDataTracking(bool shouldOptOut) {
+    public static void optOutDataTracking(bool shouldOptOut)
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + "  optOutDataTracking::");
       string payload = MoEUtils.GetOptOutTrackingPayload(MoEConstants.PARAM_TYPE_DATA, shouldOptOut, appId);
       Debug.Log(TAG + "  optOutDataTracking:: payload: " + payload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.optOutDataTracking(payload);
-      #endif
+#endif
     }
 
     #endregion
@@ -642,43 +691,47 @@ namespace MoEngage {
     /// Note: By default the SDK is enabled, should only be called to enabled the
     /// SDK if you have called [DisableSdk()] at some point.
     ///</summary>
-    public static void EnableSdk() {
+    public static void EnableSdk()
+    {
       if (!isPluginInitialized()) return;
       string payload = MoEUtils.GetSdkStatePayload(true, appId);
       Debug.Log(TAG + "  UpdateSdkState:: payload " + payload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.UpdateSdkState(payload);
-      #endif
+#endif
     }
 
     ///<summary>
     ///API to disable all features of the SDK.
     ///</summary>
-    public static void DisableSdk() {
+    public static void DisableSdk()
+    {
       if (!isPluginInitialized()) return;
       string payload = MoEUtils.GetSdkStatePayload(false, appId);
       Debug.Log(TAG + "  UpdateSdkState:: payload " + payload);
-      #if(UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
       moengageHandler.UpdateSdkState(payload);
-      #endif
+#endif
     }
     #endregion
 
     #region iOS Specific Methods
-    public static void RegisterForPush() {
+    public static void RegisterForPush()
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " Regiter for Push");
-      #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
       MoEngageiOS.RegisterForPush();
-      #endif
+#endif
     }
 
-    public static void RegisterForProvisionalPush() {
+    public static void RegisterForProvisionalPush()
+    {
       if (!isPluginInitialized()) return;
       Debug.Log(TAG + " Regiter for Provisional Push");
-      #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
       MoEngageiOS.RegisterForProvisionalPush();
-      #endif
+#endif
     }
     #endregion
 
@@ -687,91 +740,99 @@ namespace MoEngage {
     /// Pass FCM Push Payload to the MoEngage SDK.
     ///</summary>
     /// <param name="pushPayload">FCM Push payload received.</param>
-    public static void PassFcmPushPayload(IDictionary < string, string > pushPayload) {
+    public static void PassFcmPushPayload(IDictionary<string, string> pushPayload)
+    {
       Debug.Log(TAG + " PassFcmPushPayload:: payload " + pushPayload);
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.PassFcmPushPayload(MoEUtils.GetPushPayload(appId, pushPayload, MoEConstants.PUSH_SERVICE_TYPE_FCM));
-      #endif
+#endif
     }
 
     ///<summary>
     /// Pass FCM Token Payload to the MoEngage SDK.
     ///</summary>
     /// <param name="pushToken">FCM Push Token</param>
-    public static void PassFcmPushToken(string pushToken) {
+    public static void PassFcmPushToken(string pushToken)
+    {
       Debug.Log(TAG + " PassFcmPushToken:: payload " + pushToken);
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.PassFcmPushToken(MoEUtils.GetPushTokenPayload(appId, pushToken, MoEConstants.PUSH_SERVICE_TYPE_FCM));
-      #endif
+#endif
     }
 
     ///<summary>
     /// API to enable Advertising Id tracking for the given instance.
     ///<summary>
-    public static void EnableAdIdTracking() {
+    public static void EnableAdIdTracking()
+    {
       Debug.Log(TAG + " EnableAdIdTracking:: ");
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.UpdateDeviceIdentifierTrackingStatus(MoEUtils.GetDeviceIdentifiersPayload(appId, MoEConstants.KEY_AD_ID, true));
-      #endif
+#endif
     }
 
     ///<summary>
     /// API to disable Advertising Id tracking for the given instance.
     ///<summary>
-    public static void DisableAdIdTracking() {
+    public static void DisableAdIdTracking()
+    {
       Debug.Log(TAG + " DisableAdIdTracking:: ");
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.UpdateDeviceIdentifierTrackingStatus(MoEUtils.GetDeviceIdentifiersPayload(appId, MoEConstants.KEY_AD_ID, false));
-      #endif
+#endif
     }
 
     ///<summary>
     /// API to enable Android Id tracking for the given instance.
     ///<summary>
-    public static void EnableAndroidIdTracking() {
+    public static void EnableAndroidIdTracking()
+    {
       Debug.Log(TAG + " EnableAndroidIdTracking:: ");
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.UpdateDeviceIdentifierTrackingStatus(MoEUtils.GetDeviceIdentifiersPayload(appId, MoEConstants.KEY_ANDROID_ID, true));
-      #endif
+#endif
     }
 
     ///<summary>
     /// API to disable Android Id tracking for the given instance.
     ///<summary>
-    public static void DisableAndroidIdTracking() {
+    public static void DisableAndroidIdTracking()
+    {
       Debug.Log(TAG + " DisableAndroidIdTracking:: ");
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.UpdateDeviceIdentifierTrackingStatus(MoEUtils.GetDeviceIdentifiersPayload(appId, MoEConstants.KEY_ANDROID_ID, false));
-      #endif
+#endif
     }
 
     ///<summary>
     /// API to create notification channels on Android.
     ///<summary>
-    public static void SetupNotificationChannelsAndroid() {
+    public static void SetupNotificationChannelsAndroid()
+    {
       Debug.Log(TAG + " SetupNotificationChannelsAndroid:: ");
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.SetupNotificationChannelsAndroid();
-      #endif
+#endif
     }
 
     ///<summary>
     /// Notify the SDK on notification permission granted to the application.
     ///<summary>
     /// <param name="isGranted">True if the push permission was granted by the User else, false.</param>
-    public static void PushPermissionResponseAndroid(bool isGranted) {
+    public static void PushPermissionResponseAndroid(bool isGranted)
+    {
       Debug.Log(TAG + " PushPermissionResponseAndroid:: isGranted: " + isGranted);
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.PushPermissionResponseAndroid(MoEUtils.GetPushPermissionResponsePayload(isGranted, PermissionType.PUSH));
-      #endif
+#endif
     }
 
     ///<summary>
@@ -779,12 +840,13 @@ namespace MoEngage {
     /// @param [requestCount] This count will be incremented to existing value
     ///<summary>
     ///<param name="requestCount">Number of fresh request attempts.</param>
-    public static void UpdatePushPermissionRequestCountAndroid(int requestCount) {
+    public static void UpdatePushPermissionRequestCountAndroid(int requestCount)
+    {
       Debug.Log(TAG + " UpdatePushPermissionRequestCountAndroid:: requestCount: " + requestCount);
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.UpdatePushPermissionRequestCountAndroid(MoEUtils.GetUpdatePushPermissionRequestCountPayload(appId, requestCount));
-      #endif
+#endif
     }
 
     ///<summary>
@@ -792,63 +854,69 @@ namespace MoEngage {
     /// on older versions the user is navigated the application settings or
     /// application info screen.
     ///<summary>
-    public static void NavigateToSettingsAndroid() {
+    public static void NavigateToSettingsAndroid()
+    {
       Debug.Log(TAG + " NavigateToSettingsAndroid:: ");
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.NavigateToSettingsAndroid();
-      #endif
+#endif
     }
 
     ///<summary>
     /// Requests the push permission on Android 13 and above.
     ///</summary>
-    public static void RequestPushPermissionAndroid() {
+    public static void RequestPushPermissionAndroid()
+    {
       Debug.Log(TAG + " RequestPushPermissionAndroid:: ");
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.RequestPushPermissionAndroid();
-      #endif
+#endif
     }
 
     ///<summary>
     /// Enable Device-id tracking. It is enabled by default, and should be called only if tracking is disabled at some point.
     ///</summary>
-    public static void EnableDeviceIdTracking() {
+    public static void EnableDeviceIdTracking()
+    {
       Debug.Log(TAG + " EnableDeviceIdTracking:: ");
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.UpdateDeviceIdentifierTrackingStatus(MoEUtils.GetDeviceIdentifiersPayload(appId, MoEConstants.KEY_DEVICE_ID, true));
-      #endif
+#endif
     }
 
     ///<summary>
     ///Disables Device-id tracking
     ///</summary>
-    public static void DisableDeviceIdTracking() {
+    public static void DisableDeviceIdTracking()
+    {
       Debug.Log(TAG + " DisableDeviceIdTracking:: ");
       if (!isPluginInitialized()) return;
-      #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
       MoEngageAndroid.UpdateDeviceIdentifierTrackingStatus(MoEUtils.GetDeviceIdentifiersPayload(appId, MoEConstants.KEY_DEVICE_ID, false));
-      #endif
+#endif
     }
 
-    public static void OnOrientationChanged() {
-      #if UNITY_ANDROID && !UNITY_EDITOR
+    public static void OnOrientationChanged()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
       Debug.Log(TAG + " OnOrientationChanged::");
       MoEngageAndroid.OnOrientationChanged();
-      #endif
+#endif
     }
 
     ///<summary>
     /// Delete Current User Data From MoEngage Server
     /// NOTE: This API is only for `Android`
     ///</summary>
-    public static void DeleteUser(UserDeletionResponseDelegate delegateFunc) {
-      #if UNITY_ANDROID && !UNITY_EDITOR
+    public static void DeleteUser(UserDeletionResponseDelegate delegateFunc)
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
       Debug.Log(TAG + " DeleteUser::");
       MoEngageAndroid.DeleteUser(MoEUtils.GetAccountPayload(appId), delegateFunc);
-      #endif
+#endif
     }
     #endregion
 
