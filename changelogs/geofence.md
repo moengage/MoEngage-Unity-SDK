@@ -1,4 +1,15 @@
+# Geofence
+
+# RELEASE DATE
+
+## 3.0.1
+
+- Android
+  - Updated `moe-android-sdk` version to `14.10.01`
+
 # 24-06-2026
+
+## 3.0.0
 
 - Android
   - Support for native Geofence SDK version `5.4.0`

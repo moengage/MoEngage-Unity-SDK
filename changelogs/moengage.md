@@ -1,5 +1,12 @@
 # MoEngage
 
+# RELEASE DATE
+
+## 6.0.1
+
+- Android
+  - Support for `moe-android-sdk` version `14.10.01`
+
 # 24-06-2026
 
 ## 6.0.0

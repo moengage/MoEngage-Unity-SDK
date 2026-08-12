@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dependencies>
   <androidPackages>
-    <androidPackage spec="com.moengage:moe-android-sdk:14.10.00"/>
-    <androidPackage spec="com.moengage:unity-wrapper:4.0.0"/>
+    <androidPackage spec="com.moengage:moe-android-sdk:14.10.01"/>
+    <androidPackage spec="com.moengage:unity-wrapper:4.0.1"/>
   </androidPackages>
     
   <!-- iOS Cocoapod dependencies can be specified by each iosPod element. -->
