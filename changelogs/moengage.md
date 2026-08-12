@@ -1,6 +1,6 @@
 # MoEngage
 
-# RELEASE DATE
+# 12-08-2026cd
 
 ## 6.0.1
 

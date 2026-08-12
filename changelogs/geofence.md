@@ -1,6 +1,6 @@
 # Geofence
 
-# RELEASE DATE
+# 12-08-2026
 
 ## 3.0.1
 
